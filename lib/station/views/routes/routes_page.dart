@@ -1,6 +1,7 @@
 // ignore_for_file: constant_identifier_names
 
 import 'package:get/get.dart';
+import 'package:smarttelemed/openvidu_flutter/screens/prepare_videocall.dart';
 import 'package:smarttelemed/station/views/pages/checkqueue.dart';
 
 import 'package:smarttelemed/station/views/pages/health_record.dart';
@@ -11,9 +12,7 @@ import 'package:smarttelemed/station/views/pages/pages_setting/device.dart';
 import 'package:smarttelemed/station/views/pages/pages_setting/init_setting.dart'; 
 import 'package:smarttelemed/station/views/pages/regter.dart';
 import 'package:smarttelemed/station/views/pages/user_information2.dart';
-import 'package:smarttelemed/station/util/device_manager.dart';
-import 'package:smarttelemed/station/views/pages/videocall.dart';
-import 'package:smarttelemed/station/views/pages/videocall/preparationvideocall.dart';
+import 'package:smarttelemed/station/util/device_manager.dart'; 
 import 'package:smarttelemed/station/views/splash/splash_screen.dart';
  
 class Routes {
@@ -48,7 +47,7 @@ class Routes {
         GetPage(name: device_manager, page: (() => const DeviceManager())),
       //  GetPage(name: preparevideo, page: (() => const PrePareVideo())),
         GetPage(
-            name: preparation_videocall, page: (() => PreparationVideoCall())),
+            name: preparation_videocall, page: (() =>const PrepareVideocall())),
       ] ;
       // TestRoutes.routes;
 }
