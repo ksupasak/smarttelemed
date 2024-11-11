@@ -9,10 +9,9 @@ import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:smarttelemed/station/provider/provider.dart';
 import 'package:smarttelemed/station/provider/provider_function.dart';
- 
+
 import 'package:smarttelemed/station/views/ui/widgetdew.dart/widgetdew.dart';
 import 'package:http/http.dart' as http;
-
 
 import 'package:flutter/services.dart' show rootBundle;
 //import 'package:flutter/material.dart';
@@ -29,8 +28,6 @@ class UserInformation extends StatefulWidget {
 }
 
 class _UserInformationState extends State<UserInformation> {
- 
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -81,7 +78,7 @@ class _UserInformation2State extends State<UserInformation2> {
 // -------
 
   // < karn  start >
-  FocusNode _focusNode = FocusNode();   
+  FocusNode _focusNode = FocusNode();
   Printer? selectedPrinter; // Stores the selected printer
   late pw.Font thaiFont;
   // < karn  end >
@@ -321,15 +318,13 @@ class _UserInformation2State extends State<UserInformation2> {
     });
   }
 
-
-
   void printexam() async {
     String msgHead = "";
     String msgDetail = "";
     double sizeHeader = 20;
     double sizeBody = 14;
 
-     if (selectedPrinter == null) {
+    if (selectedPrinter == null) {
       await _selectPrinter();
     }
 
@@ -341,13 +336,17 @@ class _UserInformation2State extends State<UserInformation2> {
     //  msg =  'ส่วนสูง:${resToJsonCheckQuick["health_records"][0]["height"]} ';
     //  msg += ' น้ำหนัก:${resToJsonCheckQuick["health_records"][0]["weight"]}';
     //  msg += ' อุณภูมิ:${resToJsonCheckQuick["health_records"][0]["temp"]}';
-     
-     msgHead = 'HN : ${resTojson2['personal']['hn']} \n';
-     msgHead += 'คุณ : ${resTojson2['personal']['first_name']} ${resTojson2['personal']['last_name']} \n';   
-     
-     msgDetail = 'น้ำหนัก : ${resTojson2['data']['weight']} | ส่วนสูง: ${resTojson2['data']['height']} \n';    
-     msgDetail += 'อุณภูมิ : ${resTojson2['data']['temp']}  | BP: ${resTojson2['data']['bp']} \n';
-     msgDetail += 'PULSE : ${resTojson2['data']['pulse_rate']}  | RR: ${resTojson2['data']['rr']} \n';      
+
+    msgHead = 'HN : ${resTojson2['personal']['hn']} \n';
+    msgHead +=
+        'คุณ : ${resTojson2['personal']['first_name']} ${resTojson2['personal']['last_name']} \n';
+
+    msgDetail =
+        'น้ำหนัก : ${resTojson2['data']['weight']} | ส่วนสูง: ${resTojson2['data']['height']} \n';
+    msgDetail +=
+        'อุณภูมิ : ${resTojson2['data']['temp']}  | BP: ${resTojson2['data']['bp']} \n';
+    msgDetail +=
+        'PULSE : ${resTojson2['data']['pulse_rate']}  | RR: ${resTojson2['data']['rr']} \n';
 
     // Add a page with 80mm width
     pdf.addPage(
@@ -358,52 +357,52 @@ class _UserInformation2State extends State<UserInformation2> {
             //crossAxisAlignment: pw.CrossAxisAlignment.start,
             crossAxisAlignment: pw.CrossAxisAlignment.center,
             children: [
-          pw.Align(
-            alignment: pw.Alignment.center,
-            child: pw.Text(
-              'ผลการตรวจ',
-              style: pw.TextStyle(font: thaiFont, fontSize: sizeHeader),
-              textAlign: pw.TextAlign.center,
-            ),
-          ),
-          pw.SizedBox(height: 3),
-          pw.Align(
-            alignment: pw.Alignment.center,
-            child: pw.Text(
-              msgHead,
-              style: pw.TextStyle(font: thaiFont, fontSize: sizeBody),
-              textAlign: pw.TextAlign.center,
-            ),
-          ),         
-          pw.SizedBox(height: 3),
-          pw.Align(
-            alignment: pw.Alignment.center,
-            child: pw.Text(
-              'อาการ \n $dx',
-              style: pw.TextStyle(font: thaiFont, fontSize: sizeBody),
-              textAlign: pw.TextAlign.center,
-            ),
-          ),
-          pw.SizedBox(height: 3),
-          pw.Align(
-            alignment: pw.Alignment.center,
-            child: pw.Text(
-              'Doctor Note \n $doctor_note',
-              style: pw.TextStyle(font: thaiFont, fontSize: sizeBody),
-              textAlign: pw.TextAlign.center,
-            ),
-          ),
-          pw.SizedBox(height: 3),           
-          pw.Align(
-            alignment: pw.Alignment.center,
-            child: pw.Text(
-              msgDetail,
-              style: pw.TextStyle(font: thaiFont, fontSize: sizeBody),
-              textAlign: pw.TextAlign.center,
-            ),
-          ),
-          pw.SizedBox(height: 3),
-        ],
+              pw.Align(
+                alignment: pw.Alignment.center,
+                child: pw.Text(
+                  'ผลการตรวจ',
+                  style: pw.TextStyle(font: thaiFont, fontSize: sizeHeader),
+                  textAlign: pw.TextAlign.center,
+                ),
+              ),
+              pw.SizedBox(height: 3),
+              pw.Align(
+                alignment: pw.Alignment.center,
+                child: pw.Text(
+                  msgHead,
+                  style: pw.TextStyle(font: thaiFont, fontSize: sizeBody),
+                  textAlign: pw.TextAlign.center,
+                ),
+              ),
+              pw.SizedBox(height: 3),
+              pw.Align(
+                alignment: pw.Alignment.center,
+                child: pw.Text(
+                  'อาการ \n $dx',
+                  style: pw.TextStyle(font: thaiFont, fontSize: sizeBody),
+                  textAlign: pw.TextAlign.center,
+                ),
+              ),
+              pw.SizedBox(height: 3),
+              pw.Align(
+                alignment: pw.Alignment.center,
+                child: pw.Text(
+                  'Doctor Note \n $doctor_note',
+                  style: pw.TextStyle(font: thaiFont, fontSize: sizeBody),
+                  textAlign: pw.TextAlign.center,
+                ),
+              ),
+              pw.SizedBox(height: 3),
+              pw.Align(
+                alignment: pw.Alignment.center,
+                child: pw.Text(
+                  msgDetail,
+                  style: pw.TextStyle(font: thaiFont, fontSize: sizeBody),
+                  textAlign: pw.TextAlign.center,
+                ),
+              ),
+              pw.SizedBox(height: 3),
+            ],
           );
         },
       ),
@@ -413,9 +412,9 @@ class _UserInformation2State extends State<UserInformation2> {
     final pdfBytes = await pdf.save();
 
     if (selectedPrinter != null) {
-    await Printing.directPrintPdf(
-      printer: selectedPrinter!,
-      onLayout: (PdfPageFormat format) async => pdfBytes,
+      await Printing.directPrintPdf(
+        printer: selectedPrinter!,
+        onLayout: (PdfPageFormat format) async => pdfBytes,
       );
     } else {
       print("No printer selected.");
@@ -533,10 +532,9 @@ class _UserInformation2State extends State<UserInformation2> {
   // Function to get available printers
   Future<void> _selectPrinter() async {
     final printers = await Printing.listPrinters();
-    
+
     print('select_printer....');
     if (printers.isNotEmpty) {
-     
       print('Total printers found: ${printers.length}');
       for (var i = 0; i < printers.length; i++) {
         print('Printer $i: ${printers[i].name}');
@@ -544,16 +542,17 @@ class _UserInformation2State extends State<UserInformation2> {
 
       final kposPrinter = printers.firstWhere(
         (printer) => printer.name == 'KPOS_80 Printer',
-        orElse: () => printers.first, // Fallback to the first printer if not found
+        orElse: () =>
+            printers.first, // Fallback to the first printer if not found
       );
-   
+
       setState(() {
         //selectedPrinter =   printers.first;  //printers.first; // Select the first printer as default
         selectedPrinter = kposPrinter;
       });
     }
   }
-  
+
   @override
   void initState() {
     checkQuick();
@@ -563,8 +562,9 @@ class _UserInformation2State extends State<UserInformation2> {
     _focusNode.addListener(() {
       if (_focusNode.hasFocus) {
         RawKeyboard.instance.addListener((RawKeyEvent event) {
-          if (event.logicalKey == LogicalKeyboardKey.enter && event is RawKeyDownEvent) {
-          //  _sendToSelectedPrinter();
+          if (event.logicalKey == LogicalKeyboardKey.enter &&
+              event is RawKeyDownEvent) {
+            //  _sendToSelectedPrinter();
           }
         });
       }
@@ -746,165 +746,177 @@ class _UserInformation2State extends State<UserInformation2> {
                                                       offset: Offset(0, 2)),
                                                 ],
                                               ),
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.all(8.0),
-                                                child: Column(
-                                                  children: [
-                                                    Text("ตรวจสอบข้อมูล",
-                                                        style: TextStyle(
-                                                            fontSize:
-                                                                width * 0.04)),
-                                                    Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .spaceBetween,
-                                                      children: [
-                                                        Text("เลขบัตรประชาชน",
-                                                            style: TextStyle(
-                                                                fontSize:
-                                                                    width *
-                                                                        0.03)),
-                                                        Text(
-                                                            context
-                                                                .watch<
-                                                                    DataProvider>()
-                                                                .id,
-                                                            style: TextStyle(
-                                                                fontSize:
-                                                                    width *
-                                                                        0.03)),
-                                                      ],
-                                                    ),
-                                                    Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .spaceBetween,
-                                                      children: [
-                                                        Text("ชื่อ - นามสกุล",
-                                                            style: TextStyle(
-                                                                fontSize:
-                                                                    width *
-                                                                        0.03)),
-                                                        Text(
-                                                            "${context.watch<DataProvider>().dataUserIDCard['fname']}  ${context.read<DataProvider>().dataUserIDCard['lname']}",
-                                                            style: TextStyle(
-                                                                fontSize:
-                                                                    width *
-                                                                        0.03)),
-                                                      ],
-                                                    ),
-                                                    Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .spaceBetween,
-                                                      children: [
-                                                        Text(
-                                                            "วันเดือนปีเกิด(ปปปป/ดด/วว)",
-                                                            style: TextStyle(
-                                                                fontSize:
-                                                                    width *
-                                                                        0.03)),
-                                                        Text(
-                                                            "${context.watch<DataProvider>().dataUserIDCard['birthDate']} ",
-                                                            style: TextStyle(
-                                                                fontSize:
-                                                                    width *
-                                                                        0.03)),
-                                                      ],
-                                                    ),
-                                                    Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .spaceBetween,
-                                                      children: [
-                                                        Text("claimType",
-                                                            style: TextStyle(
-                                                                fontSize:
-                                                                    width *
-                                                                        0.03)),
-                                                        Text(
-                                                            context
-                                                                .watch<
-                                                                    DataProvider>()
-                                                                .claimType,
-                                                            style: TextStyle(
-                                                                fontSize:
-                                                                    width *
-                                                                        0.03)),
-                                                      ],
-                                                    ),
-                                                    Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .spaceBetween,
-                                                      children: [
-                                                        Text("correlationId",
-                                                            style: TextStyle(
-                                                                fontSize:
-                                                                    width *
-                                                                        0.03)),
-                                                        Text(
-                                                            context
-                                                                    .watch<
-                                                                        DataProvider>()
-                                                                    .dataUserIDCard[
-                                                                'correlationId'],
-                                                            style: TextStyle(
-                                                                fontSize:
-                                                                    width *
-                                                                        0.03)),
-                                                      ],
-                                                    ),
-                                                    Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .spaceBetween,
-                                                      children: [
-                                                        Text("HN :",
-                                                            style: TextStyle(
-                                                                fontSize:
-                                                                    width *
-                                                                        0.03)),
-                                                        Text(
-                                                            context
-                                                                .read<
-                                                                    DataProvider>()
-                                                                .hn
-                                                                .text,
-                                                            style: TextStyle(
-                                                                fontSize:
-                                                                    width *
-                                                                        0.03)),
-                                                      ],
-                                                    ),
-                                                    Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .spaceBetween,
-                                                      children: [
-                                                        Text("เบอร์โทร : ",
-                                                            style: TextStyle(
-                                                                fontSize:
-                                                                    width *
-                                                                        0.03)),
-                                                        Text(
-                                                            context
-                                                                .read<
-                                                                    DataProvider>()
-                                                                .tel
-                                                                .text,
-                                                            style: TextStyle(
-                                                                fontSize:
-                                                                    width *
-                                                                        0.03)),
-                                                      ],
-                                                    ),
-                                                    SizedBox(
-                                                        height: height * 0.02)
-                                                  ],
-                                                ),
-                                              )),
+                                              child: context
+                                                          .watch<DataProvider>()
+                                                          .claimTypeName !=
+                                                      ""
+                                                  ? Padding(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              8.0),
+                                                      child: Column(
+                                                        children: [
+                                                          Text("ตรวจสอบข้อมูล",
+                                                              style: TextStyle(
+                                                                  fontSize:
+                                                                      width *
+                                                                          0.04)),
+                                                          Row(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .spaceBetween,
+                                                            children: [
+                                                              Text(
+                                                                  "เลขบัตรประชาชน",
+                                                                  style: TextStyle(
+                                                                      fontSize:
+                                                                          width *
+                                                                              0.03)),
+                                                              Text(
+                                                                  context
+                                                                      .watch<
+                                                                          DataProvider>()
+                                                                      .id,
+                                                                  style: TextStyle(
+                                                                      fontSize:
+                                                                          width *
+                                                                              0.03)),
+                                                            ],
+                                                          ),
+                                                          Row(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .spaceBetween,
+                                                            children: [
+                                                              Text(
+                                                                  "ชื่อ - นามสกุล",
+                                                                  style: TextStyle(
+                                                                      fontSize:
+                                                                          width *
+                                                                              0.03)),
+                                                              Text(
+                                                                  "${context.watch<DataProvider>().dataUserIDCard['fname']}  ${context.read<DataProvider>().dataUserIDCard['lname']}",
+                                                                  style: TextStyle(
+                                                                      fontSize:
+                                                                          width *
+                                                                              0.03)),
+                                                            ],
+                                                          ),
+                                                          Row(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .spaceBetween,
+                                                            children: [
+                                                              Text(
+                                                                  "วันเดือนปีเกิด(ปปปป/ดด/วว)",
+                                                                  style: TextStyle(
+                                                                      fontSize:
+                                                                          width *
+                                                                              0.03)),
+                                                              Text(
+                                                                  "${context.watch<DataProvider>().dataUserIDCard['birthDate']} ",
+                                                                  style: TextStyle(
+                                                                      fontSize:
+                                                                          width *
+                                                                              0.03)),
+                                                            ],
+                                                          ),
+                                                          Row(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .spaceBetween,
+                                                            children: [
+                                                              Text("claimType",
+                                                                  style: TextStyle(
+                                                                      fontSize:
+                                                                          width *
+                                                                              0.03)),
+                                                              Text(
+                                                                  context
+                                                                      .watch<
+                                                                          DataProvider>()
+                                                                      .claimType,
+                                                                  style: TextStyle(
+                                                                      fontSize:
+                                                                          width *
+                                                                              0.03)),
+                                                            ],
+                                                          ),
+                                                          Row(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .spaceBetween,
+                                                            children: [
+                                                              Text(
+                                                                  "correlationId",
+                                                                  style: TextStyle(
+                                                                      fontSize:
+                                                                          width *
+                                                                              0.03)),
+                                                              Text(
+                                                                  context
+                                                                          .watch<
+                                                                              DataProvider>()
+                                                                          .dataUserIDCard[
+                                                                      'correlationId'],
+                                                                  style: TextStyle(
+                                                                      fontSize:
+                                                                          width *
+                                                                              0.03)),
+                                                            ],
+                                                          ),
+                                                          Row(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .spaceBetween,
+                                                            children: [
+                                                              Text("HN :",
+                                                                  style: TextStyle(
+                                                                      fontSize:
+                                                                          width *
+                                                                              0.03)),
+                                                              Text(
+                                                                  context
+                                                                      .read<
+                                                                          DataProvider>()
+                                                                      .hn
+                                                                      .text,
+                                                                  style: TextStyle(
+                                                                      fontSize:
+                                                                          width *
+                                                                              0.03)),
+                                                            ],
+                                                          ),
+                                                          Row(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .spaceBetween,
+                                                            children: [
+                                                              Text(
+                                                                  "เบอร์โทร : ",
+                                                                  style: TextStyle(
+                                                                      fontSize:
+                                                                          width *
+                                                                              0.03)),
+                                                              Text(
+                                                                  context
+                                                                      .read<
+                                                                          DataProvider>()
+                                                                      .tel
+                                                                      .text,
+                                                                  style: TextStyle(
+                                                                      fontSize:
+                                                                          width *
+                                                                              0.03)),
+                                                            ],
+                                                          ),
+                                                          SizedBox(
+                                                              height:
+                                                                  height * 0.02)
+                                                        ],
+                                                      ),
+                                                    )
+                                                  : Text("ไม่มีสิทรักษา ")),
                                         ),
                                         Padding(
                                           padding: const EdgeInsets.all(8.0),
@@ -1365,8 +1377,6 @@ class _choiceState extends State<choice> {
       if (resTojson != null) {}
     });
   }
-
-  
 
   @override
   Widget build(BuildContext context) {

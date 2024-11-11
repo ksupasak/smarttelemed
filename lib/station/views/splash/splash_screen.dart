@@ -65,19 +65,17 @@ class _Splash_ScreenState extends State<Splash_Screen> {
     });
   }
 
-void fullscreen()async{
-
-  if(Platform.isWindows){
-await windowManager.ensureInitialized();
-  windowManager.setFullScreen(context.read<DataProvider>().windowManagersetFullScreen);
+  void fullscreen() async {
+    if (Platform.isWindows) {
+      await windowManager.ensureInitialized();
+      windowManager.setFullScreen(
+          context.read<DataProvider>().windowManagersetFullScreen);
+    }
   }
-}
-
-
 
   @override
   void initState() {
-    fullscreen();
+    //  fullscreen();
     printDatabase();
     Future.delayed(const Duration(seconds: 1), () {
       Navigator.push(
@@ -86,6 +84,7 @@ await windowManager.ensureInitialized();
 
     super.initState();
   }
+
   @override
   void dispose() {
     super.dispose();

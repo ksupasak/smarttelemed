@@ -8,7 +8,8 @@ import 'package:smarttelemed/myapp/provider/provider.dart';
 import 'package:smarttelemed/myapp/setting/device.dart';
 import 'package:smarttelemed/myapp/setting/device/requestLocationPermission.dart';
 import 'package:smarttelemed/myapp/setting/init_setting.dart';
-import 'package:smarttelemed/myapp/setting/update_license.dart'; 
+import 'package:smarttelemed/myapp/setting/talamed_setting.dart';
+import 'package:smarttelemed/myapp/setting/update_license.dart';
 import 'package:smarttelemed/myapp/widgetdew.dart';
 
 class Setting extends StatefulWidget {
@@ -38,7 +39,7 @@ class _SettingState extends State<Setting> {
           }),
           child: Stack(
             children: [
-              backgrund(),
+              const backgrund(),
               Positioned(
                 child: Container(
                   width: _width,
@@ -59,14 +60,13 @@ class _SettingState extends State<Setting> {
                       GestureDetector(
                           onTap: () {
                             keypad_sound();
-                            //   context.read<Datafunction>().playsound();
-                            //   Get.toNamed('device');
-                            // Navigator.push(
-                            //     context,
-                            //     MaterialPageRoute(
-                            //         builder: (context) => Device()));
+
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => TalamedSetting()));
                           },
-                          child: BoxSetting(text: 'Device')),
+                          child: BoxSetting(text: 'Talamed  Setting')),
                       GestureDetector(
                           onTap: () {
                             keypad_sound();
@@ -76,7 +76,6 @@ class _SettingState extends State<Setting> {
                                     builder: (context) => Update_License()));
                           },
                           child: BoxSetting(text: 'Update License')),
-                   
                       GestureDetector(
                           onTap: () {
                             keypad_sound();

@@ -3,16 +3,16 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart'; 
+import 'package:flutter/src/widgets/framework.dart';
 import 'package:provider/provider.dart';
 import 'package:sembast/sembast.dart';
 
-import 'package:http/http.dart' as http; 
+import 'package:http/http.dart' as http;
 import 'package:smarttelemed/myapp/action/playsound.dart';
 import 'package:smarttelemed/myapp/setting/device/requestLocationPermission.dart';
 import 'package:smarttelemed/myapp/splash_screen/splash_screen.dart';
 import 'package:smarttelemed/myapp/provider/provider.dart';
-import 'package:smarttelemed/myapp/setting/local.dart'; 
+import 'package:smarttelemed/myapp/setting/local.dart';
 
 class Initsetting extends StatefulWidget {
   const Initsetting({super.key});
@@ -104,8 +104,9 @@ class _InitsettingState extends State<Initsetting> {
       Future.delayed(const Duration(seconds: 2), () {
         setState(() {
           status_safe = false;
-          Navigator.pushReplacement(context,
-              MaterialPageRoute(builder: (context) => const Splash_Screen()));
+          Navigator.pop(context);
+          // Navigator.pushReplacement(context,
+          //     MaterialPageRoute(builder: (context) => const Splash_Screen()));
         });
       });
     });
@@ -208,12 +209,12 @@ class _InitsettingState extends State<Initsetting> {
             backgroundColor: Color.fromARGB(255, 245, 245, 245),
             appBar: AppBar(
               backgroundColor: Colors.white,
+              iconTheme: const IconThemeData(color: Colors.black),
               actions: [
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: GestureDetector(
                     onTap: () {
-                      keypad_sound();
                       test();
                     },
                     child: Icon(
@@ -226,7 +227,6 @@ class _InitsettingState extends State<Initsetting> {
                   padding: const EdgeInsets.all(8.0),
                   child: GestureDetector(
                     onTap: () {
-                      keypad_sound();
                       safe();
                     },
                     child: status_safe == false

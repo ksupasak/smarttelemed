@@ -1,6 +1,6 @@
 // ignore_for_file: non_constant_identifier_names, unused_local_variable, use_build_context_synchronously
 
-import 'dart:convert'; 
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -218,16 +218,13 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
                 context.read<DataProvider>().heightHealthrecord.text =
                     height.toString();
 
- 
-if (height > 0 && weight > 0) {
-      final double bmi =  weight/ ((height/100) * (height/100));
-      setState(() {
-        context.read<DataProvider>(). bmiHealthrecord.text =
-                    bmi.toStringAsFixed(2);
-      });
-    }  
-     
-
+                if (height > 0 && weight > 0) {
+                  final double bmi = weight / ((height / 100) * (height / 100));
+                  setState(() {
+                    context.read<DataProvider>().bmiHealthrecord.text =
+                        bmi.toStringAsFixed(2);
+                  });
+                }
               }
 
               buffer = [];
@@ -240,12 +237,13 @@ if (height > 0 && weight > 0) {
       print(e);
     }
   }
- 
+
 ////////////////////////////////////////////////////////////////////////////
 
   void sendDataHealthrecord() async {
     debugPrint("ส่งค่าHealthrecord");
-    var url = Uri.parse('${context.read<DataProvider>().platfromURL}/add_hr');
+    var url =
+        Uri.parse('${context.read<DataProvider>().platfromURL}/add_visit');
     var res = await http.post(url, body: {
       "public_id": context.read<DataProvider>().id,
       "care_unit_id": context.read<DataProvider>().care_unit_id,
@@ -263,6 +261,7 @@ if (height > 0 && weight > 0) {
       "rr": "",
       "cc": "",
       "recep_public_id": "",
+      "claim_code": context.read<DataProvider>().claimCode,
     });
     var resTojson = json.decode(res.body);
     if (res.statusCode == 200) {
@@ -327,24 +326,23 @@ if (height > 0 && weight > 0) {
   @override
   void initState() {
     super.initState();
-   startH_W();
+    startH_W();
     startBP();
-  startSpo2();
+    startSpo2();
   }
 
   @override
-  void dispose() async{
-   
-
+  void dispose() async {
     if (currentportBP != null) {
-     await currentportBP?.close();
+      await currentportBP?.close();
     }
     if (currentportHW != null) {
-     await currentportHW?.close();
+      await currentportHW?.close();
     }
     if (currentportspo2 != null) {
-    await  currentportspo2?.close();
-    } super.dispose();
+      await currentportspo2?.close();
+    }
+    super.dispose();
   }
 
   @override
@@ -383,7 +381,7 @@ if (height > 0 && weight > 0) {
                     image: 'assets/kauo.png',
                     texthead: 'SPO2',
                     keyvavlue: context.read<DataProvider>().spo2Healthrecord),
-                     BoxRecord(
+                BoxRecord(
                     image: 'assets/jhgh.png',
                     texthead: 'TEMP',
                     keyvavlue: context.read<DataProvider>().tempHealthrecord),
@@ -402,7 +400,7 @@ if (height > 0 && weight > 0) {
                     image: 'assets/srhnate.png',
                     texthead: 'WEIGHT',
                     keyvavlue: context.read<DataProvider>().weightHealthrecord),
-                  BoxRecord(
+                BoxRecord(
                     image: 'assets/srhnate.png',
                     texthead: 'BMI',
                     keyvavlue: context.read<DataProvider>().bmiHealthrecord),
