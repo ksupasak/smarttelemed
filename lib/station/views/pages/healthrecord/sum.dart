@@ -261,7 +261,7 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
       "rr": "",
       "cc": "",
       "recep_public_id": "",
-      "claim_code": context.read<DataProvider>().claimCode,
+      "claim_code": context.read<DataProvider>().claimCode.toString(),
     });
     var resTojson = json.decode(res.body);
     if (res.statusCode == 200) {

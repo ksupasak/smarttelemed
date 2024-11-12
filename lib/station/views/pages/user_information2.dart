@@ -98,6 +98,8 @@ class _UserInformation2State extends State<UserInformation2> {
       if (res.statusCode == 200) {
         //debugPrint("Status ${resToJsonCheckQuick}");
         if (resToJsonCheckQuick["health_records"].length != 0) {
+
+           
           context.read<DataProvider>().heightHealthrecord.text =
               resToJsonCheckQuick["health_records"][0]["height"];
           context.read<DataProvider>().weightHealthrecord.text =
@@ -112,7 +114,8 @@ class _UserInformation2State extends State<UserInformation2> {
               resToJsonCheckQuick["health_records"][0]["pulse_rate"];
           context.read<DataProvider>().spo2Healthrecord.text =
               resToJsonCheckQuick["health_records"][0]["spo2"];
-
+  context.read<DataProvider>().claimCode = resToJsonCheckQuick["todays"][0]["claim_code"];
+  debugPrint("check status");
           //   debugPrint(context.read<DataProvider>().heightHealthrecord.text);
           //   debugPrint(context.read<DataProvider>().weightHealthrecord.text);
           //   debugPrint(context.read<DataProvider>().tempHealthrecord.text);
@@ -123,7 +126,7 @@ class _UserInformation2State extends State<UserInformation2> {
         }
       }
       if (resToJsonCheckQuick["message"] == "processing") {
-        // timerCheckQuick?.cancel();
+        timerCheckQuick?.cancel();
       }
       if (resToJsonCheckQuick["message"] == "completed") {
         debugPrint("ตรวจเสร็จเเล้ว message completed");
@@ -559,16 +562,16 @@ class _UserInformation2State extends State<UserInformation2> {
     // checkt_queue();
     // karn start
     _loadThaiFont();
-    _focusNode.addListener(() {
-      if (_focusNode.hasFocus) {
-        RawKeyboard.instance.addListener((RawKeyEvent event) {
-          if (event.logicalKey == LogicalKeyboardKey.enter &&
-              event is RawKeyDownEvent) {
-            //  _sendToSelectedPrinter();
-          }
-        });
-      }
-    });
+    // _focusNode.addListener(() {
+    //   if (_focusNode.hasFocus) {
+    //     RawKeyboard.instance.addListener((RawKeyEvent event) {
+    //       if (event.logicalKey == LogicalKeyboardKey.enter &&
+    //           event is RawKeyDownEvent) {
+    //         //  _sendToSelectedPrinter();
+    //       }
+    //     });
+    //   }
+    // });
     // karn end
 
     // printer = ESMPrinter([
@@ -721,14 +724,28 @@ class _UserInformation2State extends State<UserInformation2> {
                                                   offset: Offset(0, 2)),
                                             ],
                                           ),
-                                          child: Center(
-                                            child: Text(
-                                                "${context.watch<DataProvider>().claimTypeName} (${context.watch<DataProvider>().claimType})",
-                                                style: TextStyle(
-                                                    fontSize: width * 0.03)),
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Center(
+                                              child:context.watch<DataProvider>().claimType !=""? Text(
+                                                  "${context.watch<DataProvider>().claimTypeName} (${context.watch<DataProvider>().claimType})",
+                                                  style: TextStyle(
+                                                      fontSize: width * 0.03))
+                                                      :  Column(
+                                                        children: [
+                                                          Text("ไม่มีสิทการรักษา ชำระค่ารักษาเอง",  style: TextStyle(
+                                                          fontSize: width * 0.03)),
+                                                        ],
+                                                      )
+                                                      ,
+                                            ),
                                           ),
                                         ),
-                                        Padding(
+                                      context
+                                                          .watch<DataProvider>()
+                                                          .claimTypeName !=
+                                                      ""
+                                                  ?  Padding(
                                           padding: const EdgeInsets.fromLTRB(
                                               0, 10, 0, 0),
                                           child: Container(
@@ -746,11 +763,7 @@ class _UserInformation2State extends State<UserInformation2> {
                                                       offset: Offset(0, 2)),
                                                 ],
                                               ),
-                                              child: context
-                                                          .watch<DataProvider>()
-                                                          .claimTypeName !=
-                                                      ""
-                                                  ? Padding(
+                                              child:  Padding(
                                                       padding:
                                                           const EdgeInsets.all(
                                                               8.0),
@@ -916,8 +929,8 @@ class _UserInformation2State extends State<UserInformation2> {
                                                         ],
                                                       ),
                                                     )
-                                                  : Text("ไม่มีสิทรักษา ")),
-                                        ),
+                                                   ),
+                                        ):const SizedBox(),
                                         Padding(
                                           padding: const EdgeInsets.all(8.0),
                                           child: Row(

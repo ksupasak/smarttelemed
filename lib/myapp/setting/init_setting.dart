@@ -37,7 +37,7 @@ class _InitsettingState extends State<Initsetting> {
   int? numindex;
   bool status_safe = false;
   void test() {
-    platfromURL.text = 'https://emr-life.com/clinic_master/clinic/Api';
+    platfromURL.text = 'https://emr-life.com/clinic_master/clinic/StmsApi/';
   }
 
   void sync() async {
