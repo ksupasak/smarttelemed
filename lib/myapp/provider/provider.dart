@@ -18,6 +18,13 @@ class DataProvider with ChangeNotifier {
   String care_unit = '';
   String care_unit_id = '';
   String password = '';
+  bool in_hospital = true;
+  bool requirel_id_card = true;
+  bool require_VN = true;
+  String text_no_idcard = '';
+  String text_no_hn = '';
+  String text_no_vn =''; 
+
   bool permission_id = false;
   bool permission_ble = false;
   bool permission_printter = false;

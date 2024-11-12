@@ -104,3 +104,39 @@ Future<List<RecordSnapshot<int, Map<String, Object?>>>> getAllDataUser() async {
 
   return records;
 }
+//////////////////////
+
+Future<Database> openDatabaseInOutHospital() async {
+  Directory app = await getApplicationDocumentsDirectory();
+  String dbpart = '${app.path}/InOutHospital.db';
+  final db = await databaseFactoryIo.openDatabase(dbpart);
+  return db;
+}
+Future<List<RecordSnapshot<int, Map<String, Object?>>>> getInOutHospital() async {
+  Database db = await openDatabaseInOutHospital();
+  var store = intMapStoreFactory.store('InOutHospital');
+  var records = await store.find(db);
+
+  return records;
+}
+
+Future<void> addDataInOutHospital(Map data) async {
+  deleteInOutHospital();
+  final db = await openDatabaseInOutHospital();
+  final store = intMapStoreFactory.store('InOutHospital');
+  final key = await store.add(db, {
+    'in_hospital': data['in_hospital'],
+    'requirel_id_card': data['requirel_id_card'],
+    'require_VN': data['require_VN'],
+    'text_no_idcard': data['text_no_idcard'],
+    'text_no_hn': data['text_no_hn'],
+    'text_no_vn': data['text_no_vn'],
+  });
+
+  await db.close();
+}
+Future deleteInOutHospital() async {
+  Database db = await openDatabaseInOutHospital();
+  var store = intMapStoreFactory.store('InOutHospital');
+  await store.drop(db);
+}
