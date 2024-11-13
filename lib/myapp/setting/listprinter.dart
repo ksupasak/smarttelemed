@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:printing/printing.dart';
+import 'package:provider/provider.dart';
+import 'package:smarttelemed/myapp/provider/provider.dart';
 
 class SettingListPrinter extends StatefulWidget {
   const SettingListPrinter({super.key});
@@ -8,39 +11,63 @@ class SettingListPrinter extends StatefulWidget {
 }
 
 class _SettingListPrinterState extends State<SettingListPrinter> {
-  List listNamePrinters = [];
+  List<String> listNamePrinters = [];
   bool statusSafe = false;
   String namePrinters = "";
+
   @override
   void initState() {
-    getprinter();
     super.initState();
+    //getprinter();
+    scanprinter();
   }
 
   void getprinter() {
-    namePrinters = "Test1234";
+    namePrinters = context.read<DataProvider>().printername;
+    // Provider.of<DataProvider>(context).printername;
   }
 
-  void scanprinter() {
+  Future<void> scanprinter() async {
     setState(() {
       statusSafe = true;
+      listNamePrinters = [];
     });
 
-    listNamePrinters = [];
-
-    Future.delayed(const Duration(milliseconds: 500), () {
-      setState(() {
-        statusSafe = false;
-      });
+    Future.delayed(const Duration(milliseconds: 500), () async {
+      try {
+        final printers = await Printing.listPrinters();
+        setState(() {
+          listNamePrinters = printers.map((printer) => printer.name).toList();
+        });
+      } catch (e) {
+        print("Error listing printers: $e");
+      } finally {
+        setState(() {
+          statusSafe = false;
+        });
+      }
     });
   }
 
-  void savenameprinter() {}
+  void selectPrinter(String printerName) async {
+    setState(() {
+      namePrinters = printerName;
+      debugPrint('namePrinters=> ${namePrinters}');
+
+      context.read<DataProvider>().printername = printerName;
+      savenameprinter();
+    });
+  }
+
+  void savenameprinter() {
+    debugPrint(
+        'DataProvider().printername=> :  ${context.read<DataProvider>().printername}');
+  }
+
   @override
   Widget build(BuildContext context) {
-     
     double height = MediaQuery.of(context).size.height;
-  
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -49,15 +76,13 @@ class _SettingListPrinterState extends State<SettingListPrinter> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: GestureDetector(
-              onTap: () {
-                scanprinter();
-              },
-              child: statusSafe == false
-                  ? const Icon(
+              onTap: scanprinter,
+              child: statusSafe
+                  ? const CircularProgressIndicator()
+                  : const Icon(
                       Icons.save,
                       color: Colors.black,
-                    )
-                  : const CircularProgressIndicator(),
+                    ),
             ),
           ),
         ],
@@ -65,21 +90,29 @@ class _SettingListPrinterState extends State<SettingListPrinter> {
       body: ListView(
         children: [
           SizedBox(
-            height: height*0.1,
-            child: Center(child: Text("namePrinters :$namePrinters")),
+            height: height * 0.1,
+            child: Center(
+              child: Text("Selected Printer: $namePrinters"),
+            ),
           ),
           SizedBox(
-               height: height *0.9,
+            height: height * 0.9,
             child: ListView.builder(
               itemCount: listNamePrinters.length,
               itemBuilder: (context, index) {
-                return const Padding(
-                  padding:   EdgeInsets.all(8.0),
-                  child: Text("listNamePrinters[index].toString()"),
+                return GestureDetector(
+                  onTap: () => selectPrinter(listNamePrinters[index]),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      listNamePrinters[index],
+                      style: const TextStyle(fontSize: 16),
+                    ),
+                  ),
                 );
               },
             ),
-          )
+          ),
         ],
       ),
     );

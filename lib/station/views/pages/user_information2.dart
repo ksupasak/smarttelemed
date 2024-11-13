@@ -19,6 +19,8 @@ import 'package:flutter/services.dart';
 import 'package:printing/printing.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
+import 'package:qr_flutter/qr_flutter.dart';
+import 'package:barcode_widget/barcode_widget.dart';
 
 class UserInformation extends StatefulWidget {
   const UserInformation({super.key});
@@ -78,7 +80,7 @@ class _UserInformation2State extends State<UserInformation2> {
 // -------
 
   // < karn  start >
-  FocusNode _focusNode = FocusNode();
+  //FocusNode _focusNode = FocusNode();
   Printer? selectedPrinter; // Stores the selected printer
   late pw.Font thaiFont;
   // < karn  end >
@@ -98,8 +100,6 @@ class _UserInformation2State extends State<UserInformation2> {
       if (res.statusCode == 200) {
         //debugPrint("Status ${resToJsonCheckQuick}");
         if (resToJsonCheckQuick["health_records"].length != 0) {
-
-           
           context.read<DataProvider>().heightHealthrecord.text =
               resToJsonCheckQuick["health_records"][0]["height"];
           context.read<DataProvider>().weightHealthrecord.text =
@@ -114,8 +114,9 @@ class _UserInformation2State extends State<UserInformation2> {
               resToJsonCheckQuick["health_records"][0]["pulse_rate"];
           context.read<DataProvider>().spo2Healthrecord.text =
               resToJsonCheckQuick["health_records"][0]["spo2"];
-  context.read<DataProvider>().claimCode = resToJsonCheckQuick["todays"][0]["claim_code"];
-  debugPrint("check status");
+          context.read<DataProvider>().claimCode =
+              resToJsonCheckQuick["todays"][0]["claim_code"];
+          debugPrint("check status");
           //   debugPrint(context.read<DataProvider>().heightHealthrecord.text);
           //   debugPrint(context.read<DataProvider>().weightHealthrecord.text);
           //   debugPrint(context.read<DataProvider>().tempHealthrecord.text);
@@ -324,21 +325,37 @@ class _UserInformation2State extends State<UserInformation2> {
   void printexam() async {
     String msgHead = "";
     String msgDetail = "";
-    double sizeHeader = 20;
-    double sizeBody = 14;
+    //double sizeHeader = 20;
+
+    pw.TextStyle font_sizeBody = pw.TextStyle(
+      font: thaiFont, // Make sure thaiFont is a valid pw.Font
+      fontSize: 16,
+      fontWeight: pw.FontWeight.bold,
+    );
+
+    String dataBarcode = "";
+    String dataQrcode = "";
+
+    //  img Logo
+    Uint8List? logoBytes;
+    try {
+      final logoData = await rootBundle.load('assets/logo.png');
+      logoBytes = logoData.buffer.asUint8List();
+    } catch (e) {
+      print("Logo not found: $e");
+    }
+    //  img Logo
 
     if (selectedPrinter == null) {
       await _selectPrinter();
+
+      // selectedPrinter = selected_printer;
     }
 
     final pdf = pw.Document();
 
     // Define 80mm width and auto height for a thermal printer
     final pageFormat = PdfPageFormat(80 * PdfPageFormat.mm, double.infinity);
-
-    //  msg =  'ส่วนสูง:${resToJsonCheckQuick["health_records"][0]["height"]} ';
-    //  msg += ' น้ำหนัก:${resToJsonCheckQuick["health_records"][0]["weight"]}';
-    //  msg += ' อุณภูมิ:${resToJsonCheckQuick["health_records"][0]["temp"]}';
 
     msgHead = 'HN : ${resTojson2['personal']['hn']} \n';
     msgHead +=
@@ -351,60 +368,121 @@ class _UserInformation2State extends State<UserInformation2> {
     msgDetail +=
         'PULSE : ${resTojson2['data']['pulse_rate']}  | RR: ${resTojson2['data']['rr']} \n';
 
-    // Add a page with 80mm width
+    dataBarcode = "123456789";
+    dataQrcode = "WWW.example.com";
+
+    pw.Widget _buildLogo(Uint8List logoBytes) {
+      return pw.Center(
+        child: pw.Image(
+          pw.MemoryImage(logoBytes),
+          width: 64,
+          height: 32,
+        ),
+      );
+    }
+
+    pw.Widget _buildHeader() {
+      return pw.Column(
+        crossAxisAlignment: pw.CrossAxisAlignment.start,
+        children: [
+          pw.Text(
+            'ผลการตรวจ',
+            style: font_sizeBody,
+          ),
+          // pw.Text('Address Line 1\nCity, State ZIP\nPhone: (555) 123-4567'),
+          pw.Text(
+            msgHead,
+            style: font_sizeBody,
+          ),
+        ],
+      );
+    }
+
+    pw.Widget _buildDocnote() {
+      return pw.Column(
+        crossAxisAlignment: pw.CrossAxisAlignment.start,
+        children: [
+          pw.Text('วิเคราะห์', style: font_sizeBody),
+          pw.Text(dx, style: font_sizeBody),
+          pw.Text(
+            'จ่ายยา',
+            style: font_sizeBody,
+          ),
+          pw.Text(
+            doctor_note,
+            style: font_sizeBody,
+          ),
+          pw.Text(
+            'รายละเอียด',
+            style: font_sizeBody,
+          ),
+          pw.Text(
+            msgDetail,
+            style: font_sizeBody,
+          ),
+        ],
+      );
+    }
+
+    pw.Widget _buildBarcode(String dataBarcode) {
+      return pw.Center(
+        child: pw.BarcodeWidget(
+          data: dataBarcode.toString(), // Sample barcode data
+          barcode: pw.Barcode.code128(),
+          width: 80,
+          height: 40,
+        ),
+      );
+    }
+
+    pw.Widget _buildQRCode(String dataQrcode) {
+      return pw.Center(
+        child: pw.BarcodeWidget(
+          data: dataQrcode.toString(), // Sample QR code data
+          barcode: pw.Barcode.qrCode(),
+          width: 80,
+          height: 80,
+        ),
+      );
+    }
+
+    pw.Widget _buildFooter() {
+      return pw.Column(
+        crossAxisAlignment: pw.CrossAxisAlignment.center,
+        children: [
+          pw.Text(
+            'Thank you for visit !',
+            textAlign: pw.TextAlign.center,
+            style: pw.TextStyle(font: thaiFont, fontSize: 12),
+          ),
+          pw.Text(
+            'Visit us online at www.example.com',
+            textAlign: pw.TextAlign.center,
+            style: pw.TextStyle(font: thaiFont, fontSize: 10),
+          ),
+        ],
+      );
+    }
+
     pdf.addPage(
       pw.Page(
-        pageFormat: pageFormat,
+        pageFormat: PdfPageFormat(80 * PdfPageFormat.mm, double.infinity),
         build: (pw.Context context) {
           return pw.Column(
-            //crossAxisAlignment: pw.CrossAxisAlignment.start,
-            crossAxisAlignment: pw.CrossAxisAlignment.center,
+            crossAxisAlignment: pw.CrossAxisAlignment.start,
             children: [
-              pw.Align(
-                alignment: pw.Alignment.center,
-                child: pw.Text(
-                  'ผลการตรวจ',
-                  style: pw.TextStyle(font: thaiFont, fontSize: sizeHeader),
-                  textAlign: pw.TextAlign.center,
-                ),
-              ),
-              pw.SizedBox(height: 3),
-              pw.Align(
-                alignment: pw.Alignment.center,
-                child: pw.Text(
-                  msgHead,
-                  style: pw.TextStyle(font: thaiFont, fontSize: sizeBody),
-                  textAlign: pw.TextAlign.center,
-                ),
-              ),
-              pw.SizedBox(height: 3),
-              pw.Align(
-                alignment: pw.Alignment.center,
-                child: pw.Text(
-                  'อาการ \n $dx',
-                  style: pw.TextStyle(font: thaiFont, fontSize: sizeBody),
-                  textAlign: pw.TextAlign.center,
-                ),
-              ),
-              pw.SizedBox(height: 3),
-              pw.Align(
-                alignment: pw.Alignment.center,
-                child: pw.Text(
-                  'Doctor Note \n $doctor_note',
-                  style: pw.TextStyle(font: thaiFont, fontSize: sizeBody),
-                  textAlign: pw.TextAlign.center,
-                ),
-              ),
-              pw.SizedBox(height: 3),
-              pw.Align(
-                alignment: pw.Alignment.center,
-                child: pw.Text(
-                  msgDetail,
-                  style: pw.TextStyle(font: thaiFont, fontSize: sizeBody),
-                  textAlign: pw.TextAlign.center,
-                ),
-              ),
-              pw.SizedBox(height: 3),
+              if (logoBytes != null) _buildLogo(logoBytes),
+              pw.SizedBox(height: 5),
+              _buildHeader(),
+              pw.SizedBox(height: 5),
+              _buildDocnote(),
+              pw.Divider(),
+              pw.SizedBox(height: 5),
+              _buildBarcode(dataBarcode),
+              pw.SizedBox(height: 5),
+              _buildQRCode(dataQrcode),
+              pw.SizedBox(height: 5),
+              _buildFooter(),
             ],
           );
         },
@@ -535,8 +613,9 @@ class _UserInformation2State extends State<UserInformation2> {
   // Function to get available printers
   Future<void> _selectPrinter() async {
     final printers = await Printing.listPrinters();
+    // selectedPrinter == context.read<DataProvider>().printername;
 
-    print('select_printer....');
+    print('lists_printer....');
     if (printers.isNotEmpty) {
       print('Total printers found: ${printers.length}');
       for (var i = 0; i < printers.length; i++) {
@@ -544,10 +623,12 @@ class _UserInformation2State extends State<UserInformation2> {
       }
 
       final kposPrinter = printers.firstWhere(
-        (printer) => printer.name == 'KPOS_80 Printer',
+        // (printer) => printer.name == r'\\192.168.0.119\KPOS_80 Printer',
+        (printer) => printer.name == context.read<DataProvider>().printername,
         orElse: () =>
             printers.first, // Fallback to the first printer if not found
       );
+      debugPrint('selected :=> ${kposPrinter}');
 
       setState(() {
         //selectedPrinter =   printers.first;  //printers.first; // Select the first printer as default
@@ -562,16 +643,7 @@ class _UserInformation2State extends State<UserInformation2> {
     // checkt_queue();
     // karn start
     _loadThaiFont();
-    // _focusNode.addListener(() {
-    //   if (_focusNode.hasFocus) {
-    //     RawKeyboard.instance.addListener((RawKeyEvent event) {
-    //       if (event.logicalKey == LogicalKeyboardKey.enter &&
-    //           event is RawKeyDownEvent) {
-    //         //  _sendToSelectedPrinter();
-    //       }
-    //     });
-    //   }
-    // });
+
     // karn end
 
     // printer = ESMPrinter([
@@ -584,7 +656,7 @@ class _UserInformation2State extends State<UserInformation2> {
   @override
   void dispose() {
     timerCheckQuick?.cancel();
-    _focusNode.dispose();
+    //_focusNode.dispose();
     super.dispose();
   }
 
@@ -727,43 +799,58 @@ class _UserInformation2State extends State<UserInformation2> {
                                           child: Padding(
                                             padding: const EdgeInsets.all(8.0),
                                             child: Center(
-                                              child:context.watch<DataProvider>().claimType !=""? Text(
-                                                  "${context.watch<DataProvider>().claimTypeName} (${context.watch<DataProvider>().claimType})",
-                                                  style: TextStyle(
-                                                      fontSize: width * 0.03))
-                                                      :  Column(
-                                                        children: [
-                                                          Text("ไม่มีสิทการรักษา ชำระค่ารักษาเอง",  style: TextStyle(
-                                                          fontSize: width * 0.03)),
-                                                        ],
-                                                      )
-                                                      ,
+                                              child: context
+                                                          .watch<DataProvider>()
+                                                          .claimType !=
+                                                      ""
+                                                  ? Text(
+                                                      "${context.watch<DataProvider>().claimTypeName} (${context.watch<DataProvider>().claimType})",
+                                                      style: TextStyle(
+                                                          fontSize:
+                                                              width * 0.03))
+                                                  : Column(
+                                                      children: [
+                                                        Text(
+                                                            "ไม่มีสิทการรักษา ชำระค่ารักษาเอง",
+                                                            style: TextStyle(
+                                                                fontSize:
+                                                                    width *
+                                                                        0.03)),
+                                                      ],
+                                                    ),
                                             ),
                                           ),
                                         ),
-                                      context
-                                                          .watch<DataProvider>()
-                                                          .claimTypeName !=
-                                                      ""
-                                                  ?  Padding(
-                                          padding: const EdgeInsets.fromLTRB(
-                                              0, 10, 0, 0),
-                                          child: Container(
-                                              width: width,
-                                              decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(15),
-                                                color: Colors.white,
-                                                boxShadow: const [
-                                                  BoxShadow(
-                                                      blurRadius: 2,
-                                                      spreadRadius: 2,
-                                                      color: Color.fromARGB(
-                                                          255, 188, 188, 188),
-                                                      offset: Offset(0, 2)),
-                                                ],
-                                              ),
-                                              child:  Padding(
+                                        context
+                                                    .watch<DataProvider>()
+                                                    .claimTypeName !=
+                                                ""
+                                            ? Padding(
+                                                padding:
+                                                    const EdgeInsets.fromLTRB(
+                                                        0, 10, 0, 0),
+                                                child: Container(
+                                                    width: width,
+                                                    decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              15),
+                                                      color: Colors.white,
+                                                      boxShadow: const [
+                                                        BoxShadow(
+                                                            blurRadius: 2,
+                                                            spreadRadius: 2,
+                                                            color:
+                                                                Color.fromARGB(
+                                                                    255,
+                                                                    188,
+                                                                    188,
+                                                                    188),
+                                                            offset:
+                                                                Offset(0, 2)),
+                                                      ],
+                                                    ),
+                                                    child: Padding(
                                                       padding:
                                                           const EdgeInsets.all(
                                                               8.0),
@@ -928,9 +1015,9 @@ class _UserInformation2State extends State<UserInformation2> {
                                                                   height * 0.02)
                                                         ],
                                                       ),
-                                                    )
-                                                   ),
-                                        ):const SizedBox(),
+                                                    )),
+                                              )
+                                            : const SizedBox(),
                                         Padding(
                                           padding: const EdgeInsets.all(8.0),
                                           child: Row(
@@ -1020,8 +1107,8 @@ class _UserInformation2State extends State<UserInformation2> {
                                                           fontSize:
                                                               width * 0.03,
                                                           color: const Color
-                                                                  .fromARGB(255,
-                                                              35, 131, 123))),
+                                                              .fromARGB(255, 35,
+                                                              131, 123))),
                                                 ),
                                                 Center(
                                                   child: ElevatedButton(

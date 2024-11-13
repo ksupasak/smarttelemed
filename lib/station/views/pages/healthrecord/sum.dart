@@ -241,7 +241,7 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
 ////////////////////////////////////////////////////////////////////////////
 
   void sendDataHealthrecord() async {
-    debugPrint("ส่งค่าHealthrecord");
+    debugPrint("ส่งค่าHealthrecord${context.read<DataProvider>().platfromURL}");
     var url =
         Uri.parse('${context.read<DataProvider>().platfromURL}/add_visit');
     var res = await http.post(url, body: {
@@ -292,11 +292,10 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
     var res = await http.post(url,
         headers: {'Content-Type': 'application/json'}, body: body);
     var resTojson = json.decode(res.body);
-
-    debugPrint("getClaimCode สำเร็จ ");
-    debugPrint(resTojson.toString());
-
+    debugPrint("getClaimCode ${res.statusCode}");
     if (res.statusCode == 200) {
+      debugPrint("getClaimCode สำเร็จ ");
+      debugPrint(resTojson.toString());
       context.read<DataProvider>().updateclaimCode(resTojson);
       sendclaimCode();
     }
@@ -425,20 +424,21 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
                       )),
                   ElevatedButton(
                       onPressed: () {
-                        context.read<DataProvider>().sysHealthrecord.text =
-                            '120';
-                        context.read<DataProvider>().diaHealthrecord.text =
-                            '80';
-                        context.read<DataProvider>().pulseHealthrecord.text =
-                            '89';
-                        context.read<DataProvider>().spo2Healthrecord.text =
-                            '99';
-                        context.read<DataProvider>().heightHealthrecord.text =
-                            '165';
-                        context.read<DataProvider>().weightHealthrecord.text =
-                            '50';
-                        context.read<DataProvider>().tempHealthrecord.text =
-                            '37.5';
+                        // context.read<DataProvider>().sysHealthrecord.text =
+                        //     '120';
+                        // context.read<DataProvider>().diaHealthrecord.text =
+                        //     '80';
+                        // context.read<DataProvider>().pulseHealthrecord.text =
+                        //     '89';
+                        // context.read<DataProvider>().spo2Healthrecord.text =
+                        //     '99';
+                        // context.read<DataProvider>().heightHealthrecord.text =
+                        //     '165';
+                        // context.read<DataProvider>().weightHealthrecord.text =
+                        //     '50';
+                        // context.read<DataProvider>().tempHealthrecord.text =
+                        //     '37.5';
+                        sendclaimCode();
                       },
                       child: Text(
                         "demo",

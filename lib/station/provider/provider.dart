@@ -20,7 +20,9 @@ class DataProvider with ChangeNotifier {
   double sized_name_hospital = 0.08;
   FontWeight fontWeight_name_hospital = FontWeight.w600;
   Color shadow_name_hospital = Color.fromARGB(199, 255, 0, 0);
-
+  String printername = '';
+  // r'KPOS_80 Printer';
+  // //r'\\192.168.0.119\KPOS_80 Printer';
   //List<String> knownDevice = [];
   var resTojson;
   List<String> devicename = [];
@@ -115,7 +117,7 @@ class DataProvider with ChangeNotifier {
   TextEditingController weightHealthrecord = TextEditingController();
   TextEditingController spo2Healthrecord = TextEditingController();
   TextEditingController tempHealthrecord = TextEditingController();
-TextEditingController bmiHealthrecord = TextEditingController();
+  TextEditingController bmiHealthrecord = TextEditingController();
   List<String> deviceId = [];
   StreamController<List<String>> _deviceIdStreamController =
       StreamController<List<String>>();

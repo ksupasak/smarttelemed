@@ -41,8 +41,8 @@ class _HomeappState extends State<Homeapp> {
     });
     context.read<Datafunction>().playsound();
     if (context.read<DataProvider>().id.length == 13) {
-      var url = Uri.parse(
-          '${context.read<DataProvider>().platfromURL}/check_quick');
+      var url =
+          Uri.parse('${context.read<DataProvider>().platfromURL}/check_quick');
       var res = await http.post(url, body: {
         'care_unit_id': context.read<DataProvider>().care_unit_id,
         'public_id': context.read<DataProvider>().id,
@@ -54,7 +54,7 @@ class _HomeappState extends State<Homeapp> {
         status = false;
       });
       if (resTojson['message'] == 'not found patient') {
-      String isclaimType =  context.read<DataProvider>().claimType;
+        String isclaimType = context.read<DataProvider>().claimType;
         showDialog(
             context: context,
             builder: (BuildContext context) {
@@ -62,24 +62,24 @@ class _HomeappState extends State<Homeapp> {
                 texthead: 'ไม่พบข้อมูลในระบบ',
                 pathicon: 'assets/warning.png',
                 buttonbar: [
-                isclaimType != ""?  GestureDetector(
-                      onTap: () {
-                       
-                      Navigator.pop(context);
-                        Timer(const Duration(seconds: 2), () {
-                          setState(() {
-                          Get.toNamed('regter');
-                          }); 
-                        });
-                      },
-                      child: BoxWidetdew(
-                          color: Colors.green,
-                          height: 0.05,
-                          width: 0.2,
-                   
-                          text: 'สมัคร',
-                          radius: 0.0,
-                          textcolor: Colors.white)):const SizedBox() ,
+                  isclaimType != ""
+                      ? GestureDetector(
+                          onTap: () {
+                            Navigator.pop(context);
+                            Timer(const Duration(seconds: 2), () {
+                              setState(() {
+                                Get.toNamed('regter');
+                              });
+                            });
+                          },
+                          child: BoxWidetdew(
+                              color: Colors.green,
+                              height: 0.05,
+                              width: 0.2,
+                              text: 'สมัคร',
+                              radius: 0.0,
+                              textcolor: Colors.white))
+                      : const SizedBox(),
                   GestureDetector(
                       onTap: () {
                         Navigator.pop(context);
@@ -132,8 +132,6 @@ class _HomeappState extends State<Homeapp> {
     }
   }
 
- 
-
   // void readerID() {
   //   try {
   //     Future.delayed(const Duration(seconds: 1), () {
@@ -181,7 +179,7 @@ class _HomeappState extends State<Homeapp> {
       debugPrint("Crde Reader--------------------------------=");
       debugPrint(resTojson.toString());
       if (res.statusCode == 200) {
-        context.read<DataProvider>().updateuserinformation(resTojson );
+        context.read<DataProvider>().updateuserinformation(resTojson);
         context.read<DataProvider>().upcorrelationId(resTojson);
         debugPrint(resTojson["claimTypes"][0].toString());
         context
@@ -231,12 +229,12 @@ class _HomeappState extends State<Homeapp> {
       context.read<DataProvider>().id = '';
       context
           .read<DataProvider>()
-          .updateuserinformation({"pid": "", "claimTypes": "[]"} );
+          .updateuserinformation({"pid": "", "claimTypes": "[]"});
       context.read<DataProvider>().claimType = '';
       context.read<DataProvider>().claimTypeName = '';
       context.read<DataProvider>().claimCode = '';
     });
-  //  getIdCard();
+    getIdCard();
     // readerID();
 
     super.initState();
