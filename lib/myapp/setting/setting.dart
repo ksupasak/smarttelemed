@@ -8,6 +8,8 @@ import 'package:smarttelemed/myapp/provider/provider.dart';
 import 'package:smarttelemed/myapp/setting/device.dart';
 import 'package:smarttelemed/myapp/setting/device/requestLocationPermission.dart';
 import 'package:smarttelemed/myapp/setting/init_setting.dart';
+import 'package:smarttelemed/myapp/setting/listprinter.dart';
+import 'package:smarttelemed/myapp/setting/min_max.dart';
 import 'package:smarttelemed/myapp/setting/talamed_setting.dart';
 import 'package:smarttelemed/myapp/setting/update_license.dart';
 import 'package:smarttelemed/myapp/widgetdew.dart';
@@ -67,6 +69,26 @@ class _SettingState extends State<Setting> {
                                     builder: (context) => TalamedSetting()));
                           },
                           child: BoxSetting(text: 'Talamed  Setting')),
+                           GestureDetector(
+                          onTap: () {
+                            keypad_sound();
+
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>  SettingMinMax()));
+                          },
+                          child: BoxSetting(text: 'Min Max')),
+                              GestureDetector(
+                          onTap: () {
+                            keypad_sound();
+
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>  SettingListPrinter()));
+                          },
+                          child: BoxSetting(text: 'ListPrinter')),
                       GestureDetector(
                           onTap: () {
                             keypad_sound();

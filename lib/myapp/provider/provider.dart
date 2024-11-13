@@ -18,12 +18,35 @@ class DataProvider with ChangeNotifier {
   String care_unit = '';
   String care_unit_id = '';
   String password = '';
+  String printername = '';
+  Map<dynamic, dynamic> minmax = {
+    "sys": {
+      "min": "",
+      "max": "",
+    },
+    "dia": {
+      "min": "",
+      "max": "",
+    },
+    "temp": {
+      "min": "",
+      "max": "",
+    },
+    "bmi": {
+      "min": "",
+      "max": "",
+    },
+     "spo2": {
+      "min": "",
+      "max": "",
+    },
+  };
   bool in_hospital = true;
   bool requirel_id_card = true;
   bool require_VN = true;
   String text_no_idcard = '';
   String text_no_hn = '';
-  String text_no_vn =''; 
+  String text_no_vn = '';
 
   bool permission_id = false;
   bool permission_ble = false;

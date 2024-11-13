@@ -7,7 +7,10 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
+import 'package:sembast/sembast.dart';
+import 'package:smarttelemed/myapp/setting/local.dart';
 import 'package:smarttelemed/station/provider/provider.dart';
+import 'package:smarttelemed/station/views/ui/widgetdew.dart/popup.dart';
 import 'package:smarttelemed/station/views/ui/widgetdew.dart/widgetdew.dart';
 import 'package:http/http.dart' as http;
 
@@ -19,7 +22,7 @@ class Regter extends StatefulWidget {
 }
 
 class _RegterState extends State<Regter> {
- Uint8List? resTojsonImage;  
+  Uint8List? resTojsonImage;
   TextEditingController prefix_name = TextEditingController();
   TextEditingController first_name = TextEditingController();
   TextEditingController last_name = TextEditingController();
@@ -27,14 +30,28 @@ class _RegterState extends State<Regter> {
 
   TextEditingController hn = TextEditingController();
   TextEditingController phone = TextEditingController();
- 
+String text_no_hn ="";
+  List<RecordSnapshot<int, Map<String, Object?>>>? dataconfig;
   @override
   void initState() {
-   
-    gitimage();
+      gitimage();
+   getconfig();
     super.initState();
   }
 
+  void getconfig() async {
+    dataconfig = await getInOutHospital();
+    debugPrint("dataconfig INHospital $dataconfig");
+    if (dataconfig?.length != 0) {
+      for (RecordSnapshot<int, Map<String, Object?>> record in dataconfig!) {
+      
+        // text_no_idcard  = record["text_no_idcard"].toString();
+        text_no_hn  = record["text_no_hn"].toString();
+        debugPrint( text_no_hn);
+        // text_no_vn  = record["text_no_vn"].toString();
+      }
+    }
+  }
   // Future<void> getImage() async {
   //   var url = Uri.parse('http://localhost:8189/api/smartcard/read-cead-only');
   //   var res = await http.post(url);
@@ -51,28 +68,87 @@ class _RegterState extends State<Regter> {
     id.text = resTojson["pid"];
     first_name.text = resTojson["fname"];
     last_name.text = resTojson["lname"];
-     prefix_name.text = getprefix_name(resTojson["titleName"].toString());
- 
-    resTojsonImage = base64Decode(resTojson["image"]);
+    prefix_name.text = getprefix_name(resTojson["titleName"].toString());
+    gitHN();
+    //  resTojsonImage = base64Decode(resTojson["image"]);
     setState(() {});
   }
-String getprefix_name(String titleName){
- if(titleName == "001"){
-   return "เด็กชาย"; 
- }else if(titleName == "002"){
-  return "เด็กหญิง";
- }else if (titleName == "003"){
-  return "นาย";
- }if (titleName == "004"){
-  return "นางสาว";
- }if (titleName == "005"){
-  return "นาง";
- }
- else{
-  return "--";
- }
-   }
- 
+
+  String getprefix_name(String titleName) {
+    if (titleName == "001") {
+      return "เด็กชาย";
+    } else if (titleName == "002") {
+      return "เด็กหญิง";
+    } else if (titleName == "003") {
+      return "นาย";
+    }
+    if (titleName == "004") {
+      return "นางสาว";
+    }
+    if (titleName == "005") {
+      return "นาง";
+    } else {
+      return "--";
+    }
+  }
+
+  void gitHN() async {
+    var url = Uri.parse('http://localhost:5000/api/patient?cid=${id.text}');
+    var res = await http.get(url);
+    var resTojson = json.decode(res.body);
+    if (resTojson['statuscode'] == 400) {
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return Popup(
+              texthead: 'เลขบัตรประชาชนไม่ถูกต้อง',
+              pathicon: 'assets/warning.png',
+              buttonbar: [
+                GestureDetector(
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    child: BoxWidetdew(
+                        color: Colors.red,
+                        height: 0.05,
+                        width: 0.2,
+                        radius: 0.0,
+                        text: 'ออก',
+                        textcolor: Colors.white))
+              ],
+            );
+          });
+    } else {
+      hn.text = resTojson["vitalsign"]["hn"];
+      debugPrint(resTojson.toString());
+    }
+    if (hn.text == "") {
+       showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return Popup(
+              texthead: 'ไม่พบHNในระบบ',
+              textbody: text_no_hn,
+              pathicon: 'assets/warning.png',
+              buttonbar: [
+                GestureDetector(
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    child: BoxWidetdew(
+                        color: Colors.red,
+                        height: 0.05,
+                        width: 0.2,
+                        radius: 0.0,
+                        text: 'ออก',
+                        textcolor: Colors.white))
+              ],
+            );
+          });
+    }
+
+    setState(() {});
+  }
 
   // void setvalue() {
   //   debugPrint(context.read<DataProvider>().dataUserIDCard.toString());
@@ -210,7 +286,6 @@ String getprefix_name(String titleName){
                     child: Center(
                       child: Container(
                         width: _width * 0.85,
-                       
                         decoration: boxDecorate,
                         child: Column(
                           children: [
@@ -220,14 +295,14 @@ String getprefix_name(String titleName){
                               child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Center(
-                                        child: resTojsonImage != null
-                                            ? SizedBox(
-                                                width: _width * 0.2,
-                                                height: _height * 0.2,
-                                                child: Image.memory(
-                                                    resTojsonImage!))
-                                            : const CircularProgressIndicator(color: Color.fromARGB(255, 54, 110, 56),) ),
+                                    // Center(
+                                    //     child: resTojsonImage != null
+                                    //         ? SizedBox(
+                                    //             width: _width * 0.2,
+                                    //             height: _height * 0.2,
+                                    //             child: Image.memory(
+                                    //                 resTojsonImage!))
+                                    //         : const CircularProgressIndicator(color: Color.fromARGB(255, 54, 110, 56),) ),
                                     Text('คำนำหน้าชื่อ', style: style2),
                                     textdatauser(child: prefix_name),
                                     Text('ชื่อ', style: style2),
@@ -244,7 +319,7 @@ String getprefix_name(String titleName){
                             ),
                             SizedBox(height: _height * 0.01),
                             GestureDetector(
-                              onTap: regter,
+                              onTap:  regter,
                               child: Container(
                                 width: _width * 0.35,
                                 height: _height * 0.06,

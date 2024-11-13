@@ -42,7 +42,7 @@ class _HomeappState extends State<Homeapp> {
     context.read<Datafunction>().playsound();
     if (context.read<DataProvider>().id.length == 13) {
       var url = Uri.parse(
-          'https://emr-life.com/clinic_master/clinic/Api/check_quick');
+          '${context.read<DataProvider>().platfromURL}/check_quick');
       var res = await http.post(url, body: {
         'care_unit_id': context.read<DataProvider>().care_unit_id,
         'public_id': context.read<DataProvider>().id,
@@ -54,6 +54,7 @@ class _HomeappState extends State<Homeapp> {
         status = false;
       });
       if (resTojson['message'] == 'not found patient') {
+      String isclaimType =  context.read<DataProvider>().claimType;
         showDialog(
             context: context,
             builder: (BuildContext context) {
@@ -61,22 +62,24 @@ class _HomeappState extends State<Homeapp> {
                 texthead: 'ไม่พบข้อมูลในระบบ',
                 pathicon: 'assets/warning.png',
                 buttonbar: [
-                  GestureDetector(
+                isclaimType != ""?  GestureDetector(
                       onTap: () {
-                        Navigator.pop(context);
+                       
+                      Navigator.pop(context);
                         Timer(const Duration(seconds: 2), () {
                           setState(() {
-                            Get.toNamed('regter');
-                          });
+                          Get.toNamed('regter');
+                          }); 
                         });
                       },
                       child: BoxWidetdew(
                           color: Colors.green,
                           height: 0.05,
                           width: 0.2,
+                   
                           text: 'สมัคร',
                           radius: 0.0,
-                          textcolor: Colors.white)),
+                          textcolor: Colors.white)):const SizedBox() ,
                   GestureDetector(
                       onTap: () {
                         Navigator.pop(context);
@@ -129,44 +132,46 @@ class _HomeappState extends State<Homeapp> {
     }
   }
 
-  void readerID() {
-    try {
-      Future.delayed(const Duration(seconds: 1), () {
-        reader = ESMIDCard.instance;
-        entry = reader?.getEntry();
+ 
 
-        debugPrint('->initstate');
-        if (entry != null) {
-          entry?.listen((String data) async {
-            List<String> splitted = data.split('#');
-            debugPrint("IDCard $data");
-            context.read<DataProvider>().id = splitted[0].toString();
-            context.read<DataProvider>().regter_data = splitted;
-            setState(() {
-              context.read<DataProvider>().regter_data = splitted;
-              context.read<DataProvider>().id = splitted[0].toString();
-            });
-            debugPrint(
-                "${context.read<DataProvider>().id} / ${splitted[0].toString()}");
+  // void readerID() {
+  //   try {
+  //     Future.delayed(const Duration(seconds: 1), () {
+  //       reader = ESMIDCard.instance;
+  //       entry = reader?.getEntry();
 
-            idcard.setValue(splitted[0]);
-            if (context.read<DataProvider>().id == splitted[0].toString()) {
-              check2();
-            } else {}
-          }, onError: (error) {
-            debugPrint(error);
-          }, onDone: () {
-            debugPrint('Stream closed!');
-          });
-        } else {}
-        const oneSec = Duration(seconds: 1);
-        reading = Timer.periodic(oneSec, (Timer t) => checkCard());
-      });
-    } on Exception catch (e) {
-      debugPrint('error');
-      debugPrint(e.toString());
-    }
-  }
+  //       debugPrint('->initstate');
+  //       if (entry != null) {
+  //         entry?.listen((String data) async {
+  //           List<String> splitted = data.split('#');
+  //           debugPrint("IDCard $data");
+  //           context.read<DataProvider>().id = splitted[0].toString();
+  //           context.read<DataProvider>().regter_data = splitted;
+  //           setState(() {
+  //             context.read<DataProvider>().regter_data = splitted;
+  //             context.read<DataProvider>().id = splitted[0].toString();
+  //           });
+  //           debugPrint(
+  //               "${context.read<DataProvider>().id} / ${splitted[0].toString()}");
+
+  //           idcard.setValue(splitted[0]);
+  //           if (context.read<DataProvider>().id == splitted[0].toString()) {
+  //             check2();
+  //           } else {}
+  //         }, onError: (error) {
+  //           debugPrint(error);
+  //         }, onDone: () {
+  //           debugPrint('Stream closed!');
+  //         });
+  //       } else {}
+  //       const oneSec = Duration(seconds: 1);
+  //       reading = Timer.periodic(oneSec, (Timer t) => checkCard());
+  //     });
+  //   } on Exception catch (e) {
+  //     debugPrint('error');
+  //     debugPrint(e.toString());
+  //   }
+  // }
 
   void getIdCard() async {
     timerreadIDCard = Timer.periodic(const Duration(seconds: 4), (timer) async {
@@ -231,7 +236,7 @@ class _HomeappState extends State<Homeapp> {
       context.read<DataProvider>().claimTypeName = '';
       context.read<DataProvider>().claimCode = '';
     });
-    getIdCard();
+  //  getIdCard();
     // readerID();
 
     super.initState();
