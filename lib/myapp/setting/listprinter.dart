@@ -28,6 +28,7 @@ class _SettingListPrinterState extends State<SettingListPrinter> {
   }
 
   Future<void> scanprinter() async {
+    namePrinters = context.read<DataProvider>().printername;
     setState(() {
       statusSafe = true;
       listNamePrinters = [];
