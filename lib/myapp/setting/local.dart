@@ -140,3 +140,30 @@ Future deleteInOutHospital() async {
   var store = intMapStoreFactory.store('InOutHospital');
   await store.drop(db);
 }
+
+//////////////
+Future<Database> openDatabaseMinMax() async {
+  Directory app = await getApplicationDocumentsDirectory();
+  String dbpart = '${app.path}/minmax.db';
+  final db = await databaseFactoryIo.openDatabase(dbpart);
+  return db;
+}
+Future<List<RecordSnapshot<int, Map<String, Object?>>>> getInMinMax() async {
+  Database db = await openDatabaseMinMax();
+  var store = intMapStoreFactory.store('minmax');
+  var records = await store.find(db);
+  return records;
+}
+Future<void> addDataMinMax(Map<String, Object?> data) async {
+ deleteaMinMax();
+  final db = await openDatabaseMinMax();
+  final store = intMapStoreFactory.store('minmax');
+  final key = await store.add(db, data);
+
+  await db.close();
+}
+Future deleteaMinMax() async {
+  Database db = await openDatabaseMinMax();
+  var store = intMapStoreFactory.store('minmax');
+  await store.drop(db);
+}
