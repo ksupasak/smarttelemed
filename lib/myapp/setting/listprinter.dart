@@ -1,7 +1,11 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:printing/printing.dart';
 import 'package:provider/provider.dart';
+import 'package:sembast/sembast.dart';
 import 'package:smarttelemed/myapp/provider/provider.dart';
+import 'package:smarttelemed/myapp/setting/local.dart';
 
 class SettingListPrinter extends StatefulWidget {
   const SettingListPrinter({super.key});
@@ -18,13 +22,23 @@ class _SettingListPrinterState extends State<SettingListPrinter> {
   @override
   void initState() {
     super.initState();
-    //getprinter();
+     getprinter();
     scanprinter();
   }
 
-  void getprinter() {
-    namePrinters = context.read<DataProvider>().printername;
-    // Provider.of<DataProvider>(context).printername;
+  void getprinter() async{
+  
+ List<RecordSnapshot<int, Map<String, Object?>>> datas = await getPrinter();
+ if (datas.length != 0) {
+for(RecordSnapshot<int, Map<String, Object?>>  data in datas){
+   debugPrint("namePrinters  :${data["namePrinters"]}");
+   context.read<DataProvider>().printername = data["namePrinters"].toString();
+}
+
+ }
+
+  //  namePrinters = context.read<DataProvider>().printername;
+   
   }
 
   Future<void> scanprinter() async {
@@ -53,7 +67,7 @@ class _SettingListPrinterState extends State<SettingListPrinter> {
   void selectPrinter(String printerName) async {
     setState(() {
       namePrinters = printerName;
-      debugPrint('namePrinters=> ${namePrinters}');
+      debugPrint('namePrinters=> $namePrinters');
 
       context.read<DataProvider>().printername = printerName;
       savenameprinter();
@@ -61,14 +75,17 @@ class _SettingListPrinterState extends State<SettingListPrinter> {
   }
 
   void savenameprinter() {
-    debugPrint(
-        'DataProvider().printername=> :  ${context.read<DataProvider>().printername}');
+   
+    Map<String, dynamic> data = {
+      'namePrinters': namePrinters,
+    };
+    addDataPrinter(data);
   }
 
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
-
+  double width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -77,7 +94,7 @@ class _SettingListPrinterState extends State<SettingListPrinter> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: GestureDetector(
-              onTap: scanprinter,
+              onTap: savenameprinter,
               child: statusSafe
                   ? const CircularProgressIndicator()
                   : const Icon(
@@ -93,7 +110,8 @@ class _SettingListPrinterState extends State<SettingListPrinter> {
           SizedBox(
             height: height * 0.1,
             child: Center(
-              child: Text("Selected Printer: $namePrinters"),
+              child: Text("Selected Printer: $namePrinters",
+                      style: TextStyle(fontSize: width * 0.03)),
             ),
           ),
           SizedBox(
@@ -107,7 +125,7 @@ class _SettingListPrinterState extends State<SettingListPrinter> {
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
                       listNamePrinters[index],
-                      style: const TextStyle(fontSize: 16),
+                      style: TextStyle(fontSize: width * 0.03)
                     ),
                   ),
                 );

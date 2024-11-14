@@ -52,7 +52,7 @@ class _SettingMinMaxState extends State<SettingMinMax> {
   }
 
   void getvalue() async {
-    data = await getInMinMax();
+    data = await getMinMax();
     debugPrint(data.toString());
     if (data != []) {
       for (RecordSnapshot<int, Map<String, Object?>> record in data!) {

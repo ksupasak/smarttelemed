@@ -63,3 +63,58 @@ Future<List<RecordSnapshot<int, Map<String, Object?>>>> getAllData() async {
 
   return records;
 }
+
+
+
+//////////////
+Future<Database> openDatabaseMinMax() async {
+  Directory app = await getApplicationDocumentsDirectory();
+  String dbpart = '${app.path}/minmax.db';
+  final db = await databaseFactoryIo.openDatabase(dbpart);
+  return db;
+}
+Future<List<RecordSnapshot<int, Map<String, Object?>>>> getMinMax() async {
+  Database db = await openDatabaseMinMax();
+  var store = intMapStoreFactory.store('minmax');
+  var records = await store.find(db);
+  return records;
+}
+Future<void> addDataMinMax(Map<String, Object?> data) async {
+ deleteaMinMax();
+  final db = await openDatabaseMinMax();
+  final store = intMapStoreFactory.store('minmax');
+  final key = await store.add(db, data);
+
+  await db.close();
+}
+Future deleteaMinMax() async {
+  Database db = await openDatabaseMinMax();
+  var store = intMapStoreFactory.store('minmax');
+  await store.drop(db);
+}
+////
+ Future<Database> openDatabasePrinter() async {
+  Directory app = await getApplicationDocumentsDirectory();
+  String dbpart = '${app.path}/printer.db';
+  final db = await databaseFactoryIo.openDatabase(dbpart);
+  return db;
+}
+Future<List<RecordSnapshot<int, Map<String, Object?>>>> getPrinter() async {
+  Database db = await openDatabasePrinter();
+  var store = intMapStoreFactory.store('printer');
+  var records = await store.find(db);
+  return records;
+}
+Future<void> addDataPrinter(Map<String, Object?> data) async {
+ deleteaPrinter();
+  final db = await  openDatabasePrinter();
+  final store = intMapStoreFactory.store('printer');
+  final key = await store.add(db, data);
+
+  await db.close();
+}
+Future deleteaPrinter() async {
+  Database db = await openDatabaseMinMax();
+  var store = intMapStoreFactory.store('printer');
+  await store.drop(db);
+}
