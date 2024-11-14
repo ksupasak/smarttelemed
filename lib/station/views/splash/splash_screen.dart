@@ -72,7 +72,7 @@ class _Splash_ScreenState extends State<Splash_Screen> {
           context.read<DataProvider>().windowManagersetFullScreen);
     }
   }
- void getprinter() async{
+ void _getprinter() async{
   
  List<RecordSnapshot<int, Map<String, Object?>>> datas = await getPrinter();
  if (datas.length != 0) {
@@ -88,7 +88,7 @@ for(RecordSnapshot<int, Map<String, Object?>>  data in datas){
   }
   @override
   void initState() {
-    
+    _getprinter();
     printDatabase();
     Future.delayed(const Duration(seconds: 1), () {
       Navigator.push(
