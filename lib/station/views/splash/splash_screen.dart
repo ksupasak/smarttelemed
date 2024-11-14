@@ -72,10 +72,23 @@ class _Splash_ScreenState extends State<Splash_Screen> {
           context.read<DataProvider>().windowManagersetFullScreen);
     }
   }
+ void getprinter() async{
+  
+ List<RecordSnapshot<int, Map<String, Object?>>> datas = await getPrinter();
+ if (datas.length != 0) {
+for(RecordSnapshot<int, Map<String, Object?>>  data in datas){
+   debugPrint("namePrinters  :${data["namePrinters"]}");
+   context.read<DataProvider>().printername = data["namePrinters"].toString();
+}
 
+ }
+
+ 
+   
+  }
   @override
   void initState() {
-    //  fullscreen();
+    
     printDatabase();
     Future.delayed(const Duration(seconds: 1), () {
       Navigator.push(

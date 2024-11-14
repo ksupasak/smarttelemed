@@ -37,7 +37,7 @@ for(RecordSnapshot<int, Map<String, Object?>>  data in datas){
 
  }
 
-  //  namePrinters = context.read<DataProvider>().printername;
+ 
    
   }
 
