@@ -19,8 +19,6 @@ import 'package:flutter/services.dart';
 import 'package:printing/printing.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
-import 'package:qr_flutter/qr_flutter.dart';
-import 'package:barcode_widget/barcode_widget.dart';
 
 class UserInformation extends StatefulWidget {
   const UserInformation({super.key});
@@ -100,22 +98,25 @@ class _UserInformation2State extends State<UserInformation2> {
       if (res.statusCode == 200) {
         //debugPrint("Status ${resToJsonCheckQuick}");
         if (resToJsonCheckQuick["health_records"].length != 0) {
-          context.read<DataProvider>().heightHealthrecord.text =
-              resToJsonCheckQuick["health_records"][0]["height"];
-          context.read<DataProvider>().weightHealthrecord.text =
-              resToJsonCheckQuick["health_records"][0]["weight"];
-          context.read<DataProvider>().tempHealthrecord.text =
-              resToJsonCheckQuick["health_records"][0]["temp"];
-          context.read<DataProvider>().sysHealthrecord.text =
-              resToJsonCheckQuick["health_records"][0]["bp_sys"];
-          context.read<DataProvider>().diaHealthrecord.text =
-              resToJsonCheckQuick["health_records"][0]["bp_dia"];
-          context.read<DataProvider>().pulseHealthrecord.text =
-              resToJsonCheckQuick["health_records"][0]["pulse_rate"];
-          context.read<DataProvider>().spo2Healthrecord.text =
-              resToJsonCheckQuick["health_records"][0]["spo2"];
-          context.read<DataProvider>().claimCode =
-              resToJsonCheckQuick["todays"][0]["claim_code"];
+          if (resToJsonCheckQuick["health_records"][0]["height"] != null) {
+            context.read<DataProvider>().heightHealthrecord.text =
+                resToJsonCheckQuick["health_records"][0]["height"];
+          }
+
+          // context.read<DataProvider>().weightHealthrecord.text =
+          //     resToJsonCheckQuick["health_records"][0]["weight"];
+          // context.read<DataProvider>().tempHealthrecord.text =
+          //     resToJsonCheckQuick["health_records"][0]["temp"];
+          // context.read<DataProvider>().sysHealthrecord.text =
+          //     resToJsonCheckQuick["health_records"][0]["bp_sys"];
+          // context.read<DataProvider>().diaHealthrecord.text =
+          //     resToJsonCheckQuick["health_records"][0]["bp_dia"];
+          // context.read<DataProvider>().pulseHealthrecord.text =
+          //     resToJsonCheckQuick["health_records"][0]["pulse_rate"];
+          // context.read<DataProvider>().spo2Healthrecord.text =
+          //     resToJsonCheckQuick["health_records"][0]["spo2"];
+          // context.read<DataProvider>().claimCode =
+          //     resToJsonCheckQuick["todays"][0]["claim_code"];
           debugPrint("check status");
           //   debugPrint(context.read<DataProvider>().heightHealthrecord.text);
           //   debugPrint(context.read<DataProvider>().weightHealthrecord.text);
@@ -365,8 +366,7 @@ class _UserInformation2State extends State<UserInformation2> {
         'น้ำหนัก : ${resTojson2['data']['weight']} | ส่วนสูง: ${resTojson2['data']['height']} \n';
     msgDetail +=
         'อุณภูมิ : ${resTojson2['data']['temp']}  | BP: ${resTojson2['data']['bp']} \n';
-    msgDetail +=
-        'PULSE : ${resTojson2['data']['pulse_rate']}  | RR: ${resTojson2['data']['rr']} \n';
+    msgDetail += 'PULSE : ${resTojson2['data']['pulse_rate']} \n';
 
     dataBarcode = "123456789";
     dataQrcode = "WWW.example.com";
@@ -375,8 +375,8 @@ class _UserInformation2State extends State<UserInformation2> {
       return pw.Center(
         child: pw.Image(
           pw.MemoryImage(logoBytes),
-          width: 64,
-          height: 32,
+          width: 70,
+          height: 70,
         ),
       );
     }
@@ -477,12 +477,12 @@ class _UserInformation2State extends State<UserInformation2> {
               pw.SizedBox(height: 5),
               _buildDocnote(),
               pw.Divider(),
-              pw.SizedBox(height: 5),
-              _buildBarcode(dataBarcode),
-              pw.SizedBox(height: 5),
-              _buildQRCode(dataQrcode),
-              pw.SizedBox(height: 5),
-              _buildFooter(),
+              // pw.SizedBox(height: 5),
+              // _buildBarcode(dataBarcode),
+              // pw.SizedBox(height: 5),
+              // _buildQRCode(dataQrcode),
+              // pw.SizedBox(height: 5),
+              // _buildFooter(),
             ],
           );
         },
@@ -725,6 +725,7 @@ class _UserInformation2State extends State<UserInformation2> {
                                           ],
                                         ),
                                         child: ListView(children: [
+                                          // Text("printname: ${ context.read<DataProvider>().printername}"),
                                           Row(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.center,
@@ -740,40 +741,51 @@ class _UserInformation2State extends State<UserInformation2> {
                                               children: [
                                                 Text("DX :",
                                                     style: TextStyle(
+                                                      color: Colors.green,
                                                         fontSize:
                                                             width * 0.03)),
-                                                Text(dx,
-                                                    style: TextStyle(
-                                                        fontSize:
-                                                            width * 0.03)),
+                                                SizedBox(
+                                                  width: width * 0.6,
+                                                  child: Text(dx,
+                                                      style: TextStyle(
+                                                          fontSize:
+                                                              width * 0.03)),
+                                                ),
                                               ]),
                                           Row(
                                               mainAxisAlignment:
                                                   MainAxisAlignment.center,
                                               children: [
                                                 Text("Doctor Note :",
-                                                    style: TextStyle(
+                                                    style: TextStyle(  color: Colors.green,
                                                         fontSize:
                                                             width * 0.03)),
-                                                Text(doctor_note,
-                                                    style: TextStyle(
-                                                        fontSize:
-                                                            width * 0.03)),
+                                                SizedBox(
+                                                  width: width * 0.6,
+                                                  child: Text(doctor_note,
+                                                      style: TextStyle(
+                                                          fontSize:
+                                                              width * 0.03)),
+                                                ),
                                               ]),
                                           SizedBox(height: height * 0.05),
-                                          Center(
-                                            child: ElevatedButton(
-                                                onPressed: () {
-                                                  printexam();
-                                                },
-                                                child: Text("ปริ้นผลตรวจ",
-                                                    style: TextStyle(
-                                                        fontSize:
-                                                            width * 0.03))),
-                                          )
+                                         
                                         ]),
                                       ),
                                     ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Center(
+                                              child: ElevatedButton(
+                                                  onPressed: () {
+                                                    printexam();
+                                                  },
+                                                  child: Text("ปริ้นผลตรวจ",
+                                                      style: TextStyle(
+                                                          fontSize:
+                                                              width * 0.03))),
+                                            ),
+                                      )
                                   ],
                                 )
                               : resToJsonCheckQuick["message"] ==
@@ -1066,28 +1078,44 @@ class _UserInformation2State extends State<UserInformation2> {
                                             ],
                                           ),
                                           child: ListView(children: [
-                                            Text(
-                                              " claimTypeName : ${context.watch<DataProvider>().claimTypeName} ",
-                                              style: TextStyle(
-                                                fontSize: width * 0.03,
-                                              ),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Text(
+                                                  "กรุณารอตรวจ",
+                                                  style: TextStyle(
+                                                    fontSize: width * 0.04,
+                                                  ),
+                                                ),
+                                              ],
                                             ),
-                                            Text(
-                                              "claimType :(${context.watch<DataProvider>().claimType})",
-                                              style: TextStyle(
-                                                fontSize: width * 0.03,
-                                              ),
-                                            ),
-                                            Text(
-                                              "claimCode :${context.watch<DataProvider>().claimCode} ",
-                                              style: TextStyle(
-                                                fontSize: width * 0.03,
-                                              ),
-                                            ),
-                                            const Center(
-                                              child: CircularProgressIndicator(
-                                                color: Color.fromARGB(
-                                                    255, 0, 139, 130),
+                                            // Text(
+                                            //   " claimTypeName : ${context.watch<DataProvider>().claimTypeName} ",
+                                            //   style: TextStyle(
+                                            //     fontSize: width * 0.03,
+                                            //   ),
+                                            // ),
+                                            // Text(
+                                            //   "claimType :(${context.watch<DataProvider>().claimType})",
+                                            //   style: TextStyle(
+                                            //     fontSize: width * 0.03,
+                                            //   ),
+                                            // ),
+                                            // Text(
+                                            //   "claimCode :${context.watch<DataProvider>().claimCode} ",
+                                            //   style: TextStyle(
+                                            //     fontSize: width * 0.03,
+                                            //   ),
+                                            // ),
+                                            const Padding(
+                                              padding: EdgeInsets.all(8.0),
+                                              child: Center(
+                                                child:
+                                                    CircularProgressIndicator(
+                                                  color: Color.fromARGB(
+                                                      255, 0, 139, 130),
+                                                ),
                                               ),
                                             ),
                                           ]),
@@ -1399,18 +1427,18 @@ class _UserInformation2State extends State<UserInformation2> {
                 ),
               ),
             ),
-            ElevatedButton(
-                onPressed: () {
-                  timerCheckQuick?.cancel();
-                  Get.toNamed('healthRecord2');
-                },
-                child: const Text("เทส Health Record")),
-            ElevatedButton(
-                onPressed: () {
-                  timerCheckQuick?.cancel();
-                  Get.toNamed('device_manager');
-                },
-                child: const Text("Devices"))
+            // ElevatedButton(
+            //     onPressed: () {
+            //       timerCheckQuick?.cancel();
+            //       Get.toNamed('healthRecord2');
+            //     },
+            //     child: const Text("เทส Health Record")),
+            // ElevatedButton(
+            //     onPressed: () {
+            //       timerCheckQuick?.cancel();
+            //       Get.toNamed('device_manager');
+            //     },
+            //     child: const Text("Devices"))
           ],
         ),
       ),

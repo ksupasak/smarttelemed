@@ -5,6 +5,7 @@ import 'dart:math' as math;
 import 'package:provider/provider.dart';
 import 'package:smarttelemed/openvidu_flutter/app/models/connection.dart';
 import 'package:smarttelemed/openvidu_flutter/app/utils/logger.dart';
+import 'package:smarttelemed/openvidu_flutter/app/widgets/media_stream_view.dart';
 import 'package:smarttelemed/station/provider/provider.dart';
 import 'package:smarttelemed/station/views/ui/widgetdew.dart/widgetdew.dart'; 
 

@@ -26,6 +26,18 @@ class DataProvider with ChangeNotifier {
   //List<String> knownDevice = [];
   var resTojson;
   List<String> devicename = [];
+  Map<String, Object?> datamin_max = {
+    "minspo2": '',
+    "maxspo2": '',
+    "minsys": '',
+    "maxsys": '',
+    "mindia": '',
+    "maxdia": '',
+    "mintemp": '',
+    "maxtemp": '',
+    "minbmi": '',
+    "maxbmi": '',
+  };
   List<String> namescan = [
     'Yuwell HT-YHW', //เครื่องวัดอุณหภูมิ D0:05:10:00:02:74
     'Yuwell BO-YX110-FDC7', //เครื่องspo

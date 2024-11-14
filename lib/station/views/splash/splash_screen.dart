@@ -88,6 +88,7 @@ for(RecordSnapshot<int, Map<String, Object?>>  data in datas){
   }
   @override
   void initState() {
+  // fullscreen();
     _getprinter();
     printDatabase();
     Future.delayed(const Duration(seconds: 1), () {

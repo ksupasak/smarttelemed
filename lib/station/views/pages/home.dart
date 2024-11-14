@@ -358,11 +358,11 @@ class _HomeappState extends State<Homeapp> {
                         ],
                       ),
                     ),
-                    ElevatedButton(
-                        onPressed: () {
-                          Get.toNamed('regter');
-                        },
-                        child: const Text("regter"))
+                    // ElevatedButton(
+                    //     onPressed: () {
+                    //       Get.toNamed('regter');
+                    //     },
+                    //     child: const Text("regter"))
                   ],
                 )),
               ),

@@ -8,7 +8,10 @@ import 'package:flutter_libserialport/flutter_libserialport.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
+import 'package:sembast/sembast.dart';
+import 'package:smarttelemed/myapp/setting/local.dart';
 import 'package:smarttelemed/station/provider/provider.dart';
+import 'package:smarttelemed/station/views/ui/widgetdew.dart/popup.dart';
 import 'package:smarttelemed/station/views/ui/widgetdew.dart/widgetdew.dart';
 
 class SumHealthrecord extends StatefulWidget {
@@ -26,6 +29,12 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
   SerialPort? currentportHW;
   bool buttonsend = true;
 ////////////////////////////////////////////////////////////////////////////////
+  String warnTemp = '';
+  String warnSpo2 = '';
+  String warnbmi = '';
+  String warnSys = '';
+  String warnDia = '';
+///////////////////////////////////////////////////////////////////////////
   void initPorts() {
     try {
       debugPrint('Available ports: ${availablePorts.length}');
@@ -94,10 +103,54 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
                 int pr = int.parse(splitList[6].split(":")[1].split(" ")[0]);
 
                 debugPrint('Sys: $sys, Dia:$dia pr: $pr');
+
+                if (context.read<DataProvider>().datamin_max['minsys'] != '') {
+                  if (sys <
+                      double.parse(context
+                          .read<DataProvider>()
+                          .datamin_max['minsys']
+                          .toString())) {
+                    warnSys = "SYS ต่ำเกินไป";
+                    setState(() {});
+                  }
+                }
+                if (context.read<DataProvider>().datamin_max['maxsys'] != '') {
+                  if (sys >
+                      double.parse(context
+                          .read<DataProvider>()
+                          .datamin_max['maxsys']
+                          .toString())) {
+                    warnSys = "SYS สูงเกินไป";
+                    setState(() {});
+                  }
+                }
+
+                if (context.read<DataProvider>().datamin_max['mindia'] != '') {
+                  if (dia <
+                      double.parse(context
+                          .read<DataProvider>()
+                          .datamin_max['mindia']
+                          .toString())) {
+                    warnDia = "DIA ต่ำเกินไป";
+                    setState(() {});
+                  }
+                }
+                if (context.read<DataProvider>().datamin_max['maxdia'] != '') {
+                  if (dia >
+                      double.parse(context
+                          .read<DataProvider>()
+                          .datamin_max['maxdia']
+                          .toString())) {
+                    warnDia = "DIA สูงเกินไป";
+                    setState(() {});
+                  }
+                }
                 context.read<DataProvider>().sysHealthrecord.text =
                     sys.toString();
+
                 context.read<DataProvider>().diaHealthrecord.text =
                     dia.toString();
+
                 context.read<DataProvider>().pulseHealthrecord.text =
                     pr.toString();
 
@@ -157,6 +210,17 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
                   int pulse = buffer[6];
                   debugPrint('SpO2: $spo2, Pulse:$pulse');
                   if (spo2 > 0 && pulse > 0) {
+                    if (context.read<DataProvider>().datamin_max['minspo2'] !=
+                        '') {
+                      if (spo2 <
+                          double.parse(context
+                              .read<DataProvider>()
+                              .datamin_max['minspo2']
+                              .toString())) {
+                        warnSpo2 = "Spo2 ต่ำเกินไป";
+                        setState(() {});
+                      }
+                    }
                     context.read<DataProvider>().spo2Healthrecord.text =
                         spo2.toString();
                   }
@@ -208,8 +272,31 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
 
               if (splitList.length == 1) {
                 double temp = double.parse(splitList[0].split(":")[1]);
+
                 context.read<DataProvider>().tempHealthrecord.text =
                     temp.toString();
+
+                if (context.read<DataProvider>().datamin_max['mintemp'] != '') {
+                  if (temp <
+                      double.parse(context
+                          .read<DataProvider>()
+                          .datamin_max['mintemp']
+                          .toString())) {
+                    warnTemp = "อุณหภูมิ ต่ำเกินไป";
+                    setState(() {});
+                  }
+                }
+                if (context.read<DataProvider>().datamin_max['maxtemp'] != '') {
+                  if (temp >
+                      double.parse(context
+                          .read<DataProvider>()
+                          .datamin_max['maxtemp']
+                          .toString())) {
+                    warnTemp = "อุณหภูมิ สูงเกินไป";
+                    setState(() {});
+                  }
+                }
+
               } else {
                 double weight = double.parse(splitList[0].split(":")[1]);
                 context.read<DataProvider>().weightHealthrecord.text =
@@ -224,6 +311,27 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
                     context.read<DataProvider>().bmiHealthrecord.text =
                         bmi.toStringAsFixed(2);
                   });
+
+                     if (context.read<DataProvider>().datamin_max['minbmi'] != '') {
+                  if (bmi <
+                      double.parse(context
+                          .read<DataProvider>()
+                          .datamin_max['minbmi']
+                          .toString())) {
+                    warnbmi = "BMI ต่ำเกินไป";
+                    setState(() {});
+                  }
+                }
+                if (context.read<DataProvider>().datamin_max['maxbmi'] != '') {
+                  if (bmi >
+                      double.parse(context
+                          .read<DataProvider>()
+                          .datamin_max['maxbmi']
+                          .toString())) {
+                    warnbmi = "BMI สูงเกินไป";
+                    setState(() {});
+                  }
+                }
                 }
               }
 
@@ -238,6 +346,83 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
     }
   }
 
+////////////////////////////////////////////////////////////////////////////
+
+  void getClaimCode() async {
+    debugPrint("getClaimCode");
+    debugPrint("pid : ${context.read<DataProvider>().id}");
+    debugPrint("claimType : ${context.read<DataProvider>().claimType}");
+    debugPrint("mobile : ${context.read<DataProvider>().tel.text}");
+    debugPrint("correlationId : ${context.read<DataProvider>().correlationId}");
+    debugPrint("hn : ${context.read<DataProvider>().hn.text}");
+    if (context.read<DataProvider>().claimType != "") {
+      var url =
+          Uri.parse('http://localhost:8189/api/nhso-service/confirm-save');
+
+      var body = jsonEncode({
+        "pid": context.read<DataProvider>().id,
+        "claimType": context.read<DataProvider>().claimType,
+        "mobile": context.read<DataProvider>().tel.text,
+        "correlationId": context.read<DataProvider>().correlationId,
+        "hn": context.read<DataProvider>().hn.text
+      });
+
+      var res = await http.post(url,
+          headers: {'Content-Type': 'application/json'}, body: body);
+      var resTojson = json.decode(res.body);
+      debugPrint("statusCode getClaimCode ${res.statusCode}");
+      if (res.statusCode == 200) {
+        debugPrint("getClaimCode สำเร็จ ");
+        debugPrint(resTojson.toString());
+        context.read<DataProvider>().updateclaimCode(resTojson);
+        sendDataHealthrecord();
+      } else if (res.statusCode == 400) {
+        var url = Uri.parse(
+            'http://localhost:8189/api/nhso-service/latest-authen-code/${context.read<DataProvider>().id}');
+        var res = await http.get(url);
+        var resTojsonClaimCod = json.decode(res.body);
+        context.read<DataProvider>().updateclaimCode(resTojsonClaimCod);
+        sendDataHealthrecord();
+      }
+    } else {
+      setState(() {
+        buttonsend = !buttonsend;
+      });
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return Popup(
+              texthead: 'ชำระค่ารักษาพยาบาลเอง',
+              buttonbar: [
+                GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        buttonsend = !buttonsend;
+                      });
+                      Navigator.pop(context);
+                      sendDataHealthrecord();
+                    },
+                    child: BoxWidetdew(
+                        color: const Color.fromARGB(255, 106, 173, 115),
+                        height: 0.05,
+                        width: 0.2,
+                        text: 'ตกลง',
+                        textcolor: Colors.white)),
+                GestureDetector(
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    child: BoxWidetdew(
+                        color: const Color.fromARGB(255, 173, 106, 106),
+                        height: 0.05,
+                        width: 0.2,
+                        text: 'ยกเลิก',
+                        textcolor: Colors.white))
+              ],
+            );
+          });
+    }
+  }
 ////////////////////////////////////////////////////////////////////////////
 
   void sendDataHealthrecord() async {
@@ -255,7 +440,7 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
       "spo2": context.read<DataProvider>().spo2Healthrecord.text,
       "fbs": "",
       "height": context.read<DataProvider>().heightHealthrecord.text,
-      "bmi": "",
+      "bmi": context.read<DataProvider>().bmiHealthrecord.text,
       "bp":
           "${context.read<DataProvider>().sysHealthrecord.text}/${context.read<DataProvider>().diaHealthrecord.text}",
       "rr": "",
@@ -267,64 +452,75 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
     if (res.statusCode == 200) {
       debugPrint("ส่งค่าHealthrecord สำเร็จ");
       debugPrint(resTojson.toString());
-      getClaimCode();
+      sendHealthrecordGateway();
     }
   }
 
-  void getClaimCode() async {
-    debugPrint("getClaimCode");
-    debugPrint("pid : ${context.read<DataProvider>().id}");
-    debugPrint("claimType : ${context.read<DataProvider>().claimType}");
-    debugPrint("mobile : ${context.read<DataProvider>().tel.text}");
-    debugPrint("correlationId : ${context.read<DataProvider>().correlationId}");
-    debugPrint("hn : ${context.read<DataProvider>().hn.text}");
-
-    var url = Uri.parse('http://localhost:8189/api/nhso-service/confirm-save');
-
-    var body = jsonEncode({
-      "pid": context.read<DataProvider>().id,
-      "claimType": context.read<DataProvider>().claimType,
-      "mobile": context.read<DataProvider>().tel.text,
-      "correlationId": context.read<DataProvider>().correlationId,
-      "hn": context.read<DataProvider>().hn.text
-    });
-
-    var res = await http.post(url,
-        headers: {'Content-Type': 'application/json'}, body: body);
-    var resTojson = json.decode(res.body);
-    debugPrint("getClaimCode ${res.statusCode}");
-    if (res.statusCode == 200) {
-      debugPrint("getClaimCode สำเร็จ ");
-      debugPrint(resTojson.toString());
-      context.read<DataProvider>().updateclaimCode(resTojson);
-      sendclaimCode();
-    }
+  ////////////////////////////////////////////////////////////////////////////
+  void sendHealthrecordGateway() async {
+    // var url = Uri.parse('');
+    // Map<String, String> data ={};
+    //       var res = await http.post(url,body: data);
+    //        var resTojsonClaimCod = json.decode(res.body);
+    Get.offNamed('user_information');
   }
 
-  void sendclaimCode() async {
-    debugPrint("sendClaimCode ");
-    var url =
-        Uri.parse('${context.read<DataProvider>().platfromURL}/set_claim_code');
-    var res = await http.post(url, body: {
-      "claim_code": context.read<DataProvider>().claimCode,
-      "claim_type": context.read<DataProvider>().claimType,
-      "claim_type_name": context.read<DataProvider>().claimTypeName,
-      "public_id": context.read<DataProvider>().id,
-    });
-    var resTojson = json.decode(res.body);
-    debugPrint(resTojson.toString());
-    if (res.statusCode == 200) {
-      debugPrint("sendClaimCode สำเร็จ ");
-      setState(() {
-        buttonsend = true;
-      });
-      Get.offNamed('user_information');
+  // void sendclaimCode() async {
+  //   debugPrint("sendClaimCode ");
+  //   var url =
+  //       Uri.parse('https://emr-life.com/clinic_master/clinic/Api/set_claim_code');
+  //   var res = await http.post(url, body: {
+  //     "claim_code": context.read<DataProvider>().claimCode,
+  //     "claim_type": context.read<DataProvider>().claimType,
+  //     "claim_type_name": context.read<DataProvider>().claimTypeName,
+  //     "public_id": context.read<DataProvider>().id,
+  //   });
+  //   var resTojson = json.decode(res.body);
+  //   debugPrint(resTojson.toString());
+  //   if (res.statusCode == 200) {
+  //     debugPrint("sendClaimCode สำเร็จ ");
+  //     setState(() {
+  //       buttonsend = true;
+  //     });
+  //     Get.offNamed('user_information');
+  //   }
+  // }
+  void getmin_max() async {
+    List<RecordSnapshot<int, Map<String, Object?>>> data = await getMinMax();
+    debugPrint(data.toString());
+    if (data != []) {
+      for (RecordSnapshot<int, Map<String, Object?>> record in data!) {
+        context.read<DataProvider>().datamin_max['minsys'] =
+            record["minsys"].toString();
+        context.read<DataProvider>().datamin_max['maxsys'] =
+            record["maxsys"].toString();
+        context.read<DataProvider>().datamin_max['minspo2'] =
+            record["minspo2"].toString();
+        context.read<DataProvider>().datamin_max['maxspo2'] =
+            record["maxspo2"].toString();
+        context.read<DataProvider>().datamin_max['mindia'] =
+            record["mindia"].toString();
+        context.read<DataProvider>().datamin_max['maxdia'] =
+            record["maxdia"].toString();
+
+        context.read<DataProvider>().datamin_max['mintemp'] =
+            record["mintemp"].toString();
+        context.read<DataProvider>().datamin_max['maxtemp'] =
+            record["maxtemp"].toString();
+        context.read<DataProvider>().datamin_max['minbmi'] =
+            record["minbmi"].toString();
+        context.read<DataProvider>().datamin_max['maxbmi'] =
+            record["maxbmi"].toString();
+      }
     }
+    setState(() {});
   }
 
   @override
   void initState() {
+    context.read<DataProvider>().bmiHealthrecord = TextEditingController();
     super.initState();
+    getmin_max();
     startH_W();
     startBP();
     startSpo2();
@@ -349,10 +545,35 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     DataProvider dataProvider = context.read<DataProvider>();
+    TextStyle textStyle = TextStyle(fontSize: width * 0.03, color: Colors.red);
     return SizedBox(
         height: height * 0.7,
         width: width,
         child: ListView(children: [
+          // Text(
+          //     "${context.read<DataProvider>().datamin_max['minspo2']}/${context.read<DataProvider>().datamin_max['maxspo2']}"),
+          // Text(
+          //     "${context.read<DataProvider>().datamin_max['minsys']}/${context.read<DataProvider>().datamin_max['maxsys']}"),
+          // Text(
+          //     "${context.read<DataProvider>().datamin_max['mindia']}/${context.read<DataProvider>().datamin_max['maxdia']}"),
+          // Text(
+          //     "${context.read<DataProvider>().datamin_max['mintemp']}/${context.read<DataProvider>().datamin_max['maxtemp']}"),
+          // Text(
+          //     "${context.read<DataProvider>().datamin_max['minbmi']}/${context.read<DataProvider>().datamin_max['maxbmi']}"),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+           
+            warnTemp != ""
+                ? Text(warnTemp, style: textStyle)
+                : const SizedBox(),
+            warnSys != "" ? Text(warnSys, style: textStyle) : const SizedBox(),
+            warnDia != "" ? Text(warnDia, style: textStyle) : const SizedBox(),
+            warnSpo2 != ""
+                ? Text(warnSpo2, style: textStyle)
+                : const SizedBox(),
+            warnbmi != "" ? Text(warnbmi, style: textStyle) : const SizedBox(),
+          ]),
           Center(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -422,37 +643,14 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
                           fontSize: width * 0.03,
                         ),
                       )),
-                  ElevatedButton(
-                      onPressed: () {
-                        // context.read<DataProvider>().sysHealthrecord.text =
-                        //     '120';
-                        // context.read<DataProvider>().diaHealthrecord.text =
-                        //     '80';
-                        // context.read<DataProvider>().pulseHealthrecord.text =
-                        //     '89';
-                        // context.read<DataProvider>().spo2Healthrecord.text =
-                        //     '99';
-                        // context.read<DataProvider>().heightHealthrecord.text =
-                        //     '165';
-                        // context.read<DataProvider>().weightHealthrecord.text =
-                        //     '50';
-                        // context.read<DataProvider>().tempHealthrecord.text =
-                        //     '37.5';
-                        sendclaimCode();
-                      },
-                      child: Text(
-                        "demo",
-                        style: TextStyle(
-                          fontSize: width * 0.03,
-                        ),
-                      )),
                   buttonsend
                       ? ElevatedButton(
                           onPressed: () {
                             setState(() {
                               buttonsend = !buttonsend;
                             });
-                            sendDataHealthrecord();
+                            getClaimCode();
+
                             dataProvider.updateviewhealthrecord("");
                           },
                           child: Text(
