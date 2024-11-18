@@ -3,6 +3,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_libserialport/flutter_libserialport.dart';
 import 'package:get/get.dart';
@@ -35,6 +36,11 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
   String warnSys = '';
   String warnDia = '';
 ///////////////////////////////////////////////////////////////////////////
+  bool statusConnectH_W = false;
+  bool statusConnectSPO2 = false;
+  bool statusConnectBP = false;
+///////////////////////////////////////////////////////////////////////////
+
   void initPorts() {
     try {
       debugPrint('Available ports: ${availablePorts.length}');
@@ -163,7 +169,7 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
         }
       }
     } on Exception catch (_) {
-      print("throwing new error");
+      debugPrint("throwing new error");
     }
   }
 
@@ -179,7 +185,7 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
           debugPrint("found SPO2");
           int status = 0;
           if (!port.openReadWrite()) {
-            print(SerialPort.lastError);
+            debugPrint(SerialPort.lastError.toString());
             exit(-1);
           }
           currentportspo2 = port;
@@ -235,7 +241,7 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
         }
       }
     } on Exception catch (_) {
-      print("throwing new error");
+      debugPrint("throwing new error");
     }
   }
 
@@ -250,7 +256,7 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
           debugPrint("found W_H");
           int status = 0;
           if (!port.openReadWrite()) {
-            print(SerialPort.lastError);
+            debugPrint(SerialPort.lastError.toString());
           }
           currentportHW = port;
           debugPrint("open W_H");
@@ -296,7 +302,6 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
                     setState(() {});
                   }
                 }
-
               } else {
                 double weight = double.parse(splitList[0].split(":")[1]);
                 context.read<DataProvider>().weightHealthrecord.text =
@@ -312,26 +317,28 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
                         bmi.toStringAsFixed(2);
                   });
 
-                     if (context.read<DataProvider>().datamin_max['minbmi'] != '') {
-                  if (bmi <
-                      double.parse(context
-                          .read<DataProvider>()
-                          .datamin_max['minbmi']
-                          .toString())) {
-                    warnbmi = "BMI ต่ำเกินไป";
-                    setState(() {});
+                  if (context.read<DataProvider>().datamin_max['minbmi'] !=
+                      '') {
+                    if (bmi <
+                        double.parse(context
+                            .read<DataProvider>()
+                            .datamin_max['minbmi']
+                            .toString())) {
+                      warnbmi = "BMI ต่ำเกินไป";
+                      setState(() {});
+                    }
                   }
-                }
-                if (context.read<DataProvider>().datamin_max['maxbmi'] != '') {
-                  if (bmi >
-                      double.parse(context
-                          .read<DataProvider>()
-                          .datamin_max['maxbmi']
-                          .toString())) {
-                    warnbmi = "BMI สูงเกินไป";
-                    setState(() {});
+                  if (context.read<DataProvider>().datamin_max['maxbmi'] !=
+                      '') {
+                    if (bmi >
+                        double.parse(context
+                            .read<DataProvider>()
+                            .datamin_max['maxbmi']
+                            .toString())) {
+                      warnbmi = "BMI สูงเกินไป";
+                      setState(() {});
+                    }
                   }
-                }
                 }
               }
 
@@ -341,8 +348,8 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
         }
       }
     } on Exception catch (e) {
-      print("throwing new error");
-      print(e);
+      debugPrint("throwing new error");
+      debugPrint(e.toString());
     }
   }
 
@@ -438,18 +445,17 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
       "bp_dia": context.read<DataProvider>().diaHealthrecord.text,
       "pulse_rate": context.read<DataProvider>().pulseHealthrecord.text,
       "spo2": context.read<DataProvider>().spo2Healthrecord.text,
-      "fbs": "",
       "height": context.read<DataProvider>().heightHealthrecord.text,
       "bmi": context.read<DataProvider>().bmiHealthrecord.text,
       "bp":
           "${context.read<DataProvider>().sysHealthrecord.text}/${context.read<DataProvider>().diaHealthrecord.text}",
-      "rr": "",
-      "cc": "",
-      "recep_public_id": "",
       "claim_code": context.read<DataProvider>().claimCode.toString(),
     });
-    var resTojson = json.decode(res.body);
+    debugPrint("ส่งค่าHealthrecordสำเร็จ");
+    debugPrint(res.statusCode.toString());
+
     if (res.statusCode == 200) {
+      var resTojson = json.decode(res.body);
       debugPrint("ส่งค่าHealthrecord สำเร็จ");
       debugPrint(resTojson.toString());
       sendHealthrecordGateway();
@@ -540,6 +546,11 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
     super.dispose();
   }
 
+  List<String> imggeCarouselSlider = [
+    "assets/1117.png",
+    "assets/ye990.png",
+    "assets/unnamed.jpg",
+  ];
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
@@ -547,7 +558,7 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
     DataProvider dataProvider = context.read<DataProvider>();
     TextStyle textStyle = TextStyle(fontSize: width * 0.03, color: Colors.red);
     return SizedBox(
-        height: height * 0.7,
+        height: height * 0.78,
         width: width,
         child: ListView(children: [
           // Text(
@@ -560,10 +571,21 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
           //     "${context.read<DataProvider>().datamin_max['mintemp']}/${context.read<DataProvider>().datamin_max['maxtemp']}"),
           // Text(
           //     "${context.read<DataProvider>().datamin_max['minbmi']}/${context.read<DataProvider>().datamin_max['maxbmi']}"),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-           
+          CarouselSlider.builder(
+            itemCount: 3,
+            options: CarouselOptions(
+                autoPlay: true,
+                enlargeCenterPage: true,
+                viewportFraction: 0.9,
+                aspectRatio: 2.0,
+                initialPage: 2,
+                autoPlayInterval: const Duration(seconds: 10)),
+            itemBuilder: (context, index, pageViewIndex) => Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Image.asset(imggeCarouselSlider[index]),
+            ),
+          ),
+          Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             warnTemp != ""
                 ? Text(warnTemp, style: textStyle)
                 : const SizedBox(),
@@ -629,38 +651,72 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  ElevatedButton(
+            child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              ElevatedButton(
+                  onPressed: () {
+                    Get.offNamed('user_information');
+                    //   Get.toNamed('spo2');
+                  },
+                  child: Text(
+                    "กลับ",
+                    style: TextStyle(
+                      fontSize: width * 0.03,
+                    ),
+                  )),
+              buttonsend
+                  ? ElevatedButton(
                       onPressed: () {
-                        Get.offNamed('user_information');
-                        //   Get.toNamed('spo2');
+                        setState(() {
+                          buttonsend = !buttonsend;
+                        });
+                        getClaimCode();
+
+                        dataProvider.updateviewhealthrecord("");
                       },
                       child: Text(
-                        "ย้อนกลับ",
+                        "ส่ง",
                         style: TextStyle(
                           fontSize: width * 0.03,
                         ),
-                      )),
-                  buttonsend
-                      ? ElevatedButton(
-                          onPressed: () {
-                            setState(() {
-                              buttonsend = !buttonsend;
-                            });
-                            getClaimCode();
-
-                            dataProvider.updateviewhealthrecord("");
-                          },
-                          child: Text(
-                            "ส่ง",
-                            style: TextStyle(
-                              fontSize: width * 0.03,
-                            ),
-                          ))
-                      : const SizedBox(child: CircularProgressIndicator()),
-                ]),
+                      ))
+                  : const SizedBox(child: CircularProgressIndicator()),
+            ]),
+          ),
+          Row(
+            children: [
+              ElevatedButton.icon(
+                  onPressed: () {
+                    showModalBottomSheet(
+                      backgroundColor: const Color.fromARGB(0, 255, 255, 255),
+                      isScrollControlled: true,
+                      shape: const RoundedRectangleBorder(
+                          borderRadius:
+                              BorderRadius.vertical(top: Radius.circular(10))),
+                      context: context,
+                      builder: (context) => Container(
+                        height: height * 0.3,
+                        decoration: const BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(20),
+                                topRight: Radius.circular(20))),
+                        child: Column(children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(
+                                height: height * 0.01,
+                                width: width * 0.4,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(50),
+                                    color: Colors.grey)),
+                          ),
+                          SizedBox(width: width)
+                        ]),
+                      ),
+                    );
+                  },
+                  label: const Icon(Icons.settings)),
+            ],
           )
         ]));
   }

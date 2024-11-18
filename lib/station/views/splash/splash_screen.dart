@@ -72,23 +72,50 @@ class _Splash_ScreenState extends State<Splash_Screen> {
           context.read<DataProvider>().windowManagersetFullScreen);
     }
   }
- void _getprinter() async{
-  
- List<RecordSnapshot<int, Map<String, Object?>>> datas = await getPrinter();
- if (datas.length != 0) {
-for(RecordSnapshot<int, Map<String, Object?>>  data in datas){
-   debugPrint("namePrinters  :${data["namePrinters"]}");
-   context.read<DataProvider>().printername = data["namePrinters"].toString();
-}
 
- }
-
- 
-   
+  void _getprinter() async {
+    List<RecordSnapshot<int, Map<String, Object?>>> datas = await getPrinter();
+    if (datas.length != 0) {
+      for (RecordSnapshot<int, Map<String, Object?>> data in datas) {
+        debugPrint("namePrinters  :${data["namePrinters"]}");
+        context.read<DataProvider>().printername =
+            data["namePrinters"].toString();
+      }
+    }
   }
+
+  void getconfig() async {
+    List<RecordSnapshot<int, Map<String, Object?>>>? dataconfig;
+    dataconfig = await getInOutHospital();
+    debugPrint("dataconfig INHospital $dataconfig");
+    if (dataconfig?.length != 0) {
+      for (RecordSnapshot<int, Map<String, Object?>> record in dataconfig!) {
+        if (record["in_hospital"] != "true") {
+          context.read<DataProvider>().in_hospital = false;
+          setState(() {});
+        }
+        if (record['requirel_id_card'] != "true") {
+          context.read<DataProvider>().requirel_id_card = false;
+          setState(() {});
+        }
+        if (record['require_VN'] != "true") {
+          context.read<DataProvider>().require_VN = false;
+          setState(() {});
+        }
+        context.read<DataProvider>().text_no_idcard =
+            record["text_no_idcard"].toString();
+        context.read<DataProvider>().text_no_hn =
+            record["text_no_hn"].toString();
+        context.read<DataProvider>().text_no_vn =
+            record["text_no_vn"].toString();
+      }
+    }
+  }
+
   @override
   void initState() {
-  // fullscreen();
+//fullscreen();
+    getconfig();
     _getprinter();
     printDatabase();
     Future.delayed(const Duration(seconds: 1), () {

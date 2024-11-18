@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:sembast/sembast.dart';
 
 class DataProvider with ChangeNotifier {
   bool windowManagersetFullScreen = true;
@@ -21,6 +22,13 @@ class DataProvider with ChangeNotifier {
   FontWeight fontWeight_name_hospital = FontWeight.w600;
   Color shadow_name_hospital = Color.fromARGB(199, 255, 0, 0);
   String printername = '';
+
+  bool in_hospital = true;
+  bool requirel_id_card = true;
+  bool require_VN = true;
+  String text_no_idcard = '';
+  String text_no_hn = '';
+  String text_no_vn = '';
   // r'KPOS_80 Printer';
   // //r'\\192.168.0.119\KPOS_80 Printer';
   //List<String> knownDevice = [];
