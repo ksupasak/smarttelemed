@@ -127,11 +127,23 @@ class _VideocallWidgetState extends State<VideocallWidget> {
 
   Future<void> _connect() async {
     apiService.createSession().then((sessionId) {
+
+ debugPrint("t1 $sessionId");
+
       apiService.createToken().then((token) {
+
+        
+ debugPrint("t2 $token");
+
         session = Session(sessionId, token);
+
+ debugPrint("t3 $session");
+
         session?.messageStream.listen((message) {
           setState(() {});
         });
+
+         debugPrint("t4 ");
 
         session!.onNotifySetRemoteMediaStream = (String connectionId) {
           refresh();
@@ -151,6 +163,9 @@ class _VideocallWidgetState extends State<VideocallWidget> {
         startWebSocket();
       }).catchError((error) {
         if (context.mounted) {
+                    debugPrint("qsss");
+                    debugPrint(error);
+
           ScaffoldMessenger.of(context)
               .showSnackBar(SnackBar(content: Text(error.toString())));
         }

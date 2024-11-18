@@ -61,10 +61,13 @@ dependencies:
   window_manager: ^0.3.0
   usb_serial: ^0.5.2
   flutter_libserialport: ^0.2.3 
-  openvidu_flutter: ^0.0.12
+  # openvidu_flutter: ^0.0.12
   qr_flutter: ^4.0.0
   barcode_widget: ^2.0.2
 
+  openvidu_flutter:
+     path: "vendors/openvidu-flutter"  
+     
   
 dev_dependencies:
   flutter_test:

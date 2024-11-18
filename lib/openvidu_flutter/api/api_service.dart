@@ -29,7 +29,7 @@ class ApiService {
     };
     return apiClient
         .request(Config(
-            uri: Uri.parse('https://$url/api/sessions'),
+            uri: Uri.parse('https://$url/openvidu/api/sessions'),
             headers: headersMap,
             body: RequestBody.json(bodyMap),
             method: RequestMethod.post,
@@ -52,7 +52,7 @@ class ApiService {
     //api/sessions/<SESSION_ID>/connection
     return apiClient
         .request(Config(
-            uri: Uri.parse('https://$url/api/sessions/$sessionId/connections'),
+            uri: Uri.parse('https://$url/openvidu/api/sessions/$sessionId/connections'),
             headers: headersMap,
             body: RequestBody.json(bodyMap),
             method: RequestMethod.post,

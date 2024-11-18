@@ -234,7 +234,7 @@ class _HomeappState extends State<Homeapp> {
       context.read<DataProvider>().claimTypeName = '';
       context.read<DataProvider>().claimCode = '';
     });
-    getIdCard();
+   // getIdCard();
     // readerID();
 
     super.initState();
