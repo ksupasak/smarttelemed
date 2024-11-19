@@ -1,11 +1,13 @@
 import 'dart:math';
 import 'dart:io';
 import 'dart:async';
-
+import 'package:http/http.dart' as http;
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart'; 
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:logging/logging.dart';
+import 'package:smarttelemed/myapp/provider/provider.dart';
 import 'package:smarttelemed/openvidu_flutter/screens/videocall.dart';
 
 class PrepareVideocall extends StatefulWidget {
@@ -42,6 +44,15 @@ class _PrepareVideocallState extends State<PrepareVideocall> {
 
     _loadSharedPref();
     _liveConn();
+    getvideocalldata();
+  }
+
+  Future<void> getvideocalldata() async {
+    var url =
+        Uri.parse('${context.read<DataProvider>().platfromURL}/get_video');
+    var res = await http.post(url, body: {
+      'public_id': context.read<DataProvider>().id,
+    });
   }
 
   Future<void> _loadSharedPref() async {
@@ -93,21 +104,6 @@ class _PrepareVideocallState extends State<PrepareVideocall> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Flutter OpenVidu'), actions: <Widget>[
-        Row(children: <Widget>[
-          isOnline
-              ? const Image(
-                  image: AssetImage('assets/imgs/openvidu_logo.png'),
-                  fit: BoxFit.fill,
-                  width: 35,
-                )
-              : const Image(
-                  image: AssetImage('assets/imgs/offline_icon.png'),
-                  fit: BoxFit.fill,
-                  width: 35,
-                ),
-        ]),
-      ]),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(10.0),
         child: Center(

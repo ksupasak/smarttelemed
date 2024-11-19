@@ -483,9 +483,10 @@ packages:
   openvidu_flutter:
     dependency: "direct main"
     description:
-      path: "vendors/openvidu-flutter"
-      relative: true
-    source: path
+      name: openvidu_flutter
+      sha256: f42ed70de1fae048d9bf88b6fe10036e9386e06e81732ca18f5e6b68ea1e407c
+      url: "https://pub.dev"
+    source: hosted
     version: "0.0.12"
   path:
     dependency: transitive

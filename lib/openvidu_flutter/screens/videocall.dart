@@ -9,7 +9,7 @@ import 'package:openvidu_flutter/utils/session.dart';
 import 'package:openvidu_flutter/utils/utils.dart';
 import 'package:openvidu_flutter/widgets/chat_screen.dart';
 import 'package:openvidu_flutter/widgets/custom_draggable.dart';
-import 'package:openvidu_flutter/widgets/participant_widget.dart'; 
+import 'package:openvidu_flutter/widgets/participant_widget.dart';
 import 'package:smarttelemed/openvidu_flutter/api/api_service.dart';
 import 'package:smarttelemed/openvidu_flutter/screens/prepare_videocall.dart';
 
@@ -127,23 +127,20 @@ class _VideocallWidgetState extends State<VideocallWidget> {
 
   Future<void> _connect() async {
     apiService.createSession().then((sessionId) {
-
- debugPrint("t1 $sessionId");
+      debugPrint("t1 $sessionId");
 
       apiService.createToken().then((token) {
-
-        
- debugPrint("t2 $token");
+        debugPrint("t2 $token");
 
         session = Session(sessionId, token);
 
- debugPrint("t3 $session");
+        debugPrint("t3 $session");
 
         session?.messageStream.listen((message) {
           setState(() {});
         });
 
-         debugPrint("t4 ");
+        debugPrint("t4 ");
 
         session!.onNotifySetRemoteMediaStream = (String connectionId) {
           refresh();
@@ -163,8 +160,8 @@ class _VideocallWidgetState extends State<VideocallWidget> {
         startWebSocket();
       }).catchError((error) {
         if (context.mounted) {
-                    debugPrint("qsss");
-                    debugPrint(error);
+          debugPrint("qsss");
+          debugPrint(error);
 
           ScaffoldMessenger.of(context)
               .showSnackBar(SnackBar(content: Text(error.toString())));

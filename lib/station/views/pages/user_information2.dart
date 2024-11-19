@@ -7,8 +7,11 @@ import 'package:flutter/material.dart';
 // import 'package:flutter_pos_printer_platform/esc_pos_utils_platform/esc_pos_utils_platform.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
+import 'package:sembast/sembast.dart';
+import 'package:smarttelemed/myapp/setting/local.dart';
 import 'package:smarttelemed/station/provider/provider.dart';
 import 'package:smarttelemed/station/provider/provider_function.dart';
+import 'package:smarttelemed/station/views/ui/widgetdew.dart/popup.dart';
 
 import 'package:smarttelemed/station/views/ui/widgetdew.dart/widgetdew.dart';
 import 'package:http/http.dart' as http;
@@ -63,6 +66,7 @@ class _UserInformation2State extends State<UserInformation2> {
   var resTojson3;
   var resTojson2;
   var resTojson;
+  // var resTojsonGateway;
   String height = '-';
   String weight = '-';
   String temp = '-';
@@ -75,6 +79,8 @@ class _UserInformation2State extends State<UserInformation2> {
   bool ontap = false;
   String doctor_note = '--';
   String dx = '--';
+  String text_no_vn = "";
+
 // -------
 
   // < karn  start >
@@ -86,7 +92,7 @@ class _UserInformation2State extends State<UserInformation2> {
   var resToJsonCheckQuick;
   Timer? timerCheckQuick;
   Future<void> checkQuick() async {
-    timerCheckQuick = Timer.periodic(const Duration(seconds: 4), (timer) async {
+    timerCheckQuick = Timer.periodic(const Duration(seconds: 1), (timer) async {
       var url =
           Uri.parse('${context.read<DataProvider>().platfromURL}/check_quick');
       var res = await http.post(url, body: {
@@ -118,13 +124,6 @@ class _UserInformation2State extends State<UserInformation2> {
           // context.read<DataProvider>().claimCode =
           //     resToJsonCheckQuick["todays"][0]["claim_code"];
           debugPrint("check status");
-          //   debugPrint(context.read<DataProvider>().heightHealthrecord.text);
-          //   debugPrint(context.read<DataProvider>().weightHealthrecord.text);
-          //   debugPrint(context.read<DataProvider>().tempHealthrecord.text);
-          //   debugPrint(context.read<DataProvider>().sysHealthrecord.text);
-          //   debugPrint(context.read<DataProvider>().diaHealthrecord.text);
-          //   debugPrint(context.read<DataProvider>().pulseHealthrecord.text);
-          //   debugPrint(context.read<DataProvider>().spo2Healthrecord.text);
         }
       }
       if (resToJsonCheckQuick["message"] == "processing") {
@@ -312,7 +311,7 @@ class _UserInformation2State extends State<UserInformation2> {
     });
     setState(() {
       resTojson2 = json.decode(res.body);
-      debugPrint('+++++++' + resTojson2.toString());
+      debugPrint('+++++++$resTojson2');
       doctor_note = resTojson2['data']['doctor_note'];
       dx = resTojson2['data']['dx'];
       if (resTojson2 != null) {
@@ -368,8 +367,8 @@ class _UserInformation2State extends State<UserInformation2> {
         'อุณภูมิ : ${resTojson2['data']['temp']}  | BP: ${resTojson2['data']['bp']} \n';
     msgDetail += 'PULSE : ${resTojson2['data']['pulse_rate']} \n';
 
-    dataBarcode = "123456789";
-    dataQrcode = "WWW.example.com";
+    dataBarcode = resTojson2["personal"]["hn"];
+    dataQrcode = resTojson2["personal"]["hn"];
 
     pw.Widget _buildLogo(Uint8List logoBytes) {
       return pw.Center(
@@ -389,7 +388,6 @@ class _UserInformation2State extends State<UserInformation2> {
             'ผลการตรวจ',
             style: font_sizeBody,
           ),
-          // pw.Text('Address Line 1\nCity, State ZIP\nPhone: (555) 123-4567'),
           pw.Text(
             msgHead,
             style: font_sizeBody,
@@ -451,12 +449,12 @@ class _UserInformation2State extends State<UserInformation2> {
         crossAxisAlignment: pw.CrossAxisAlignment.center,
         children: [
           pw.Text(
-            'Thank you for visit !',
+            '--',
             textAlign: pw.TextAlign.center,
             style: pw.TextStyle(font: thaiFont, fontSize: 12),
           ),
           pw.Text(
-            'Visit us online at www.example.com',
+            '-',
             textAlign: pw.TextAlign.center,
             style: pw.TextStyle(font: thaiFont, fontSize: 10),
           ),
@@ -477,12 +475,12 @@ class _UserInformation2State extends State<UserInformation2> {
               pw.SizedBox(height: 5),
               _buildDocnote(),
               pw.Divider(),
-              // pw.SizedBox(height: 5),
-              // _buildBarcode(dataBarcode),
-              // pw.SizedBox(height: 5),
-              // _buildQRCode(dataQrcode),
-              // pw.SizedBox(height: 5),
-              // _buildFooter(),
+              pw.SizedBox(height: 5),
+              _buildBarcode(dataBarcode),
+              pw.SizedBox(height: 5),
+              _buildQRCode(dataQrcode),
+              pw.SizedBox(height: 5),
+              _buildFooter(),
             ],
           );
         },
@@ -500,106 +498,7 @@ class _UserInformation2State extends State<UserInformation2> {
     } else {
       print("No printer selected.");
     }
-
-    // debugPrint("inti Printer");
-    // List<int> bytes = [];
-
-    // final profile = await CapabilityProfile.load(name: 'XP-N160I');
-    // final generator = Generator(PaperSize.mm58, profile);
-
-    // bytes += generator.text(context.read<DataProvider>().name_hospital,
-    //     styles: const PosStyles(align: PosAlign.center));
-
-    // bytes += generator.text('Examination',
-    //     styles: const PosStyles(
-    //         width: PosTextSize.size1, height: PosTextSize.size1));
-    // bytes += generator.text('\n');
-    // bytes += generator.text('Doctor  :  pairot tanyajasesn');
-    // bytes += generator.text('Results :  $dx');
-    // bytes += generator.text('        :  $doctor_note');
-    // printer?.printTest(bytes);
   }
-
-  // Future<void> printq() async {
-  //   List<int> bytes = [];
-
-  //   final profile = await CapabilityProfile.load(name: 'OFE6'); //XP-N160I
-  //   final generator = Generator(PaperSize.mm58, profile);
-  //   bytes += generator.text(context.read<DataProvider>().name_hospital,
-  //       styles: const PosStyles(align: PosAlign.center));
-  //   bytes += generator.text("Q ${resTojson['queue_number']}",
-  //       styles: const PosStyles(
-  //           align: PosAlign.center,
-  //           width: PosTextSize.size6,
-  //           height: PosTextSize.size6,
-  //           fontType: PosFontType.fontA));
-  //   bytes += generator.text('\n');
-  //   bytes +=
-  //       generator.text('Doctor :   ${resTojson['todays'][0]['doctor_name']}');
-  //   bytes += generator.text(
-  //       'Care   :  ${resTojson['todays'][0]['care_name']} / ( ${resTojson['todays'][0]['slot']} )');
-  //   bytes += generator.text('\n');
-  //   bytes += generator.text('Health Information',
-  //       styles: const PosStyles(align: PosAlign.center));
-  //   bytes += generator.row([
-  //     PosColumn(
-  //         width: 4,
-  //         text: 'height',
-  //         styles: const PosStyles(align: PosAlign.center, codeTable: 'CP1252')),
-  //     PosColumn(
-  //         width: 4,
-  //         text: 'weight',
-  //         styles: const PosStyles(align: PosAlign.center, codeTable: 'CP1252')),
-  //     PosColumn(
-  //         width: 4,
-  //         text: 'temp',
-  //         styles: const PosStyles(align: PosAlign.center, codeTable: 'CP1252')),
-  //   ]);
-  //   bytes += generator.row([
-  //     PosColumn(
-  //         width: 4,
-  //         text: height,
-  //         styles: const PosStyles(align: PosAlign.center, codeTable: 'CP1252')),
-  //     PosColumn(
-  //         width: 4,
-  //         text: weight,
-  //         styles: const PosStyles(align: PosAlign.center, codeTable: 'CP1252')),
-  //     PosColumn(
-  //         width: 4,
-  //         text: temp,
-  //         styles: const PosStyles(align: PosAlign.center, codeTable: 'CP1252')),
-  //   ]);
-  //   bytes += generator.row([
-  //     PosColumn(
-  //         width: 4,
-  //         text: 'sys',
-  //         styles: const PosStyles(align: PosAlign.center, codeTable: 'CP1252')),
-  //     PosColumn(
-  //         width: 4,
-  //         text: 'dia',
-  //         styles: const PosStyles(align: PosAlign.center, codeTable: 'CP1252')),
-  //     PosColumn(
-  //         width: 4,
-  //         text: 'spo2',
-  //         styles: const PosStyles(align: PosAlign.center, codeTable: 'CP1252')),
-  //   ]);
-  //   bytes += generator.row([
-  //     PosColumn(
-  //         width: 4,
-  //         text: sys,
-  //         styles: const PosStyles(align: PosAlign.center, codeTable: 'CP1252')),
-  //     PosColumn(
-  //         width: 4,
-  //         text: dia,
-  //         styles: const PosStyles(align: PosAlign.center, codeTable: 'CP1252')),
-  //     PosColumn(
-  //         width: 4,
-  //         text: spo2,
-  //         styles: const PosStyles(align: PosAlign.center, codeTable: 'CP1252')),
-  //   ]);
-  //   ontap = false;
-  //   printer?.printTest(bytes);
-  // }
 
   Future<void> _loadThaiFont() async {
     final fontData = await rootBundle.load('assets/fonts/THSarabunNew.ttf');
@@ -610,10 +509,8 @@ class _UserInformation2State extends State<UserInformation2> {
     });
   }
 
-  // Function to get available printers
   Future<void> _selectPrinter() async {
     final printers = await Printing.listPrinters();
-    // selectedPrinter == context.read<DataProvider>().printername;
 
     print('lists_printer....');
     if (printers.isNotEmpty) {
@@ -623,34 +520,77 @@ class _UserInformation2State extends State<UserInformation2> {
       }
 
       final kposPrinter = printers.firstWhere(
-        // (printer) => printer.name == r'\\192.168.0.119\KPOS_80 Printer',
         (printer) => printer.name == context.read<DataProvider>().printername,
-        orElse: () =>
-            printers.first, // Fallback to the first printer if not found
+        orElse: () => printers.first,
       );
       debugPrint('selected :=> ${kposPrinter}');
 
       setState(() {
-        //selectedPrinter =   printers.first;  //printers.first; // Select the first printer as default
         selectedPrinter = kposPrinter;
       });
     }
   }
 
+  void senvisitGateway() async {
+    var url = Uri.parse(
+        'http://localhost:5000/api/patient?cid=${context.read<DataProvider>().id}');
+    var res = await http.get(url);
+    var resTojsonGateway = json.decode(res.body);
+    debugPrint(resTojsonGateway.toString());
+    if (resTojsonGateway["statuscode"] == 400) {
+      debugPrint("ไม่มี vitalsign ติดต่อเจ้าหน้าที่ ");
+
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return Popup(
+              texthead: 'ไม่มี  VN',
+              textbody: text_no_vn,
+              buttonbar: [
+                GestureDetector(
+                    onTap: () {},
+                    child: BoxWidetdew(
+                        color: const Color.fromARGB(255, 106, 173, 115),
+                        height: 0.05,
+                        width: 0.2,
+                        text: 'ตกลง',
+                        textcolor: Colors.white)),
+              ],
+            );
+          });
+    }
+    if (resTojsonGateway["statuscode"] == 100) {
+      debugPrint("มี   ");
+    }
+  }
+
+  void getconfig() async {
+    List<RecordSnapshot<int, Map<String, Object?>>>? dataconfig;
+    dataconfig = await getInOutHospital();
+    debugPrint("dataconfig INHospital $dataconfig");
+    if (dataconfig?.length != 0) {
+      for (RecordSnapshot<int, Map<String, Object?>> record in dataconfig!) {
+        text_no_vn = record["text_no_vn"].toString();
+      }
+    }
+    debugPrint(text_no_vn);
+    setState(() {});
+    senvisitGateway();
+  }
+
   @override
   void initState() {
+    //  getconfig();
+
     checkQuick();
-    // checkt_queue();
-    // karn start
     _loadThaiFont();
-
-    // karn end
-
-    // printer = ESMPrinter([
-    //   {'vendor_id': '19267', 'product_id': '14384'},
-    // ]);
-
     super.initState();
+  }
+
+  String birthdate(String datas) {
+    String data =
+        "${datas[6]}${datas[7]}/${datas[4]}${datas[5]}/${datas[0]}${datas[1]}${datas[2]}${datas[3]}";
+    return data;
   }
 
   @override
@@ -725,7 +665,6 @@ class _UserInformation2State extends State<UserInformation2> {
                                           ],
                                         ),
                                         child: ListView(children: [
-                                          // Text("printname: ${ context.read<DataProvider>().printername}"),
                                           Row(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.center,
@@ -741,7 +680,7 @@ class _UserInformation2State extends State<UserInformation2> {
                                               children: [
                                                 Text("DX :",
                                                     style: TextStyle(
-                                                      color: Colors.green,
+                                                        color: Colors.green,
                                                         fontSize:
                                                             width * 0.03)),
                                                 SizedBox(
@@ -757,7 +696,8 @@ class _UserInformation2State extends State<UserInformation2> {
                                                   MainAxisAlignment.center,
                                               children: [
                                                 Text("Doctor Note :",
-                                                    style: TextStyle(  color: Colors.green,
+                                                    style: TextStyle(
+                                                        color: Colors.green,
                                                         fontSize:
                                                             width * 0.03)),
                                                 SizedBox(
@@ -769,67 +709,71 @@ class _UserInformation2State extends State<UserInformation2> {
                                                 ),
                                               ]),
                                           SizedBox(height: height * 0.05),
-                                         
                                         ]),
                                       ),
                                     ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Center(
-                                              child: ElevatedButton(
-                                                  onPressed: () {
-                                                    printexam();
-                                                  },
-                                                  child: Text("ปริ้นผลตรวจ",
-                                                      style: TextStyle(
-                                                          fontSize:
-                                                              width * 0.03))),
-                                            ),
-                                      )
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Center(
+                                        child: ElevatedButton(
+                                            onPressed: () {
+                                              printexam();
+                                            },
+                                            child: Text("ปริ้นผลตรวจ",
+                                                style: TextStyle(
+                                                    fontSize: width * 0.03))),
+                                      ),
+                                    )
                                   ],
                                 )
                               : resToJsonCheckQuick["message"] ==
                                       "health_record"
                                   ? ListView(
                                       children: [
-                                        Container(
-                                          width: width,
-                                          height: height * 0.1,
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(15),
-                                            color: Colors.white,
-                                            boxShadow: const [
-                                              BoxShadow(
-                                                  blurRadius: 2,
-                                                  spreadRadius: 2,
-                                                  color: Color.fromARGB(
-                                                      255, 188, 188, 188),
-                                                  offset: Offset(0, 2)),
-                                            ],
-                                          ),
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: Center(
-                                              child: context
-                                                          .watch<DataProvider>()
-                                                          .claimType !=
-                                                      ""
-                                                  ? Text(
-                                                      "${context.watch<DataProvider>().claimTypeName} (${context.watch<DataProvider>().claimType})",
-                                                      style: TextStyle(
-                                                          fontSize:
-                                                              width * 0.03))
-                                                  : Column(
-                                                      children: [
-                                                        Text(
-                                                            "ไม่มีสิทการรักษา ชำระค่ารักษาเอง",
-                                                            style: TextStyle(
-                                                                fontSize:
-                                                                    width *
-                                                                        0.03)),
-                                                      ],
-                                                    ),
+                                        Padding(
+                                          padding: const EdgeInsets.fromLTRB(
+                                              10, 10, 10, 0),
+                                          child: Container(
+                                            width: width,
+                                            height: height * 0.1,
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(15),
+                                              color: Colors.white,
+                                              boxShadow: const [
+                                                BoxShadow(
+                                                    blurRadius: 2,
+                                                    spreadRadius: 2,
+                                                    color: Color.fromARGB(
+                                                        255, 188, 188, 188),
+                                                    offset: Offset(0, 2)),
+                                              ],
+                                            ),
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: Center(
+                                                child: context
+                                                            .watch<
+                                                                DataProvider>()
+                                                            .claimType !=
+                                                        ""
+                                                    ? Text(
+                                                        "${context.watch<DataProvider>().claimTypeName} (${context.watch<DataProvider>().claimType})",
+                                                        style: TextStyle(
+                                                            fontSize:
+                                                                width * 0.03))
+                                                    : Column(
+                                                        children: [
+                                                          Text(
+                                                              "ไม่มีสิทการรักษา ชำระค่ารักษาเอง",
+                                                              style: TextStyle(
+                                                                  fontSize:
+                                                                      width *
+                                                                          0.03)),
+                                                        ],
+                                                      ),
+                                              ),
                                             ),
                                           ),
                                         ),
@@ -840,7 +784,7 @@ class _UserInformation2State extends State<UserInformation2> {
                                             ? Padding(
                                                 padding:
                                                     const EdgeInsets.fromLTRB(
-                                                        0, 10, 0, 0),
+                                                        10, 10, 10, 0),
                                                 child: Container(
                                                     width: width,
                                                     decoration: BoxDecoration(
@@ -863,9 +807,8 @@ class _UserInformation2State extends State<UserInformation2> {
                                                       ],
                                                     ),
                                                     child: Padding(
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              8.0),
+                                                      padding: const EdgeInsets
+                                                          .fromLTRB(5, 0, 0, 0),
                                                       child: Column(
                                                         children: [
                                                           Text("ตรวจสอบข้อมูล",
@@ -874,152 +817,90 @@ class _UserInformation2State extends State<UserInformation2> {
                                                                       width *
                                                                           0.04)),
                                                           Row(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .spaceBetween,
                                                             children: [
-                                                              Text(
-                                                                  "เลขบัตรประชาชน",
-                                                                  style: TextStyle(
-                                                                      fontSize:
-                                                                          width *
-                                                                              0.03)),
-                                                              Text(
-                                                                  context
-                                                                      .watch<
-                                                                          DataProvider>()
-                                                                      .id,
-                                                                  style: TextStyle(
-                                                                      fontSize:
-                                                                          width *
-                                                                              0.03)),
-                                                            ],
-                                                          ),
-                                                          Row(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .spaceBetween,
-                                                            children: [
-                                                              Text(
-                                                                  "ชื่อ - นามสกุล",
-                                                                  style: TextStyle(
-                                                                      fontSize:
-                                                                          width *
-                                                                              0.03)),
-                                                              Text(
-                                                                  "${context.watch<DataProvider>().dataUserIDCard['fname']}  ${context.read<DataProvider>().dataUserIDCard['lname']}",
-                                                                  style: TextStyle(
-                                                                      fontSize:
-                                                                          width *
-                                                                              0.03)),
-                                                            ],
-                                                          ),
-                                                          Row(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .spaceBetween,
-                                                            children: [
-                                                              Text(
-                                                                  "วันเดือนปีเกิด(ปปปป/ดด/วว)",
-                                                                  style: TextStyle(
-                                                                      fontSize:
-                                                                          width *
-                                                                              0.03)),
-                                                              Text(
-                                                                  "${context.watch<DataProvider>().dataUserIDCard['birthDate']} ",
-                                                                  style: TextStyle(
-                                                                      fontSize:
-                                                                          width *
-                                                                              0.03)),
-                                                            ],
-                                                          ),
-                                                          Row(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .spaceBetween,
-                                                            children: [
-                                                              Text("claimType",
-                                                                  style: TextStyle(
-                                                                      fontSize:
-                                                                          width *
-                                                                              0.03)),
-                                                              Text(
-                                                                  context
-                                                                      .watch<
-                                                                          DataProvider>()
-                                                                      .claimType,
-                                                                  style: TextStyle(
-                                                                      fontSize:
-                                                                          width *
-                                                                              0.03)),
-                                                            ],
-                                                          ),
-                                                          Row(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .spaceBetween,
-                                                            children: [
-                                                              Text(
-                                                                  "correlationId",
-                                                                  style: TextStyle(
-                                                                      fontSize:
-                                                                          width *
-                                                                              0.03)),
-                                                              Text(
-                                                                  context
-                                                                          .watch<
-                                                                              DataProvider>()
-                                                                          .dataUserIDCard[
-                                                                      'correlationId'],
-                                                                  style: TextStyle(
-                                                                      fontSize:
-                                                                          width *
-                                                                              0.03)),
-                                                            ],
-                                                          ),
-                                                          Row(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .spaceBetween,
-                                                            children: [
-                                                              Text("HN :",
-                                                                  style: TextStyle(
-                                                                      fontSize:
-                                                                          width *
-                                                                              0.03)),
-                                                              Text(
-                                                                  context
-                                                                      .read<
-                                                                          DataProvider>()
-                                                                      .hn
-                                                                      .text,
-                                                                  style: TextStyle(
-                                                                      fontSize:
-                                                                          width *
-                                                                              0.03)),
-                                                            ],
-                                                          ),
-                                                          Row(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .spaceBetween,
-                                                            children: [
-                                                              Text(
-                                                                  "เบอร์โทร : ",
-                                                                  style: TextStyle(
-                                                                      fontSize:
-                                                                          width *
-                                                                              0.03)),
-                                                              Text(
-                                                                  context
-                                                                      .read<
-                                                                          DataProvider>()
-                                                                      .tel
-                                                                      .text,
-                                                                  style: TextStyle(
-                                                                      fontSize:
-                                                                          width *
-                                                                              0.03)),
+                                                              SizedBox(
+                                                                width:
+                                                                    width * 0.4,
+                                                                child: Column(
+                                                                  crossAxisAlignment:
+                                                                      CrossAxisAlignment
+                                                                          .start,
+                                                                  children: [
+                                                                    Text(
+                                                                        "เลขบัตรประชาชน",
+                                                                        style: TextStyle(
+                                                                            fontSize:
+                                                                                width * 0.03)),
+                                                                    Text(
+                                                                        "ชื่อ - นามสกุล",
+                                                                        style: TextStyle(
+                                                                            fontSize:
+                                                                                width * 0.03)),
+                                                                    Text(
+                                                                        "วันเดือนปีเกิด",
+                                                                        style: TextStyle(
+                                                                            fontSize:
+                                                                                width * 0.03)),
+                                                                    Text("HN :",
+                                                                        style: TextStyle(
+                                                                            fontSize:
+                                                                                width * 0.03)),
+                                                                    Text(
+                                                                        "เบอร์โทร : ",
+                                                                        style: TextStyle(
+                                                                            fontSize:
+                                                                                width * 0.03)),
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                              SizedBox(
+                                                                width:
+                                                                    width * 0.4,
+                                                                child: Column(
+                                                                  crossAxisAlignment:
+                                                                      CrossAxisAlignment
+                                                                          .start,
+                                                                  children: [
+                                                                    Text(
+                                                                        context
+                                                                            .watch<
+                                                                                DataProvider>()
+                                                                            .id,
+                                                                        style: TextStyle(
+                                                                            fontSize:
+                                                                                width * 0.03)),
+                                                                    Text(
+                                                                        "${context.watch<DataProvider>().dataUserIDCard['fname']}  ${context.read<DataProvider>().dataUserIDCard['lname']}",
+                                                                        style: TextStyle(
+                                                                            fontSize:
+                                                                                width * 0.03)),
+                                                                    Text(
+                                                                        birthdate(
+                                                                            "${context.watch<DataProvider>().dataUserIDCard['birthDate']}"),
+                                                                        style: TextStyle(
+                                                                            fontSize:
+                                                                                width * 0.03)),
+                                                                    Text(
+                                                                        context
+                                                                            .read<
+                                                                                DataProvider>()
+                                                                            .hn
+                                                                            .text,
+                                                                        style: TextStyle(
+                                                                            fontSize:
+                                                                                width * 0.03)),
+                                                                    Text(
+                                                                        context
+                                                                            .read<
+                                                                                DataProvider>()
+                                                                            .tel
+                                                                            .text,
+                                                                        style: TextStyle(
+                                                                            fontSize:
+                                                                                width * 0.03)),
+                                                                  ],
+                                                                ),
+                                                              ),
                                                             ],
                                                           ),
                                                           SizedBox(
@@ -1041,6 +922,12 @@ class _UserInformation2State extends State<UserInformation2> {
                                                       ElevatedButton.styleFrom(
                                                     backgroundColor:
                                                         Colors.green,
+                                                    shape:
+                                                        RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              5),
+                                                    ),
                                                   ),
                                                   onPressed: () {
                                                     if (resToJsonCheckQuick[
@@ -1054,8 +941,8 @@ class _UserInformation2State extends State<UserInformation2> {
                                                   child: Text(
                                                     "ยืนยัน",
                                                     style: TextStyle(
-                                                      fontSize: width * 0.03,
-                                                    ),
+                                                        fontSize: width * 0.03,
+                                                        color: Colors.white),
                                                   )),
                                             ],
                                           ),
@@ -1139,15 +1026,36 @@ class _UserInformation2State extends State<UserInformation2> {
                                                               131, 123))),
                                                 ),
                                                 Center(
-                                                  child: ElevatedButton(
-                                                      onPressed: () {
-                                                        timerCheckQuick
-                                                            ?.cancel();
-                                                        Get.offNamed(
-                                                            'preparation_videocall');
-                                                      },
-                                                      child: const Text(
-                                                          "VideoCall")),
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            8.0),
+                                                    child: ElevatedButton(
+                                                        style: ElevatedButton
+                                                            .styleFrom(
+                                                          backgroundColor:
+                                                              Colors.green,
+                                                          shape:
+                                                              RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        5),
+                                                          ),
+                                                        ),
+                                                        onPressed: () {
+                                                          timerCheckQuick
+                                                              ?.cancel();
+                                                          Get.offNamed(
+                                                              'preparation_videocall');
+                                                        },
+                                                        child: const Text(
+                                                          "VideoCall",
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.white),
+                                                        )),
+                                                  ),
                                                 )
                                               ]),
                                             )

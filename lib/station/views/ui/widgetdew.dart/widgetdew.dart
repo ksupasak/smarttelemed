@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart'; 
+import 'package:flutter/services.dart';
 // import 'package:flutter_pos_printer_platform/esc_pos_utils_platform/src/capability_profile.dart';
 // import 'package:flutter_pos_printer_platform/esc_pos_utils_platform/src/enums.dart';
 // import 'package:flutter_pos_printer_platform/esc_pos_utils_platform/src/generator.dart';
@@ -11,12 +11,12 @@ import 'package:flutter/services.dart';
 // import 'package:flutter_pos_printer_platform/flutter_pos_printer_platform.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
- 
-import 'package:provider/provider.dart'; 
+
+import 'package:provider/provider.dart';
 import 'package:smarttelemed/station/provider/provider.dart';
-import 'package:smarttelemed/station/provider/provider_function.dart';  
+import 'package:smarttelemed/station/provider/provider_function.dart';
 import 'package:smarttelemed/station/views/pages/videocall.dart';
-import 'package:smarttelemed/station/views/ui/widgetdew.dart/popup.dart'; 
+import 'package:smarttelemed/station/views/ui/widgetdew.dart/popup.dart';
 import 'package:http/http.dart' as http;
 
 class backgrund extends StatefulWidget {
@@ -234,7 +234,13 @@ class _WidgetNameHospitalState extends State<WidgetNameHospital> {
 }
 
 class BoxRecord extends StatefulWidget {
-  BoxRecord({super.key, this.keyvavlue, this.texthead, this.icon, this.image,this.color});
+  BoxRecord(
+      {super.key,
+      this.keyvavlue,
+      this.texthead,
+      this.icon,
+      this.image,
+      this.color});
   var keyvavlue;
   var texthead;
   var image;
@@ -272,7 +278,7 @@ class _BoxRecordState extends State<BoxRecord> {
                               fontFamily:
                                   context.read<DataProvider>().fontFamily,
                               fontSize: _width * 0.03,
-                              color: teamcolor)), 
+                              color: teamcolor)),
                     ],
                   ),
             TextField(
@@ -295,7 +301,7 @@ class _BoxRecordState extends State<BoxRecord> {
                 color: teamcolor,
                 fontSize: _height * 0.03,
               ),
-              controller:widget.color ?? widget.keyvavlue,
+              controller: widget.color ?? widget.keyvavlue,
               keyboardType: TextInputType.number,
               textAlign: TextAlign.center,
             ),
@@ -336,7 +342,7 @@ class _BoxDecorateState extends State<BoxDecorate> {
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(10),
-                      boxShadow:const [
+                      boxShadow: const [
                         BoxShadow(
                             blurRadius: 0.5,
                             color: Color(0xff48B5AA),
@@ -3088,9 +3094,9 @@ class _ButtonAddAppointTodayState extends State<ButtonAddAppointToday> {
         ? GestureDetector(
             onTap: () {
               setState(() {
-                ontap = true;
+                //    ontap = true;
               });
-              addAppointToday();
+              //   addAppointToday();
             },
             child: Container(
                 height: _height * 0.05,

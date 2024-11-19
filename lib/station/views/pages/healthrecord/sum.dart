@@ -83,7 +83,9 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
           final reader = SerialPortReader(port);
 
           debugPrint("reader BP");
-
+          setState(() {
+            statusConnectBP = true;
+          });
           reader.stream.listen((data) {
             debugPrint('$data');
 
@@ -170,6 +172,9 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
       }
     } on Exception catch (_) {
       debugPrint("throwing new error");
+      setState(() {
+        statusConnectBP = false;
+      });
     }
   }
 
@@ -200,7 +205,9 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
           final reader = SerialPortReader(port);
 
           debugPrint("reader SPO2");
-
+          setState(() {
+            statusConnectSPO2 = true;
+          });
           reader.stream.listen((data) {
             if (data[0] == 42) {
               status = 1;
@@ -242,6 +249,9 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
       }
     } on Exception catch (_) {
       debugPrint("throwing new error");
+      setState(() {
+        statusConnectSPO2 = false;
+      });
     }
   }
 
@@ -266,9 +276,11 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
           List<int> buffer = [];
           final reader = SerialPortReader(port);
           debugPrint("reader W_H");
-
+          setState(() {
+            statusConnectH_W = true;
+          });
           reader.stream.listen((data) {
-            debugPrint(data.toString());
+            debugPrint("reader.stream.listen${data.toString()}");
             buffer.addAll(data);
             if (data[data.length - 1] == 10) {
               String txt = intArrayToString(buffer);
@@ -350,6 +362,9 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
     } on Exception catch (e) {
       debugPrint("throwing new error");
       debugPrint(e.toString());
+      setState(() {
+        statusConnectH_W = false;
+      });
     }
   }
 
@@ -653,18 +668,30 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
             padding: const EdgeInsets.all(8.0),
             child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.red,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                  ),
                   onPressed: () {
                     Get.offNamed('user_information');
                     //   Get.toNamed('spo2');
                   },
                   child: Text(
                     "กลับ",
-                    style: TextStyle(
-                      fontSize: width * 0.03,
-                    ),
+                    style:
+                        TextStyle(fontSize: width * 0.03, color: Colors.white),
                   )),
+              SizedBox(width: width * 0.05),
               buttonsend
                   ? ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.green,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                      ),
                       onPressed: () {
                         setState(() {
                           buttonsend = !buttonsend;
@@ -676,12 +703,12 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
                       child: Text(
                         "ส่ง",
                         style: TextStyle(
-                          fontSize: width * 0.03,
-                        ),
+                            fontSize: width * 0.03, color: Colors.white),
                       ))
                   : const SizedBox(child: CircularProgressIndicator()),
             ]),
           ),
+
           Row(
             children: [
               ElevatedButton.icon(
@@ -710,7 +737,70 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
                                     borderRadius: BorderRadius.circular(50),
                                     color: Colors.grey)),
                           ),
-                          SizedBox(width: width)
+                          SizedBox(
+                            width: width,
+                            child: Column(
+                              children: [
+                                Row(
+                                  children: [
+                                    Image.asset(
+                                      "assets/1117.png",
+                                      height: 50,
+                                      width: 50,
+                                    ),
+                                    Container(
+                                      height: 20,
+                                      width: 20,
+                                      decoration: BoxDecoration(
+                                          color: statusConnectH_W
+                                              ? Colors.green
+                                              : Colors.red,
+                                          borderRadius:
+                                              BorderRadius.circular(50)),
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    Image.asset(
+                                      "assets/ye990.png",
+                                      height: 50,
+                                      width: 50,
+                                    ),
+                                    Container(
+                                      height: 20,
+                                      width: 20,
+                                      decoration: BoxDecoration(
+                                          color: statusConnectBP
+                                              ? Colors.green
+                                              : Colors.red,
+                                          borderRadius:
+                                              BorderRadius.circular(50)),
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    Image.asset(
+                                      "assets/unnamed.jpg",
+                                      height: 50,
+                                      width: 50,
+                                    ),
+                                    Container(
+                                      height: 20,
+                                      width: 20,
+                                      decoration: BoxDecoration(
+                                          color: statusConnectSPO2
+                                              ? Colors.green
+                                              : Colors.red,
+                                          borderRadius:
+                                              BorderRadius.circular(50)),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          )
                         ]),
                       ),
                     );

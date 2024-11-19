@@ -132,45 +132,6 @@ class _HomeappState extends State<Homeapp> {
     }
   }
 
-  // void readerID() {
-  //   try {
-  //     Future.delayed(const Duration(seconds: 1), () {
-  //       reader = ESMIDCard.instance;
-  //       entry = reader?.getEntry();
-
-  //       debugPrint('->initstate');
-  //       if (entry != null) {
-  //         entry?.listen((String data) async {
-  //           List<String> splitted = data.split('#');
-  //           debugPrint("IDCard $data");
-  //           context.read<DataProvider>().id = splitted[0].toString();
-  //           context.read<DataProvider>().regter_data = splitted;
-  //           setState(() {
-  //             context.read<DataProvider>().regter_data = splitted;
-  //             context.read<DataProvider>().id = splitted[0].toString();
-  //           });
-  //           debugPrint(
-  //               "${context.read<DataProvider>().id} / ${splitted[0].toString()}");
-
-  //           idcard.setValue(splitted[0]);
-  //           if (context.read<DataProvider>().id == splitted[0].toString()) {
-  //             check2();
-  //           } else {}
-  //         }, onError: (error) {
-  //           debugPrint(error);
-  //         }, onDone: () {
-  //           debugPrint('Stream closed!');
-  //         });
-  //       } else {}
-  //       const oneSec = Duration(seconds: 1);
-  //       reading = Timer.periodic(oneSec, (Timer t) => checkCard());
-  //     });
-  //   } on Exception catch (e) {
-  //     debugPrint('error');
-  //     debugPrint(e.toString());
-  //   }
-  // }
-
   void getIdCard() async {
     timerreadIDCard = Timer.periodic(const Duration(seconds: 4), (timer) async {
       var url = Uri.parse('http://localhost:8189/api/smartcard/read');
@@ -234,8 +195,7 @@ class _HomeappState extends State<Homeapp> {
       context.read<DataProvider>().claimTypeName = '';
       context.read<DataProvider>().claimCode = '';
     });
-   // getIdCard();
-    // readerID();
+    getIdCard();
 
     super.initState();
   }
