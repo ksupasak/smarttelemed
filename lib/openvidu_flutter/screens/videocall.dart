@@ -23,11 +23,11 @@ class VideocallWidget extends StatefulWidget {
     required this.iceServer,
   });
 
-  final String server;
-  final String sessionId;
-  final String userName;
-  final String secret;
-  final String iceServer;
+  final String server;        // url 
+  final String sessionId;     // from API 
+  final String userName;     // visit
+  final String secret;      //  minadadmin
+  final String iceServer;  // empty
 
   @override
   State<VideocallWidget> createState() => _VideocallWidgetState();
