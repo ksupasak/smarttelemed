@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter/material.dart';
+
 import 'api_client.dart';
 import 'request_config.dart';
 import 'package:logging/logging.dart';
@@ -12,6 +14,9 @@ class ApiService {
   final String secret;
   final bool Function(X509Certificate, String, int)? badCertificateCallback;
   late ApiClient apiClient;
+
+  final String path = "/openvidu";
+  // final String path = "";
 
   ApiService(this.sessionId, this.url, this.secret,
       [this.badCertificateCallback]) {
@@ -29,15 +34,20 @@ class ApiService {
     };
     return apiClient
         .request(Config(
-            uri: Uri.parse('https://$url/openvidu/api/sessions'),
+            uri: Uri.parse('https://$url$path/api/sessions'),
             headers: headersMap,
             body: RequestBody.json(bodyMap),
             method: RequestMethod.post,
             responseType: ResponseBody.plain()))
         .then((dynamic jsonResponse) {
-      return jsonResponse;
+
+          final parsedJson = jsonDecode(jsonResponse);
+          debugPrint('$jsonResponse');
+
+      return parsedJson['id'];
     }).catchError((error) {
       _logger.info('createSession error: $error');
+      debugPrint('$error');
       return sessionId;
     });
   }
@@ -52,13 +62,18 @@ class ApiService {
     //api/sessions/<SESSION_ID>/connection
     return apiClient
         .request(Config(
-            uri: Uri.parse('https://$url/openvidu/api/sessions/$sessionId/connections'),
+            uri: Uri.parse('https://$url$path/api/sessions/$sessionId/connection'),
             headers: headersMap,
             body: RequestBody.json(bodyMap),
             method: RequestMethod.post,
             responseType: ResponseBody.plain()))
         .then((dynamic tokenResponse) {
-      return tokenResponse;
+          debugPrint('$tokenResponse');
+           final parsedJson = jsonDecode(tokenResponse); 
+
+      return parsedJson['token'];
+      // return tokenResponse;
+      
     });
   }
 }
