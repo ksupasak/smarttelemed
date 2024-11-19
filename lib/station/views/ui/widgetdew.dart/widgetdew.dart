@@ -73,7 +73,7 @@ class _BoxTimeState extends State<BoxTime> {
       setState(() {
         dateTime = DateTime.now();
         data =
-            "${dateTime.hour}:${dateTime.minute.toString().padLeft(2, '0')}:${dateTime.second.toString().padLeft(2, '0')}";
+            "${dateTime.day}/${dateTime.month}/${dateTime.year} ${dateTime.hour}:${dateTime.minute.toString().padLeft(2, '0')}:${dateTime.second.toString().padLeft(2, '0')}";
       });
     });
   }
@@ -102,27 +102,26 @@ class _BoxTimeState extends State<BoxTime> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               SizedBox(
-                width: width * 0.45,
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Row(
-                        children: const [WidgetNameHospital()],
+                      const Row(
+                        children: [WidgetNameHospital()],
                       ),
                       Text(context.read<DataProvider>().care_unit,
                           style: style),
                     ]),
               ),
               SizedBox(
-                  width: width * 0.35,
+                  width: width * 0.5,
                   height: height * 0.07,
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       SizedBox(
-                          width: width * 0.2,
+                          width: width * 0.3,
                           height: height * 0.03,
                           child: Row(
                             children: [
@@ -224,12 +223,9 @@ class _WidgetNameHospitalState extends State<WidgetNameHospital> {
         color: Color.fromARGB(255, 255, 255, 255),
         fontSize: _width * 0.04,
         fontWeight: FontWeight.w600);
-    return Container(
-        child: Center(
-      child: Container(
-          child:
-              Text(context.read<DataProvider>().name_hospital, style: style)),
-    ));
+    return Center(
+      child: Text(context.read<DataProvider>().name_hospital, style: style),
+    );
   }
 }
 

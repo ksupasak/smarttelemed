@@ -146,10 +146,50 @@ class _HomeappState extends State<Homeapp> {
         context
             .read<DataProvider>()
             .updateclaimType(resTojson["claimTypes"][0]);
-        check2();
+        agreement();
         timerreadIDCard?.cancel();
       }
     });
+  }
+
+  void agreement() {
+    if (context.read<DataProvider>().id.length == 13) {
+      String texthead =
+          'ข้อตกลงในการให้ความยินยอมในการเก็บรวบรวมและใช้ข้อมูลส่วนบุคคล';
+      String textbody =
+          'ผู้ใช้งานต้องมีสิทธิหลักประกันสุขภาพแห่งชาติ หรือสิทธิอื่น ๆอายุ 15 ปี บริบูรณ์ขึ้นไปลงทะเบียนด้วยตนเองเท่านั้น ยังไม่สามารถลงทะเบียนแทนบุคคลในครอบครัวได้ (ในปัจจุบัน)เพื่อประโยชน์ในการใช้ Line Official Account สปสช. เปลี่ยนหน่วยบริการด้วยตนเองบนมือถือ สำนักงานหลักประกันสุขภาพแห่งชาติ (สปสช.) ขอให้ผู้ใช้งานโปรดแสดงความยินยอมให้ สปสช. เก็บรวบรวม ใช้ หรือเปิดเผยข้อมูลส่วนบุคคลของผู้ใช้งาน รวมถึงข้อมูลส่วนตัว เช่น ชื่อ นามสกุล เลขบัตรประชาชน และข้อมูลอื่นที่เกี่ยวข้องกับสิทธิของผู้ใช้งาน เพื่อการตรวจสอบสิทธิ และให้บริการที่เกี่ยวข้องกับสิทธิหลักประกันสุขภาพแห่งชาติ หรือสิทธิอื่น ๆ ตามกฎหมายในกรณีที่จำเป็น ผู้ใช้งานสามารถขอถอนความยินยอมได้ตลอดเวลา และหากมีข้อสงสัยเกี่ยวกับความยินยอมนี้ ผู้ใช้งานสามารถติดต่อสำนักงานหลักประกันสุขภาพแห่งชาติ ผ่าน Line Official Account สปสช.สอบถามรายละเอียดเพิ่มเติมได้ที่: สายด่วน สปสช. 1330 (เปิดบริการ 24 ชั่วโมง)';
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return Popup(
+              texthead: texthead,
+              textbody: textbody,
+              buttonbar: [
+                GestureDetector(
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    child: BoxWidetdew(
+                        color: const Color.fromARGB(255, 173, 106, 106),
+                        height: 0.05,
+                        width: 0.2,
+                        text: 'ยกเลิก',
+                        textcolor: Colors.white)),
+                GestureDetector(
+                    onTap: () {
+                      Navigator.pop(context);
+                      check2();
+                    },
+                    child: BoxWidetdew(
+                        color: const Color.fromARGB(255, 106, 173, 115),
+                        height: 0.05,
+                        width: 0.2,
+                        text: 'ตกลง',
+                        textcolor: Colors.white)),
+              ],
+            );
+          });
+    }
   }
 
   void checkCard() {
@@ -286,7 +326,7 @@ class _HomeappState extends State<Homeapp> {
                                     status == false
                                         ? GestureDetector(
                                             onTap: () {
-                                              check2();
+                                              agreement();
                                             },
                                             child: BoxWidetdew(
                                                 color: const Color(0xff00A3FF),
