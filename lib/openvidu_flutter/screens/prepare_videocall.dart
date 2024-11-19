@@ -1,14 +1,18 @@
+import 'dart:convert';
 import 'dart:math';
 import 'dart:io';
 import 'dart:async';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:logging/logging.dart';
-import 'package:smarttelemed/myapp/provider/provider.dart';
 import 'package:smarttelemed/openvidu_flutter/screens/videocall.dart';
+import 'package:smarttelemed/station/main_app/app.dart';
+import 'package:smarttelemed/station/provider/provider.dart';
 
 class PrepareVideocall extends StatefulWidget {
   const PrepareVideocall({super.key});
@@ -27,7 +31,7 @@ class _PrepareVideocallState extends State<PrepareVideocall> {
   late TextEditingController _textSecretController;
   late TextEditingController _textPortController;
   late TextEditingController _textIceServersController;
-
+  var resToJsonVideo;
   @override
   void initState() {
     super.initState();
@@ -44,7 +48,7 @@ class _PrepareVideocallState extends State<PrepareVideocall> {
 
     _loadSharedPref();
     _liveConn();
-    getvideocalldata();
+    // getvideocalldata();
   }
 
   Future<void> getvideocalldata() async {
@@ -53,6 +57,21 @@ class _PrepareVideocallState extends State<PrepareVideocall> {
     var res = await http.post(url, body: {
       'public_id': context.read<DataProvider>().id,
     });
+    resToJsonVideo = json.decode(res.body);
+    setState(() {});
+    debugPrint(
+        "id :${context.read<DataProvider>().id} /get video :${resToJsonVideo.toString()} ");
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
+      _saveSharedPref();
+      return VideocallWidget(
+        server: 'openvidu.pcm-life.com',
+        sessionId: resToJsonVideo["data"]["sessionId"],
+        token: resToJsonVideo["data"]["token"],
+        userName: "nameTest",
+        secret: "minadadmin",
+        iceServer: "",
+      );
+    }));
   }
 
   Future<void> _loadSharedPref() async {
@@ -180,6 +199,7 @@ class _PrepareVideocallState extends State<PrepareVideocall> {
                             server:
                                 '${_textUrlController.text}:${_textPortController.text}',
                             sessionId: _textSessionController.text,
+                            token: "",
                             userName: _textUserNameController.text,
                             secret: _textSecretController.text,
                             iceServer: _textIceServersController.text,
@@ -191,6 +211,11 @@ class _PrepareVideocallState extends State<PrepareVideocall> {
                   style: const TextStyle(fontSize: 20.0),
                 ),
               ),
+              ElevatedButton(
+                  onPressed: () {
+                    Get.offNamed('user_information');
+                  },
+                  child: Text("<-"))
             ],
           ),
         ),

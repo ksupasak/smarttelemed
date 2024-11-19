@@ -18,16 +18,18 @@ class VideocallWidget extends StatefulWidget {
     super.key,
     required this.server,
     required this.sessionId,
+    required this.token,
     required this.userName,
     required this.secret,
     required this.iceServer,
   });
 
-  final String server;        // url 
-  final String sessionId;     // from API 
-  final String userName;     // visit
-  final String secret;      //  minadadmin
-  final String iceServer;  // empty
+  final String server; // url
+  final String sessionId; // from API
+  final String token;
+  final String userName; // visit
+  final String secret; //  minadadmin
+  final String iceServer; // empty
 
   @override
   State<VideocallWidget> createState() => _VideocallWidgetState();
@@ -40,7 +42,10 @@ class _VideocallWidgetState extends State<VideocallWidget> {
   @override
   void initState() {
     super.initState();
-    apiService = ApiService(widget.sessionId, widget.server, widget.secret,
+    apiService = ApiService(
+        widget.sessionId,
+        widget.server,
+        "minadadmin", //widget.secret,
         (X509Certificate cert, String host, int port) => true);
     _connect();
   }
@@ -130,7 +135,7 @@ class _VideocallWidgetState extends State<VideocallWidget> {
       debugPrint("t1 $sessionId");
 
       apiService.createToken().then((token) {
-        debugPrint("t2 $token");
+        debugPrint("t2 ${token}");
 
         session = Session(sessionId, token);
 

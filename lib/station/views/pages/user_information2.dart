@@ -66,7 +66,7 @@ class _UserInformation2State extends State<UserInformation2> {
   var resTojson3;
   var resTojson2;
   var resTojson;
-  // var resTojsonGateway;
+  var resTojsonGateway;
   String height = '-';
   String weight = '-';
   String temp = '-';
@@ -81,6 +81,7 @@ class _UserInformation2State extends State<UserInformation2> {
   String dx = '--';
   String text_no_vn = "";
 
+  Timer? timerreadIDCard;
 // -------
 
   // < karn  start >
@@ -531,36 +532,54 @@ class _UserInformation2State extends State<UserInformation2> {
     }
   }
 
+  void check_card_out() {
+    timerreadIDCard = Timer.periodic(const Duration(seconds: 2), (timer) async {
+      var url = Uri.parse('http://localhost:8189/api/smartcard/read');
+      var res = await http.get(url);
+      var resTojson = json.decode(res.body);
+      debugPrint("check_card_out");
+      debugPrint(resTojson.toString());
+      if (res.statusCode == 200) {
+        timerreadIDCard?.cancel();
+        Get.offAll('home');
+      }
+    });
+  }
+
   void senvisitGateway() async {
     var url = Uri.parse(
-        'http://localhost:5000/api/patient?cid=${context.read<DataProvider>().id}');
+        'http://localhost:5000/api/patient?cid=${context.read<DataProvider>().id}'); //${context.read<DataProvider>().id}
     var res = await http.get(url);
-    var resTojsonGateway = json.decode(res.body);
+    resTojsonGateway = json.decode(res.body);
     debugPrint(resTojsonGateway.toString());
-    if (resTojsonGateway["statuscode"] == 400) {
-      debugPrint("ไม่มี vitalsign ติดต่อเจ้าหน้าที่ ");
-
-      showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return Popup(
-              texthead: 'ไม่มี  VN',
-              textbody: text_no_vn,
-              buttonbar: [
-                GestureDetector(
-                    onTap: () {},
-                    child: BoxWidetdew(
-                        color: const Color.fromARGB(255, 106, 173, 115),
-                        height: 0.05,
-                        width: 0.2,
-                        text: 'ตกลง',
-                        textcolor: Colors.white)),
-              ],
-            );
-          });
-    }
-    if (resTojsonGateway["statuscode"] == 100) {
-      debugPrint("มี   ");
+    if (resTojsonGateway != null) {
+      if (resTojsonGateway["statuscode"] == 400) {
+        debugPrint("ไม่มี vitalsign ติดต่อเจ้าหน้าที่ ");
+        check_card_out();
+        showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return Popup(
+                texthead: 'ไม่มี  VN',
+                textbody: text_no_vn,
+                buttonbar: [
+                  GestureDetector(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: BoxWidetdew(
+                          color: const Color.fromARGB(255, 106, 173, 115),
+                          height: 0.05,
+                          width: 0.2,
+                          text: 'ตกลง',
+                          textcolor: Colors.white)),
+                ],
+              );
+            });
+      }
+      if (resTojsonGateway["statuscode"] == 100) {
+        debugPrint("มี   ");
+      }
     }
   }
 
@@ -573,14 +592,14 @@ class _UserInformation2State extends State<UserInformation2> {
         text_no_vn = record["text_no_vn"].toString();
       }
     }
-    debugPrint(text_no_vn);
+
     setState(() {});
     senvisitGateway();
   }
 
   @override
   void initState() {
-    //  getconfig();
+    getconfig();
 
     checkQuick();
     _loadThaiFont();
@@ -816,6 +835,22 @@ class _UserInformation2State extends State<UserInformation2> {
                                                                   fontSize:
                                                                       width *
                                                                           0.04)),
+                                                          resTojsonGateway !=
+                                                                  null
+                                                              ? resTojsonGateway[
+                                                                          "statuscode"] ==
+                                                                      400
+                                                                  ? Text(
+                                                                      text_no_vn,
+                                                                      style: TextStyle(
+                                                                          color: Colors
+                                                                              .red,
+                                                                          fontSize:
+                                                                              width * 0.03),
+                                                                    )
+                                                                  : const Text(
+                                                                      "")
+                                                              : const Text(""),
                                                           Row(
                                                             children: [
                                                               SizedBox(
@@ -921,7 +956,18 @@ class _UserInformation2State extends State<UserInformation2> {
                                                   style:
                                                       ElevatedButton.styleFrom(
                                                     backgroundColor:
-                                                        Colors.green,
+                                                        resTojsonGateway != null
+                                                            ? resTojsonGateway[
+                                                                        "statuscode"] ==
+                                                                    200
+                                                                ? Colors.green
+                                                                : const Color
+                                                                    .fromARGB(
+                                                                    255,
+                                                                    221,
+                                                                    221,
+                                                                    221)
+                                                            : Colors.grey,
                                                     shape:
                                                         RoundedRectangleBorder(
                                                       borderRadius:
@@ -930,12 +976,20 @@ class _UserInformation2State extends State<UserInformation2> {
                                                     ),
                                                   ),
                                                   onPressed: () {
-                                                    if (resToJsonCheckQuick[
-                                                            "message"] ==
-                                                        "health_record") {
-                                                      timerCheckQuick?.cancel();
-                                                      Get.toNamed(
-                                                          'healthRecord2');
+                                                    if (resTojsonGateway !=
+                                                        null) {
+                                                      if (resTojsonGateway[
+                                                              "statuscode"] ==
+                                                          200) {
+                                                        if (resToJsonCheckQuick[
+                                                                "message"] ==
+                                                            "health_record") {
+                                                          timerCheckQuick
+                                                              ?.cancel();
+                                                          Get.toNamed(
+                                                              'healthRecord2');
+                                                        }
+                                                      }
                                                     }
                                                   },
                                                   child: Text(
