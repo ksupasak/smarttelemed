@@ -318,11 +318,11 @@ class _HomeappState extends State<Homeapp> {
                         ],
                       ),
                     ),
-                    ElevatedButton(
-                        onPressed: () {
-                          Get.toNamed('preparation_videocall');
-                        },
-                        child: const Text("videocal"))
+                    // ElevatedButton(
+                    //     onPressed: () {
+                    //       Get.toNamed('preparation_videocall');
+                    //     },
+                    //     child: const Text("videocal"))
                   ],
                 )),
               ),

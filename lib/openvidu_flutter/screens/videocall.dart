@@ -1,7 +1,10 @@
+import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
+import 'package:get/get.dart';
 import 'package:openvidu_flutter/participant/local_participant.dart';
 import 'package:openvidu_flutter/participant/participant.dart';
 import 'package:openvidu_flutter/utils/custom_websocket.dart';
@@ -10,8 +13,11 @@ import 'package:openvidu_flutter/utils/utils.dart';
 import 'package:openvidu_flutter/widgets/chat_screen.dart';
 import 'package:openvidu_flutter/widgets/custom_draggable.dart';
 import 'package:openvidu_flutter/widgets/participant_widget.dart';
+import 'package:provider/provider.dart';
 import 'package:smarttelemed/openvidu_flutter/api/api_service.dart';
 import 'package:smarttelemed/openvidu_flutter/screens/prepare_videocall.dart';
+import 'package:http/http.dart' as http;
+import 'package:smarttelemed/station/provider/provider.dart';
 
 class VideocallWidget extends StatefulWidget {
   const VideocallWidget({
@@ -38,7 +44,7 @@ class VideocallWidget extends StatefulWidget {
 class _VideocallWidgetState extends State<VideocallWidget> {
   late ApiService apiService;
   Session? session;
-
+  Timer? timerCheckstatusVideocall;
   @override
   void initState() {
     super.initState();
@@ -48,12 +54,31 @@ class _VideocallWidgetState extends State<VideocallWidget> {
         "minadadmin", //widget.secret,
         (X509Certificate cert, String host, int port) => true);
     _connect();
+    checkstatusVideocall();
+  }
+
+  void checkstatusVideocall() async {
+    timerCheckstatusVideocall =
+        Timer.periodic(const Duration(seconds: 1), (timer) async {
+      var url =
+          Uri.parse('${context.read<DataProvider>().platfromURL}/check_quick');
+      var res = await http.post(url, body: {
+        'care_unit_id': context.read<DataProvider>().care_unit_id,
+        'public_id': context.read<DataProvider>().id,
+      });
+      var resToJson = json.decode(res.body);
+      debugPrint(resToJson["message"].toString());
+      if (resToJson["message"].toString() != "processing") {
+        Get.offNamed("user_information");
+      }
+    });
   }
 
   void _hangUp() {
     if (session != null) {
-      Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => const PrepareVideocall()));
+      Get.offNamed("user_information");
+      // Navigator.of(context).pushReplacement(
+      //     MaterialPageRoute(builder: (context) => const PrepareVideocall()));
     }
   }
 
@@ -94,9 +119,6 @@ class _VideocallWidgetState extends State<VideocallWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Video Call'),
-      ),
       body: _body(),
     );
   }
@@ -104,6 +126,7 @@ class _VideocallWidgetState extends State<VideocallWidget> {
   @override
   void dispose() {
     session?.leaveSession();
+    timerCheckstatusVideocall?.cancel();
     super.dispose();
   }
 
@@ -135,7 +158,7 @@ class _VideocallWidgetState extends State<VideocallWidget> {
       debugPrint("t1 $sessionId");
 
       apiService.createToken().then((token) {
-        debugPrint("t2 ${token}");
+        debugPrint("t2 $token");
 
         session = Session(sessionId, token);
 

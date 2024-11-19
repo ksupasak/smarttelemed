@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:openvidu_flutter/participant/remote_participant.dart';
-import 'dart:math' as math; 
+import 'dart:math' as math;
 import 'package:provider/provider.dart';
 import 'package:smarttelemed/openvidu_flutter/app/models/connection.dart';
 import 'package:smarttelemed/openvidu_flutter/app/utils/logger.dart';
 import 'package:smarttelemed/openvidu_flutter/app/widgets/media_stream_view.dart';
 import 'package:smarttelemed/station/provider/provider.dart';
-import 'package:smarttelemed/station/views/ui/widgetdew.dart/widgetdew.dart'; 
+import 'package:smarttelemed/station/views/ui/widgetdew.dart/widgetdew.dart';
 
 class VideoCall extends StatefulWidget {
   const VideoCall({super.key});
@@ -22,8 +22,8 @@ class _VideoCallState extends State<VideoCall> {
   // LocalParticipant? localParticipant;
   bool isInside = false;
   @override
-  void initState() {    
-    initOpenVidu();  
+  void initState() {
+    initOpenVidu();
     super.initState();
   }
 
@@ -32,7 +32,7 @@ class _VideoCallState extends State<VideoCall> {
     localParticipant =
         await _openvidu.startLocalPreview(context, StreamMode.frontCamera);
     setState(() {});
-      listenSessionEvents();
+    listenSessionEvents();
   }
 
   void listenSessionEvents() {
@@ -101,8 +101,7 @@ class _VideoCallState extends State<VideoCall> {
   void dispose() async {
     await localParticipant!.close();
     await _openvidu.disconnect();
-    setState(() {
-    });
+    setState(() {});
     super.dispose();
   }
 
@@ -145,15 +144,12 @@ class _VideoCallState extends State<VideoCall> {
                                 participant: localParticipant!,
                                 onConnect: onConnect))
                         : const SizedBox(),
-
-                        
                     ElevatedButton(
                         onPressed: () {
-                            localParticipant!.close();
+                          localParticipant!.close();
                           _openvidu.disconnect();
-                          setState(() { 
-                          });
-                        Get.offNamed('user_information');
+                          setState(() {});
+                          Get.offNamed('user_information');
                         },
                         child: const Text("ออก")),
                   ],
@@ -181,11 +177,10 @@ class _VideoCallState extends State<VideoCall> {
                           }),
                       Positioned(
                           child: ElevatedButton(
-                        onPressed: ()   {
-                            _openvidu.disconnect();
-                          setState(() { 
-                          });
-                      Get.offNamed('user_information');
+                        onPressed: () {
+                          _openvidu.disconnect();
+                          setState(() {});
+                          Get.offNamed('user_information');
                         },
                         child: const Text("ออก"),
                       )),

@@ -128,18 +128,20 @@ class _UserInformation2State extends State<UserInformation2> {
         }
       }
       if (resToJsonCheckQuick["message"] == "processing") {
-        timerCheckQuick?.cancel();
+        // timerCheckQuick?.cancel();
       }
       if (resToJsonCheckQuick["message"] == "completed") {
         debugPrint("ตรวจเสร็จเเล้ว message completed");
         timerCheckQuick?.cancel();
         finished();
         exam();
+        check_card_out();
       }
       if (resToJsonCheckQuick["message"] == "finished") {
         debugPrint("ตรวจเสร็จเเล้ว message finished");
         timerCheckQuick?.cancel();
         exam();
+        check_card_out();
       }
     });
   }
@@ -336,7 +338,8 @@ class _UserInformation2State extends State<UserInformation2> {
 
     String dataBarcode = "";
     String dataQrcode = "";
-
+    String databarcodeHN = resTojson2["personal"]["hn"];
+    String databarcodeVN = ""; //resTojson2[""][""];
     //  img Logo
     Uint8List? logoBytes;
     try {
@@ -393,6 +396,15 @@ class _UserInformation2State extends State<UserInformation2> {
             msgHead,
             style: font_sizeBody,
           ),
+        ],
+      );
+    }
+
+    pw.Widget _buildText(String mText) {
+      return pw.Column(
+        crossAxisAlignment: pw.CrossAxisAlignment.center,
+        children: [
+          pw.Text(mText, style: font_sizeBody),
         ],
       );
     }
@@ -476,11 +488,16 @@ class _UserInformation2State extends State<UserInformation2> {
               pw.SizedBox(height: 5),
               _buildDocnote(),
               pw.Divider(),
+              _buildText("HN"),
               pw.SizedBox(height: 5),
-              _buildBarcode(dataBarcode),
+              _buildBarcode(databarcodeHN),
+              pw.Divider(),
+              _buildText("VN"),
               pw.SizedBox(height: 5),
-              _buildQRCode(dataQrcode),
+              _buildBarcode(databarcodeVN),
               pw.SizedBox(height: 5),
+              // _buildQRCode(dataQrcode),
+              // pw.SizedBox(height: 5),
               _buildFooter(),
             ],
           );
@@ -532,16 +549,17 @@ class _UserInformation2State extends State<UserInformation2> {
     }
   }
 
-  void check_card_out() {
-    timerreadIDCard = Timer.periodic(const Duration(seconds: 2), (timer) async {
+  void check_card_out() async {
+    timerreadIDCard = Timer.periodic(const Duration(seconds: 4), (timer) async {
       var url = Uri.parse('http://localhost:8189/api/smartcard/read');
       var res = await http.get(url);
       var resTojson = json.decode(res.body);
       debugPrint("check_card_out");
-      debugPrint(resTojson.toString());
-      if (res.statusCode == 200) {
+      // debugPrint(resTojson.toString());
+      if (resTojson["status"] == 500) {
+        context.read<DataProvider>().id = '';
         timerreadIDCard?.cancel();
-        Get.offAll('home');
+        Get.offNamed('home');
       }
     });
   }
@@ -599,6 +617,7 @@ class _UserInformation2State extends State<UserInformation2> {
 
   @override
   void initState() {
+    // check_card_out();
     getconfig();
 
     checkQuick();
@@ -697,30 +716,47 @@ class _UserInformation2State extends State<UserInformation2> {
                                               mainAxisAlignment:
                                                   MainAxisAlignment.center,
                                               children: [
-                                                Text("DX :",
-                                                    style: TextStyle(
-                                                        color: Colors.green,
-                                                        fontSize:
-                                                            width * 0.03)),
                                                 SizedBox(
-                                                  width: width * 0.6,
+                                                  width: width * 0.25,
+                                                  child: Text("DX :",
+                                                      style: TextStyle(
+                                                          color: Colors.green,
+                                                          fontSize:
+                                                              width * 0.03)),
+                                                ),
+                                                SizedBox(
+                                                  width: width * 0.5,
                                                   child: Text(dx,
                                                       style: TextStyle(
                                                           fontSize:
                                                               width * 0.03)),
                                                 ),
                                               ]),
+                                          Center(
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: Container(
+                                                width: width * 0.8,
+                                                height: 1,
+                                                color: Colors.grey,
+                                              ),
+                                            ),
+                                          ),
                                           Row(
                                               mainAxisAlignment:
                                                   MainAxisAlignment.center,
                                               children: [
-                                                Text("Doctor Note :",
-                                                    style: TextStyle(
-                                                        color: Colors.green,
-                                                        fontSize:
-                                                            width * 0.03)),
                                                 SizedBox(
-                                                  width: width * 0.6,
+                                                  width: width * 0.25,
+                                                  child: Text("Doctor Note :",
+                                                      style: TextStyle(
+                                                          color: Colors.green,
+                                                          fontSize:
+                                                              width * 0.03)),
+                                                ),
+                                                SizedBox(
+                                                  width: width * 0.5,
                                                   child: Text(doctor_note,
                                                       style: TextStyle(
                                                           fontSize:
@@ -735,11 +771,19 @@ class _UserInformation2State extends State<UserInformation2> {
                                       padding: const EdgeInsets.all(8.0),
                                       child: Center(
                                         child: ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor: Colors.green,
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(5),
+                                              ),
+                                            ),
                                             onPressed: () {
                                               printexam();
                                             },
                                             child: Text("ปริ้นผลตรวจ",
                                                 style: TextStyle(
+                                                    color: Colors.white,
                                                     fontSize: width * 0.03))),
                                       ),
                                     )
@@ -959,7 +1003,7 @@ class _UserInformation2State extends State<UserInformation2> {
                                                         resTojsonGateway != null
                                                             ? resTojsonGateway[
                                                                         "statuscode"] ==
-                                                                    200
+                                                                    100
                                                                 ? Colors.green
                                                                 : const Color
                                                                     .fromARGB(
@@ -980,7 +1024,7 @@ class _UserInformation2State extends State<UserInformation2> {
                                                         null) {
                                                       if (resTojsonGateway[
                                                               "statuscode"] ==
-                                                          200) {
+                                                          100) {
                                                         if (resToJsonCheckQuick[
                                                                 "message"] ==
                                                             "health_record") {
