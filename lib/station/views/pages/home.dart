@@ -102,6 +102,7 @@ class _HomeappState extends State<Homeapp> {
         });
         Timer(const Duration(seconds: 1), () {
           Get.toNamed('user_information');
+          timerreadIDCard?.cancel();
         });
       }
     } else {

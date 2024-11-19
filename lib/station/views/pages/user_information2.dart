@@ -991,10 +991,10 @@ class _UserInformation2State extends State<UserInformation2> {
                                               )
                                             : const SizedBox(),
                                         Padding(
-                                          padding: const EdgeInsets.all(8.0),
+                                          padding: const EdgeInsets.all(12.0),
                                           child: Row(
                                             mainAxisAlignment:
-                                                MainAxisAlignment.end,
+                                                MainAxisAlignment.center,
                                             children: [
                                               ElevatedButton(
                                                   style:
@@ -1036,11 +1036,17 @@ class _UserInformation2State extends State<UserInformation2> {
                                                       }
                                                     }
                                                   },
-                                                  child: Text(
-                                                    "ยืนยัน",
-                                                    style: TextStyle(
-                                                        fontSize: width * 0.03,
-                                                        color: Colors.white),
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            12.0),
+                                                    child: Text(
+                                                      "ยืนยัน",
+                                                      style: TextStyle(
+                                                          fontSize:
+                                                              width * 0.03,
+                                                          color: Colors.white),
+                                                    ),
                                                   )),
                                             ],
                                           ),

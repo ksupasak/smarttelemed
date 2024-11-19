@@ -449,8 +449,7 @@ class _InformationCardState extends State<InformationCard> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "${widget.dataidcard['personal']['first_name']}" +
-                        '  ' +
+                    "${widget.dataidcard['personal']['first_name']}" '  ' +
                         "${widget.dataidcard['personal']['last_name']}",
                     style: TextStyle(
                       fontFamily: context.read<DataProvider>().fontFamily,
@@ -472,13 +471,15 @@ class _InformationCardState extends State<InformationCard> {
                     style: TextStyle(
                       fontFamily: context.read<DataProvider>().fontFamily,
                       fontSize: MediaQuery.of(context).size.width * 0.03,
-                      color: Color(0xff1B6286),
-                      shadows: [
-                        Shadow(
-                            // color: Color.fromARGB(255, 0, 109, 64),
-                            // blurRadius: 10,
-                            ),
-                      ],
+                      color: const Color(0xff1B6286),
+                    ),
+                  ),
+                  Text(
+                    "${widget.dataidcard['personal']['hn']}",
+                    style: TextStyle(
+                      fontFamily: context.read<DataProvider>().fontFamily,
+                      fontSize: MediaQuery.of(context).size.width * 0.03,
+                      color: const Color(0xff1B6286),
                     ),
                   ),
                 ],
