@@ -135,13 +135,13 @@ class _UserInformation2State extends State<UserInformation2> {
         timerCheckQuick?.cancel();
         finished();
         exam();
-        check_card_out();
+        //   check_card_out();
       }
       if (resToJsonCheckQuick["message"] == "finished") {
         debugPrint("ตรวจเสร็จเเล้ว message finished");
         timerCheckQuick?.cancel();
         exam();
-        check_card_out();
+        // check_card_out();
       }
     });
   }
@@ -573,7 +573,7 @@ class _UserInformation2State extends State<UserInformation2> {
     if (resTojsonGateway != null) {
       if (resTojsonGateway["statuscode"] == 400) {
         debugPrint("ไม่มี vitalsign ติดต่อเจ้าหน้าที่ ");
-        check_card_out();
+        //    check_card_out();
         showDialog(
             context: context,
             builder: (BuildContext context) {
@@ -1000,18 +1000,19 @@ class _UserInformation2State extends State<UserInformation2> {
                                                   style:
                                                       ElevatedButton.styleFrom(
                                                     backgroundColor:
-                                                        resTojsonGateway != null
-                                                            ? resTojsonGateway[
-                                                                        "statuscode"] ==
-                                                                    100
-                                                                ? Colors.green
-                                                                : const Color
-                                                                    .fromARGB(
-                                                                    255,
-                                                                    221,
-                                                                    221,
-                                                                    221)
-                                                            : Colors.grey,
+                                                        //  resTojsonGateway != null
+                                                        // ? resTojsonGateway[
+                                                        //             "statuscode"] ==
+                                                        //         100
+                                                        //     ?
+                                                        Colors.green,
+                                                    //     : const Color
+                                                    //         .fromARGB(
+                                                    //         255,
+                                                    //         221,
+                                                    //         221,
+                                                    //         221)
+                                                    // : Colors.grey,
                                                     shape:
                                                         RoundedRectangleBorder(
                                                       borderRadius:
@@ -1020,20 +1021,18 @@ class _UserInformation2State extends State<UserInformation2> {
                                                     ),
                                                   ),
                                                   onPressed: () {
+                                                    if (resToJsonCheckQuick[
+                                                            "message"] ==
+                                                        "health_record") {
+                                                      timerCheckQuick?.cancel();
+                                                      Get.toNamed(
+                                                          'healthRecord2');
+                                                    }
                                                     if (resTojsonGateway !=
                                                         null) {
                                                       if (resTojsonGateway[
                                                               "statuscode"] ==
-                                                          100) {
-                                                        if (resToJsonCheckQuick[
-                                                                "message"] ==
-                                                            "health_record") {
-                                                          timerCheckQuick
-                                                              ?.cancel();
-                                                          Get.toNamed(
-                                                              'healthRecord2');
-                                                        }
-                                                      }
+                                                          100) {}
                                                     }
                                                   },
                                                   child: Padding(

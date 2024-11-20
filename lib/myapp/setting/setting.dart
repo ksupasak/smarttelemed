@@ -68,36 +68,37 @@ class _SettingState extends State<Setting> {
                                 MaterialPageRoute(
                                     builder: (context) => TalamedSetting()));
                           },
-                          child: BoxSetting(text: 'Talamed  Setting')),
-                           GestureDetector(
-                          onTap: () {
-                            keypad_sound();
-
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>  SettingMinMax()));
-                          },
-                          child: BoxSetting(text: 'Min Max')),
-                              GestureDetector(
-                          onTap: () {
-                            keypad_sound();
-
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>  SettingListPrinter()));
-                          },
-                          child: BoxSetting(text: 'ListPrinter')),
+                          child: BoxSetting(text: 'Telemed  Setting')),
                       GestureDetector(
                           onTap: () {
                             keypad_sound();
+
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => Update_License()));
+                                    builder: (context) => SettingMinMax()));
                           },
-                          child: BoxSetting(text: 'Update License')),
+                          child: BoxSetting(text: 'Min Max')),
+                      GestureDetector(
+                          onTap: () {
+                            keypad_sound();
+
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        SettingListPrinter()));
+                          },
+                          child: BoxSetting(text: 'ListPrinter')),
+                      // GestureDetector(
+                      //     onTap: () {
+                      //       keypad_sound();
+                      //       Navigator.push(
+                      //           context,
+                      //           MaterialPageRoute(
+                      //               builder: (context) => Update_License()));
+                      //     },
+                      //     child: BoxSetting(text: 'Update License')),
                       GestureDetector(
                           onTap: () {
                             keypad_sound();
