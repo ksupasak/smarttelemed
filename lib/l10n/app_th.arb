@@ -1,9 +1,20 @@
 {
     "press_msg": "คุณกดปุ่มนี้หลายครั้ง:",
-    "counter_msg": "{count} ครั้ง"  ,
-    "confirm":"ตกลง",
-       "register":"สมัค",
-       "leave":"ออก"
-       ,
-     "no_hn":"ไม่มี HN"
+    "counter_msg": "{count} ครั้ง",
+    "confirm": "ตกลง",
+    "register": "ลงทะเบียน",
+    "leave": "ออก",
+    
+    "hn": "HN",
+    "no_hn": "ไม่มี HN",
+    "vn":"VN"
+    "no_vn": "ไม่มี VN",
+
+    "no_treatment_rights": "ไม่มีสิทธิ์การรักษา ชำระค่ารักษาเอง",  
+    "check_data": "ตรวจสอบข้อมูล",    
+    "id_card_number": "เลขบัตรประชาชน",   
+    "full_name": "ชื่อ - นามสกุล",   
+    "birth_date": "วันเดือนปีเกิด", 
+    "phone_number": "เบอร์โทร"
+   
 }
