@@ -34,7 +34,8 @@ class _InitsettingState extends State<Initsetting> {
   int? numindex;
   bool status_safe = false;
   void test() {
-    platfromURL.text = 'https://emr-life.com/clinic_master/clinic/StmsApi';
+    platfromURL.text =
+        'https://emr-life.com/expert/telemed/StmsApi'; // 'https://emr-life.com/clinic_master/clinic/StmsApi';
   }
 
   void sync() async {
@@ -393,7 +394,7 @@ class _InitsettingState extends State<Initsetting> {
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Column(children: [
-                            BoxText(keyvavlue: app.text, texthead: 'ประเภทApp'),
+                            //  BoxText(keyvavlue: app.text, texthead: 'ประเภทApp'),
                             BoxText(
                                 keyvavlue: name_hospital.text,
                                 texthead: 'Name Hospital'),

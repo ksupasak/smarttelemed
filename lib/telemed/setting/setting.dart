@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 
 import 'package:smarttelemed/myapp/action/playsound.dart';
+import 'package:smarttelemed/telemed/background.dart/background.dart';
 
-import 'package:smarttelemed/myapp/widgetdew.dart';
 import 'package:smarttelemed/telemed/setting/init_setting.dart';
 import 'package:smarttelemed/telemed/setting/min_max.dart';
 import 'package:smarttelemed/telemed/setting/settingListPrinter.dart';
 import 'package:smarttelemed/telemed/setting/talamed_setting.dart';
+import 'package:smarttelemed/telemed/setting/ui/boxSetting.dart';
 import 'package:smarttelemed/telemed/splash_screen/splashScreen.dart';
 
 class Setting extends StatefulWidget {
@@ -34,7 +35,7 @@ class _SettingState extends State<Setting> {
           }),
           child: Stack(
             children: [
-              const backgrund(),
+              const Background(),
               Positioned(
                 child: SizedBox(
                   width: width,
