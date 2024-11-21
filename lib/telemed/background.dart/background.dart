@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
-import 'package:smarttelemed/station/main_app/app.dart';
 import 'package:smarttelemed/telemed/background.dart/boxTime.dart';
 import 'package:smarttelemed/telemed/provider/provider.dart';
 
