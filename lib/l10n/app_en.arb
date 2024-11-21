@@ -9,8 +9,24 @@
         "count": {}
       }
     },
-     "confirm":"Confirm",
-     "register":"Register",
-     "leave":"Leave",
-     "no_hn":"No HN"
+    "f_name": "firstname",
+    "confirm": "Confirm",
+    "register": "Register",
+    "leave": "Leave",
+
+    "hn": "HN",
+    "no_hn": "No HN",
+    "vn":"VN"
+    "no_vn": "No VN",
+
+    "health_check": "Health Check",
+    "enter_exam": "Enter for Examination",
+
+    "no_treatment_rights": "No treatment rights, self-payment required",   
+    "check_data": "Check data",   
+    "id_card_number": "ID Card Number",    
+    "full_name": "Full Name",    
+    "birth_date": "Date of Birth",    
+    "hn": "HN",   
+    "phone_number": "Phone Number"  
 }
