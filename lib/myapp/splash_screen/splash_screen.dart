@@ -141,9 +141,8 @@ class _Splash_ScreenState extends State<Splash_Screen> {
     }
   }
 
-
   void getconfig() async {
-      List<RecordSnapshot<int, Map<String, Object?>>>? dataconfig;
+    List<RecordSnapshot<int, Map<String, Object?>>>? dataconfig;
     dataconfig = await getInOutHospital();
     debugPrint("dataconfig INHospital $dataconfig");
     if (dataconfig?.length != 0) {
@@ -153,26 +152,30 @@ class _Splash_ScreenState extends State<Splash_Screen> {
           setState(() {});
         }
         if (record['requirel_id_card'] != "true") {
-           context.read<DataProvider>().requirel_id_card = false;
+          context.read<DataProvider>().requirel_id_card = false;
           setState(() {});
         }
         if (record['require_VN'] != "true") {
-           context.read<DataProvider>().require_VN = false;
+          context.read<DataProvider>().require_VN = false;
           setState(() {});
         }
-         context.read<DataProvider>().text_no_idcard = record["text_no_idcard"].toString();
-       context.read<DataProvider>().text_no_hn = record["text_no_hn"].toString();
-         context.read<DataProvider>().text_no_vn = record["text_no_vn"].toString();
+        context.read<DataProvider>().text_no_idcard =
+            record["text_no_idcard"].toString();
+        context.read<DataProvider>().text_no_hn =
+            record["text_no_hn"].toString();
+        context.read<DataProvider>().text_no_vn =
+            record["text_no_vn"].toString();
       }
     }
   }
+
   @override
   void initState() {
     getconfig();
     getDeviceInformation();
     debugPrint('เข้าหน้าsplash');
     setdata();
-    
+
     super.initState();
   }
 

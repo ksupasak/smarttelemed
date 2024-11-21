@@ -3,8 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sembast/sembast.dart';
-import 'package:smarttelemed/myapp/provider/provider.dart';
-import 'package:smarttelemed/myapp/setting/local.dart';
+import 'package:smarttelemed/telemed/local/local.dart';
+import 'package:smarttelemed/telemed/provider/provider.dart';
 
 class TalamedSetting extends StatefulWidget {
   const TalamedSetting({super.key});

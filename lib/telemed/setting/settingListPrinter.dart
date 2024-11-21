@@ -1,11 +1,9 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'package:flutter/material.dart';
 import 'package:printing/printing.dart';
 import 'package:provider/provider.dart';
 import 'package:sembast/sembast.dart';
-import 'package:smarttelemed/myapp/provider/provider.dart';
-import 'package:smarttelemed/myapp/setting/local.dart';
+import 'package:smarttelemed/telemed/local/local.dart';
+import 'package:smarttelemed/telemed/provider/provider.dart';
 
 class SettingListPrinter extends StatefulWidget {
   const SettingListPrinter({super.key});
@@ -51,7 +49,7 @@ class _SettingListPrinterState extends State<SettingListPrinter> {
           listNamePrinters = printers.map((printer) => printer.name).toList();
         });
       } catch (e) {
-        print("Error listing printers: $e");
+        debugPrint("Error listing printers: $e");
       } finally {
         setState(() {
           statusSafe = false;
