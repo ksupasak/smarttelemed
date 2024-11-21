@@ -1,0 +1,16 @@
+{
+    "press_msg": "You have pushed the button this many times:",
+    "@press_msg": {
+      "description": "press message"
+    },
+    "counter_msg": " {count} times",
+    "@counter_msg": {
+      "placeholders": {
+        "count": {}
+      }
+    },
+     "confirm":"Confirm",
+     "register":"Register",
+     "leave":"Leave",
+     "no_hn":"No HN"
+}

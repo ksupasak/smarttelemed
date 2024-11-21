@@ -61,33 +61,33 @@ class _SplashScreenState extends State<SplashScreen> {
   void getconfig() async {
     List<RecordSnapshot<int, Map<String, Object?>>>? dataconfig;
     dataconfig = await getInOutHospital();
-    DataProvider Provider = context.read<DataProvider>();
-    Provider.debugPrintV("RecordSnapshot : $dataconfig");
+    DataProvider provider = context.read<DataProvider>();
+    provider.debugPrintV("RecordSnapshot : $dataconfig");
     if (dataconfig.length != 0) {
       for (RecordSnapshot<int, Map<String, Object?>> record in dataconfig) {
         if (record["in_hospital"] != "true") {
-          Provider.in_hospital = false;
+          provider.in_hospital = false;
           setState(() {});
         }
         if (record['requirel_id_card'] != "true") {
-          Provider.requirel_id_card = false;
+          provider.requirel_id_card = false;
           setState(() {});
         }
         if (record['require_VN'] != "true") {
-          Provider.require_VN = false;
+          provider.require_VN = false;
           setState(() {});
         }
-        Provider.text_no_idcard = record["text_no_idcard"].toString();
-        Provider.text_no_hn = record["text_no_hn"].toString();
-        Provider.text_no_vn = record["text_no_vn"].toString();
+        provider.text_no_idcard = record["text_no_idcard"].toString();
+        provider.text_no_hn = record["text_no_hn"].toString();
+        provider.text_no_vn = record["text_no_vn"].toString();
       }
     }
-    Provider.debugPrintV("INHospital :${Provider.in_hospital}");
-    Provider.debugPrintV("requirel_id_card :${Provider.requirel_id_card}");
-    Provider.debugPrintV("require_VN :${Provider.require_VN}");
-    Provider.debugPrintV("text_no_idcard :${Provider.text_no_idcard}");
-    Provider.debugPrintV("text_no_hn :${Provider.text_no_hn}");
-    Provider.debugPrintV("text_no_vn :${Provider.text_no_vn}");
+    provider.debugPrintV("INHospital :${provider.in_hospital}");
+    provider.debugPrintV("requirel_id_card :${provider.requirel_id_card}");
+    provider.debugPrintV("require_VN :${provider.require_VN}");
+    provider.debugPrintV("text_no_idcard :${provider.text_no_idcard}");
+    provider.debugPrintV("text_no_hn :${provider.text_no_hn}");
+    provider.debugPrintV("text_no_vn :${provider.text_no_vn}");
     getprinter();
   }
 
@@ -103,6 +103,28 @@ class _SplashScreenState extends State<SplashScreen> {
       }
     }
     Provider.debugPrintV("namePrinters  :${datas[0]["namePrinters"]}");
+
+    getmin_max();
+  }
+
+  void getmin_max() async {
+    List<RecordSnapshot<int, Map<String, Object?>>> data = await getMinMax();
+    DataProvider provider = context.read<DataProvider>();
+    provider.debugPrintV(data.toString());
+    if (data != []) {
+      for (RecordSnapshot<int, Map<String, Object?>> record in data!) {
+        provider.datamin_max['minsys'] = record["minsys"].toString();
+        provider.datamin_max['maxsys'] = record["maxsys"].toString();
+        provider.datamin_max['minspo2'] = record["minspo2"].toString();
+        provider.datamin_max['maxspo2'] = record["maxspo2"].toString();
+        provider.datamin_max['mindia'] = record["mindia"].toString();
+        provider.datamin_max['maxdia'] = record["maxdia"].toString();
+        provider.datamin_max['mintemp'] = record["mintemp"].toString();
+        provider.datamin_max['maxtemp'] = record["maxtemp"].toString();
+        provider.datamin_max['minbmi'] = record["minbmi"].toString();
+        provider.datamin_max['maxbmi'] = record["maxbmi"].toString();
+      }
+    }
     setState(() {
       Future.delayed(const Duration(seconds: 2), () {
         Navigator.pushReplacement(context,

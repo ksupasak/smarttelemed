@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import 'package:smarttelemed/myapp/action/playsound.dart';
 import 'package:smarttelemed/telemed/background.dart/background.dart';
 
 import 'package:smarttelemed/telemed/setting/init_setting.dart';
+import 'package:smarttelemed/telemed/setting/language.dart';
 import 'package:smarttelemed/telemed/setting/min_max.dart';
 import 'package:smarttelemed/telemed/setting/settingListPrinter.dart';
 import 'package:smarttelemed/telemed/setting/talamed_setting.dart';
@@ -52,8 +52,14 @@ class _SettingState extends State<Setting> {
                           child: BoxSetting(text: 'Init Setting')),
                       GestureDetector(
                           onTap: () {
-                            keypad_sound();
-
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const LanguageApp()));
+                          },
+                          child: BoxSetting(text: 'Language')),
+                      GestureDetector(
+                          onTap: () {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
@@ -63,8 +69,6 @@ class _SettingState extends State<Setting> {
                           child: BoxSetting(text: 'Telemed  Setting')),
                       GestureDetector(
                           onTap: () {
-                            keypad_sound();
-
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
@@ -74,8 +78,6 @@ class _SettingState extends State<Setting> {
                           child: BoxSetting(text: 'Min Max')),
                       GestureDetector(
                           onTap: () {
-                            keypad_sound();
-
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(

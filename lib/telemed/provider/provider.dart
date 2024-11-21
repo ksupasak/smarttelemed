@@ -11,6 +11,7 @@ class DataProvider with ChangeNotifier {
   String app = '';
   String name_hospital = '';
   String platfromURL = '';
+  String platfromURLgeatway = 'https://goodwide.pythonanywhere.com';
   String password = '';
   String care_unit = '';
   String care_unit_id = '';
@@ -33,6 +34,13 @@ class DataProvider with ChangeNotifier {
     "maxbmi": '',
   };
   String printername = '';
+  Locale languageApp = const Locale('th');
+
+  void setlanguageApp(Locale locale) {
+    languageApp = locale;
+    notifyListeners();
+  }
+
 ///////////////////////////////
   Map dataUserIDCard = {};
   String id = '';
@@ -47,6 +55,29 @@ class DataProvider with ChangeNotifier {
     claimType = data['claimTypes'][0]["claimType"];
     claimTypeName = data['claimTypes'][0]["claimTypeName"];
     correlationId = data["correlationId"];
+    notifyListeners();
+  }
+
+  Map datagateway = {};
+  String hn = '';
+  String vn = '';
+  String prefixName = '';
+  String fname = '';
+  String lname = '';
+  String phone = '';
+  String imgae = '';
+  String birthdate = '';
+  void updateusergateway(Map data) {
+    //https://goodwide.pythonanywhere.com/api/patient?cid=1111111111111
+    debugPrintV("พบข้อมูล gateway $data");
+    hn = data['data']['hn'];
+    vn = data['data']['vn'];
+    prefixName = data['data']['prefix_name'];
+    fname = data['data']['fname'];
+    lname = data['data']['lname'];
+    phone = data['data']['phone'];
+    imgae = data['data']['img'];
+    birthdate = data['data']['birthdate'];
     notifyListeners();
   }
 }

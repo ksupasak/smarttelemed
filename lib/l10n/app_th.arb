@@ -1,0 +1,9 @@
+{
+    "press_msg": "คุณกดปุ่มนี้หลายครั้ง:",
+    "counter_msg": "{count} ครั้ง"  ,
+    "confirm":"ตกลง",
+       "register":"สมัค",
+       "leave":"ออก"
+       ,
+     "no_hn":"ไม่มี HN"
+}
