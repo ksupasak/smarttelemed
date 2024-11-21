@@ -2,7 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smarttelemed/telemed/background.dart/background.dart';
 import 'package:smarttelemed/telemed/provider/provider.dart';
+import 'package:smarttelemed/telemed/views/healthrecord.dart';
 import 'package:smarttelemed/telemed/views/ui/informationCard.dart';
+import 'package:smarttelemed/telemed/views/ui/stylebutton.dart';
+
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Userinformation extends StatefulWidget {
   const Userinformation({super.key});
@@ -14,7 +18,7 @@ class Userinformation extends StatefulWidget {
 class _UserinformationState extends State<Userinformation> {
   String birthdate(String datas) {
     String data =
-        "${datas[6]}${datas[7]}/${datas[4]}${datas[5]}/${datas[0]}${datas[1]}${datas[2]}${datas[3]}";
+        "${datas[8]}${datas[9]}/${datas[5]}${datas[6]}/${datas[0]}${datas[1]}${datas[2]}${datas[3]}";
     return data;
   }
 
@@ -160,6 +164,46 @@ class _UserinformationState extends State<Userinformation> {
                             ),
                             SizedBox(height: height * 0.02)
                           ],
+                        ),
+                      )),
+                ),
+                SizedBox(height: height * 0.02),
+                Center(
+                  child: ElevatedButton(
+                      style: stylebutter(Colors.green),
+                      onPressed: () {
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const SumHealthrecord()));
+                      },
+                      child: Text("ตรวจสุขภาพ",
+                          style: TextStyle(
+                              fontSize: width * 0.03, color: Colors.white))),
+                ),
+                SizedBox(height: height * 0.02),
+                Center(
+                  child: ElevatedButton(
+                      style: stylebutter(Colors.blue),
+                      onPressed: () {},
+                      child: Text("เข้าตรวจ",
+                          style: TextStyle(
+                              fontSize: width * 0.03, color: Colors.white))),
+                ),
+                SizedBox(height: height * 0.03),
+                Center(
+                  child: GestureDetector(
+                      onTap: () {},
+                      child: Container(
+                        width: width * 0.1,
+                        decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey)),
+                        child: Center(
+                          child: Text(
+                            S.of(context)!.leave,
+                            style: TextStyle(
+                                color: Colors.red, fontSize: width * 0.03),
+                          ),
                         ),
                       )),
                 )

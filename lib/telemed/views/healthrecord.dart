@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_libserialport/flutter_libserialport.dart';
 import 'package:provider/provider.dart';
@@ -371,9 +373,9 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
       var body = jsonEncode({
         "pid": context.read<DataProvider>().id,
         "claimType": context.read<DataProvider>().claimType,
-        "mobile": context.read<DataProvider>().tel.text,
+        "mobile": context.read<DataProvider>().phone,
         "correlationId": context.read<DataProvider>().correlationId,
-        "hn": context.read<DataProvider>().hn.text
+        "hn": context.read<DataProvider>().hn
       });
 
       var res = await http.post(url,
