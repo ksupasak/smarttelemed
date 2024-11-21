@@ -13,11 +13,14 @@
     "confirm": "Confirm",
     "register": "Register",
     "leave": "Leave",
-    
+
     "hn": "HN",
     "no_hn": "No HN",
     "vn":"VN"
     "no_vn": "No VN",
+
+    "health_check": "Health Check",
+    "enter_exam": "Enter for Examination",
 
     "no_treatment_rights": "No treatment rights, self-payment required",   
     "check_data": "Check data",   

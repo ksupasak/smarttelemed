@@ -4,11 +4,14 @@
     "confirm": "ตกลง",
     "register": "ลงทะเบียน",
     "leave": "ออก",
-    
+
     "hn": "HN",
     "no_hn": "ไม่มี HN",
     "vn":"VN"
     "no_vn": "ไม่มี VN",
+    
+    "health_check": "ตรวจสุขภาพ",
+    "enter_exam": "เข้าตรวจ",
 
     "no_treatment_rights": "ไม่มีสิทธิ์การรักษา ชำระค่ารักษาเอง",  
     "check_data": "ตรวจสอบข้อมูล",    
