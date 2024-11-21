@@ -112,7 +112,7 @@ class _SplashScreenState extends State<SplashScreen> {
     DataProvider provider = context.read<DataProvider>();
     provider.debugPrintV(data.toString());
     if (data != []) {
-      for (RecordSnapshot<int, Map<String, Object?>> record in data!) {
+      for (RecordSnapshot<int, Map<String, Object?>> record in data) {
         provider.datamin_max['minsys'] = record["minsys"].toString();
         provider.datamin_max['maxsys'] = record["maxsys"].toString();
         provider.datamin_max['minspo2'] = record["minspo2"].toString();
