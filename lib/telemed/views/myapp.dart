@@ -30,7 +30,7 @@ class _MyAppState extends State<MyApp> {
           Locale('en'),
           Locale('th'),
         ],
-        locale: DataProvider().languageApp,
+        locale: Locale('en'),
         color: Colors.grey,
         debugShowCheckedModeBanner: false,
         home: const Scaffold(body: SplashScreen()),

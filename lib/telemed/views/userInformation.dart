@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:smarttelemed/telemed/background.dart/background.dart';
 import 'package:smarttelemed/telemed/provider/provider.dart';
 import 'package:smarttelemed/telemed/views/healthrecord.dart';
+import 'package:smarttelemed/telemed/views/home.dart';
 import 'package:smarttelemed/telemed/views/ui/informationCard.dart';
 import 'package:smarttelemed/telemed/views/ui/stylebutton.dart';
 
@@ -17,9 +18,16 @@ class Userinformation extends StatefulWidget {
 
 class _UserinformationState extends State<Userinformation> {
   String birthdate(String datas) {
-    String data =
-        "${datas[8]}${datas[9]}/${datas[5]}${datas[6]}/${datas[0]}${datas[1]}${datas[2]}${datas[3]}";
-    return data;
+    if (datas != "") {
+      return "${datas[8]}${datas[9]}/${datas[5]}${datas[6]}/${datas[0]}${datas[1]}${datas[2]}${datas[3]}";
+    } else {
+      return "";
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
   }
 
   @override
@@ -36,7 +44,7 @@ class _UserinformationState extends State<Userinformation> {
             height: height,
             child: ListView(
               children: [
-                SizedBox(height: height * 0.15),
+                SizedBox(height: height * 0.13),
                 Center(
                   child: Container(
                       width: width * 0.8,
@@ -75,7 +83,7 @@ class _UserinformationState extends State<Userinformation> {
                           ? Text(
                               "${provider.claimTypeName} (${provider.claimType})",
                               style: TextStyle(fontSize: width * 0.03))
-                          : Text("ไม่มีสิทธิ์การรักษา ชำระค่ารักษาเอง",
+                          : Text(S.of(context)!.no_treatment_rights,
                               style: TextStyle(fontSize: width * 0.03)),
                     ),
                   ),
@@ -99,7 +107,7 @@ class _UserinformationState extends State<Userinformation> {
                         padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
                         child: Column(
                           children: [
-                            Text("ตรวจสอบข้อมูล",
+                            Text(S.of(context)!.check_data,
                                 style: TextStyle(fontSize: width * 0.04)),
                             provider.vn == ""
                                 ? Text(
@@ -117,19 +125,19 @@ class _UserinformationState extends State<Userinformation> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Text("เลขบัตรประชาชน",
+                                      Text(S.of(context)!.id_card_number,
                                           style: TextStyle(
                                               fontSize: width * 0.03)),
-                                      Text("ชื่อ - นามสกุล",
+                                      Text(S.of(context)!.full_name,
                                           style: TextStyle(
                                               fontSize: width * 0.03)),
-                                      Text("วันเดือนปีเกิด",
+                                      Text(S.of(context)!.birth_date,
                                           style: TextStyle(
                                               fontSize: width * 0.03)),
-                                      Text("HN :",
+                                      Text(S.of(context)!.hn,
                                           style: TextStyle(
                                               fontSize: width * 0.03)),
-                                      Text("เบอร์โทร : ",
+                                      Text(S.of(context)!.phone_number,
                                           style: TextStyle(
                                               fontSize: width * 0.03)),
                                     ],
@@ -177,7 +185,7 @@ class _UserinformationState extends State<Userinformation> {
                             MaterialPageRoute(
                                 builder: (context) => const SumHealthrecord()));
                       },
-                      child: Text("ตรวจสุขภาพ",
+                      child: Text(S.of(context)!.health_check,
                           style: TextStyle(
                               fontSize: width * 0.03, color: Colors.white))),
                 ),
@@ -186,14 +194,19 @@ class _UserinformationState extends State<Userinformation> {
                   child: ElevatedButton(
                       style: stylebutter(Colors.blue),
                       onPressed: () {},
-                      child: Text("เข้าตรวจ",
+                      child: Text(S.of(context)!.enter_exam,
                           style: TextStyle(
                               fontSize: width * 0.03, color: Colors.white))),
                 ),
                 SizedBox(height: height * 0.03),
                 Center(
                   child: GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const HomeTelemed()));
+                      },
                       child: Container(
                         width: width * 0.1,
                         decoration: BoxDecoration(

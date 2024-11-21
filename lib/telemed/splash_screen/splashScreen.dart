@@ -88,21 +88,22 @@ class _SplashScreenState extends State<SplashScreen> {
     provider.debugPrintV("text_no_idcard :${provider.text_no_idcard}");
     provider.debugPrintV("text_no_hn :${provider.text_no_hn}");
     provider.debugPrintV("text_no_vn :${provider.text_no_vn}");
-    getprinter();
+    getprinterList();
   }
 
-  void getprinter() async {
-    DataProvider Provider = context.read<DataProvider>();
+  void getprinterList() async {
+    DataProvider provider = context.read<DataProvider>();
     List<RecordSnapshot<int, Map<String, Object?>>> datas = await getPrinter();
-    Provider.debugPrintV("ListPrinters  :$datas");
+    provider.debugPrintV("ListPrinters  :$datas");
 
     if (datas.length != 0) {
       for (RecordSnapshot<int, Map<String, Object?>> data in datas) {
-        context.read<DataProvider>().printername =
-            data["namePrinters"].toString();
+        provider.printername = data["namePrinters"].toString();
+        provider.debugPrintV("namePrinters  :${datas[0]["namePrinters"]}");
       }
+    } else {
+      provider.debugPrintV("data");
     }
-    Provider.debugPrintV("namePrinters  :${datas[0]["namePrinters"]}");
 
     getmin_max();
   }

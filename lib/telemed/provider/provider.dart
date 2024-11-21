@@ -58,6 +58,13 @@ class DataProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  String claimCode = '';
+  void updateclaimCode(Map data) {
+    claimCode = data["claimCode"];
+    debugPrint("claimCode : $claimCode");
+    notifyListeners();
+  }
+
   Map datagateway = {};
   String hn = '';
   String vn = '';
@@ -80,4 +87,25 @@ class DataProvider with ChangeNotifier {
     birthdate = data['data']['birthdate'];
     notifyListeners();
   }
+
+  void updateuserCard(Map data) {
+    debugPrintV("พบข้อมูล Crde Reader :$data");
+    String databirthDate;
+    fname = data['fname'];
+    lname = data['lname'];
+    databirthDate = data['birthDate'];
+    birthdate =
+        "${databirthDate[0]}${databirthDate[1]}${databirthDate[2]}${databirthDate[3]}-${databirthDate[4]}${databirthDate[5]}-${databirthDate[6]}${databirthDate[7]}";
+    notifyListeners();
+  }
+
+/////////////////////////////////////
+  TextEditingController sysHealthrecord = TextEditingController();
+  TextEditingController diaHealthrecord = TextEditingController();
+  TextEditingController pulseHealthrecord = TextEditingController();
+  TextEditingController heightHealthrecord = TextEditingController();
+  TextEditingController weightHealthrecord = TextEditingController();
+  TextEditingController spo2Healthrecord = TextEditingController();
+  TextEditingController tempHealthrecord = TextEditingController();
+  TextEditingController bmiHealthrecord = TextEditingController();
 }

@@ -1,10 +1,20 @@
 import 'dart:convert';
+import 'dart:io';
 
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_libserialport/flutter_libserialport.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
+import 'package:smarttelemed/telemed/background.dart/background.dart';
 import 'package:smarttelemed/telemed/provider/provider.dart';
+import 'package:smarttelemed/telemed/views/ui/boxrecord.dart';
+import 'package:smarttelemed/telemed/views/ui/informationCard.dart';
+import 'package:smarttelemed/telemed/views/ui/popup.dart';
+import 'package:smarttelemed/telemed/views/ui/stylebutton.dart';
+import 'package:smarttelemed/telemed/views/userInformation.dart';
+
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SumHealthrecord extends StatefulWidget {
   const SumHealthrecord({super.key});
@@ -169,8 +179,6 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
 
 //////////////////////////////////////////////////////////////////////////////
   void startSpo2() async {
-    bool connect = false;
-
     try {
       for (var name in SerialPort.availablePorts) {
         debugPrint('scan $name');
@@ -253,7 +261,7 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
         final port = SerialPort(name);
         if (port.vendorId == 6790) {
           debugPrint("found W_H");
-          int status = 0;
+
           if (!port.openReadWrite()) {
             debugPrint(SerialPort.lastError.toString());
           }
@@ -363,9 +371,9 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
     debugPrint("getClaimCode");
     debugPrint("pid : ${context.read<DataProvider>().id}");
     debugPrint("claimType : ${context.read<DataProvider>().claimType}");
-    debugPrint("mobile : ${context.read<DataProvider>().tel.text}");
+    debugPrint("mobile : ${context.read<DataProvider>().phone}");
     debugPrint("correlationId : ${context.read<DataProvider>().correlationId}");
-    debugPrint("hn : ${context.read<DataProvider>().hn.text}");
+    debugPrint("hn : ${context.read<DataProvider>().hn}");
     if (context.read<DataProvider>().claimType != "") {
       var url =
           Uri.parse('http://localhost:8189/api/nhso-service/confirm-save');
@@ -405,30 +413,22 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
             return Popup(
               texthead: 'ชำระค่ารักษาพยาบาลเอง',
               buttonbar: [
-                GestureDetector(
-                    onTap: () {
+                ElevatedButton(
+                    style: stylebutter(Colors.green),
+                    onPressed: () {
                       setState(() {
                         buttonsend = !buttonsend;
                       });
                       Navigator.pop(context);
                       sendDataHealthrecord();
                     },
-                    child: BoxWidetdew(
-                        color: const Color.fromARGB(255, 106, 173, 115),
-                        height: 0.05,
-                        width: 0.2,
-                        text: 'ตกลง',
-                        textcolor: Colors.white)),
-                GestureDetector(
-                    onTap: () {
+                    child: Text(S.of(context)!.confirm)),
+                ElevatedButton(
+                    style: stylebutter(Colors.green),
+                    onPressed: () {
                       Navigator.pop(context);
                     },
-                    child: BoxWidetdew(
-                        color: const Color.fromARGB(255, 173, 106, 106),
-                        height: 0.05,
-                        width: 0.2,
-                        text: 'ยกเลิก',
-                        textcolor: Colors.white))
+                    child: Text(S.of(context)!.leave))
               ],
             );
           });
@@ -468,69 +468,15 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
 
   ////////////////////////////////////////////////////////////////////////////
   void sendHealthrecordGateway() async {
-    // var url = Uri.parse('');
-    // Map<String, String> data ={};
-    //       var res = await http.post(url,body: data);
-    //        var resTojsonClaimCod = json.decode(res.body);
-    Get.offNamed('user_information');
-  }
-
-  // void sendclaimCode() async {
-  //   debugPrint("sendClaimCode ");
-  //   var url =
-  //       Uri.parse('https://emr-life.com/clinic_master/clinic/Api/set_claim_code');
-  //   var res = await http.post(url, body: {
-  //     "claim_code": context.read<DataProvider>().claimCode,
-  //     "claim_type": context.read<DataProvider>().claimType,
-  //     "claim_type_name": context.read<DataProvider>().claimTypeName,
-  //     "public_id": context.read<DataProvider>().id,
-  //   });
-  //   var resTojson = json.decode(res.body);
-  //   debugPrint(resTojson.toString());
-  //   if (res.statusCode == 200) {
-  //     debugPrint("sendClaimCode สำเร็จ ");
-  //     setState(() {
-  //       buttonsend = true;
-  //     });
-  //     Get.offNamed('user_information');
-  //   }
-  // }
-  void getmin_max() async {
-    List<RecordSnapshot<int, Map<String, Object?>>> data = await getMinMax();
-    debugPrint(data.toString());
-    if (data != []) {
-      for (RecordSnapshot<int, Map<String, Object?>> record in data!) {
-        context.read<DataProvider>().datamin_max['minsys'] =
-            record["minsys"].toString();
-        context.read<DataProvider>().datamin_max['maxsys'] =
-            record["maxsys"].toString();
-        context.read<DataProvider>().datamin_max['minspo2'] =
-            record["minspo2"].toString();
-        context.read<DataProvider>().datamin_max['maxspo2'] =
-            record["maxspo2"].toString();
-        context.read<DataProvider>().datamin_max['mindia'] =
-            record["mindia"].toString();
-        context.read<DataProvider>().datamin_max['maxdia'] =
-            record["maxdia"].toString();
-
-        context.read<DataProvider>().datamin_max['mintemp'] =
-            record["mintemp"].toString();
-        context.read<DataProvider>().datamin_max['maxtemp'] =
-            record["maxtemp"].toString();
-        context.read<DataProvider>().datamin_max['minbmi'] =
-            record["minbmi"].toString();
-        context.read<DataProvider>().datamin_max['maxbmi'] =
-            record["maxbmi"].toString();
-      }
-    }
-    setState(() {});
+    Navigator.pushReplacement(context,
+        MaterialPageRoute(builder: (context) => const Userinformation()));
   }
 
   @override
   void initState() {
     context.read<DataProvider>().bmiHealthrecord = TextEditingController();
     super.initState();
-    getmin_max();
+
     startH_W();
     startBP();
     startSpo2();
@@ -559,244 +505,271 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-    DataProvider dataProvider = context.read<DataProvider>();
+    DataProvider provider = context.read<DataProvider>();
     TextStyle textStyle = TextStyle(fontSize: width * 0.03, color: Colors.red);
-    return SizedBox(
-        height: height * 0.78,
-        width: width,
-        child: ListView(children: [
-          // Text(
-          //     "${context.read<DataProvider>().datamin_max['minspo2']}/${context.read<DataProvider>().datamin_max['maxspo2']}"),
-          // Text(
-          //     "${context.read<DataProvider>().datamin_max['minsys']}/${context.read<DataProvider>().datamin_max['maxsys']}"),
-          // Text(
-          //     "${context.read<DataProvider>().datamin_max['mindia']}/${context.read<DataProvider>().datamin_max['maxdia']}"),
-          // Text(
-          //     "${context.read<DataProvider>().datamin_max['mintemp']}/${context.read<DataProvider>().datamin_max['maxtemp']}"),
-          // Text(
-          //     "${context.read<DataProvider>().datamin_max['minbmi']}/${context.read<DataProvider>().datamin_max['maxbmi']}"),
-          CarouselSlider.builder(
-            itemCount: 3,
-            options: CarouselOptions(
-                autoPlay: true,
-                enlargeCenterPage: true,
-                viewportFraction: 0.9,
-                aspectRatio: 2.0,
-                initialPage: 2,
-                autoPlayInterval: const Duration(seconds: 10)),
-            itemBuilder: (context, index, pageViewIndex) => Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Image.asset(imggeCarouselSlider[index]),
-            ),
-          ),
-          Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-            warnTemp != ""
-                ? Text(warnTemp, style: textStyle)
-                : const SizedBox(),
-            warnSys != "" ? Text(warnSys, style: textStyle) : const SizedBox(),
-            warnDia != "" ? Text(warnDia, style: textStyle) : const SizedBox(),
-            warnSpo2 != ""
-                ? Text(warnSpo2, style: textStyle)
-                : const SizedBox(),
-            warnbmi != "" ? Text(warnbmi, style: textStyle) : const SizedBox(),
-          ]),
-          Center(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                BoxRecord(
-                    image: 'assets/jhv.png',
-                    texthead: 'SYS',
-                    keyvavlue: context.read<DataProvider>().sysHealthrecord),
-                BoxRecord(
-                    image: 'assets/jhvkb.png',
-                    texthead: 'DIA',
-                    keyvavlue: context.read<DataProvider>().diaHealthrecord),
-                BoxRecord(
-                    image: 'assets/jhbjk;.png',
-                    texthead: 'PULSE',
-                    keyvavlue: context.read<DataProvider>().pulseHealthrecord)
-              ],
-            ),
-          ),
-          Center(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                BoxRecord(
-                    image: 'assets/kauo.png',
-                    texthead: 'SPO2',
-                    keyvavlue: context.read<DataProvider>().spo2Healthrecord),
-                BoxRecord(
-                    image: 'assets/jhgh.png',
-                    texthead: 'TEMP',
-                    keyvavlue: context.read<DataProvider>().tempHealthrecord),
-              ],
-            ),
-          ),
-          Center(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                BoxRecord(
-                    image: 'assets/shr.png',
-                    texthead: 'HEIGHT',
-                    keyvavlue: context.read<DataProvider>().heightHealthrecord),
-                BoxRecord(
-                    image: 'assets/srhnate.png',
-                    texthead: 'WEIGHT',
-                    keyvavlue: context.read<DataProvider>().weightHealthrecord),
-                BoxRecord(
-                    image: 'assets/srhnate.png',
-                    texthead: 'BMI',
-                    keyvavlue: context.read<DataProvider>().bmiHealthrecord),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.red,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5),
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: Stack(
+        children: [
+          const Background(),
+          Positioned(
+            child: SizedBox(
+                height: height,
+                width: width,
+                child: ListView(children: [
+                  SizedBox(height: height * 0.13),
+                  Center(
+                    child: Container(
+                        width: width * 0.8,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(10),
+                          boxShadow: const [
+                            BoxShadow(
+                                blurRadius: 0.5,
+                                color: Color(0xff48B5AA),
+                                offset: Offset(0, 3)),
+                          ],
+                        ),
+                        child: const Center(
+                          child: InformationCard(),
+                        )),
+                  ),
+                  SizedBox(height: height * 0.01),
+                  CarouselSlider.builder(
+                    itemCount: 3,
+                    options: CarouselOptions(
+                        autoPlay: true,
+                        enlargeCenterPage: true,
+                        viewportFraction: 0.9,
+                        aspectRatio: 2.0,
+                        initialPage: 2,
+                        autoPlayInterval: const Duration(seconds: 10)),
+                    itemBuilder: (context, index, pageViewIndex) => Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Image.asset(imggeCarouselSlider[index]),
                     ),
                   ),
-                  onPressed: () {
-                    Get.offNamed('user_information');
-                    //   Get.toNamed('spo2');
-                  },
-                  child: Text(
-                    "กลับ",
-                    style:
-                        TextStyle(fontSize: width * 0.03, color: Colors.white),
-                  )),
-              SizedBox(width: width * 0.05),
-              buttonsend
-                  ? ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.green,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                      ),
-                      onPressed: () {
-                        setState(() {
-                          buttonsend = !buttonsend;
-                        });
-                        getClaimCode();
-
-                        dataProvider.updateviewhealthrecord("");
-                      },
-                      child: Text(
-                        "ส่ง",
-                        style: TextStyle(
-                            fontSize: width * 0.03, color: Colors.white),
-                      ))
-                  : const SizedBox(child: CircularProgressIndicator()),
-            ]),
-          ),
-
-          Row(
-            children: [
-              ElevatedButton.icon(
-                  onPressed: () {
-                    showModalBottomSheet(
-                      backgroundColor: const Color.fromARGB(0, 255, 255, 255),
-                      isScrollControlled: true,
-                      shape: const RoundedRectangleBorder(
-                          borderRadius:
-                              BorderRadius.vertical(top: Radius.circular(10))),
-                      context: context,
-                      builder: (context) => Container(
-                        height: height * 0.3,
-                        decoration: const BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(20),
-                                topRight: Radius.circular(20))),
-                        child: Column(children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Container(
-                                height: height * 0.01,
-                                width: width * 0.4,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(50),
-                                    color: Colors.grey)),
-                          ),
-                          SizedBox(
-                            width: width,
-                            child: Column(
-                              children: [
-                                Row(
-                                  children: [
-                                    Image.asset(
-                                      "assets/1117.png",
-                                      height: 50,
-                                      width: 50,
-                                    ),
-                                    Container(
-                                      height: 20,
-                                      width: 20,
-                                      decoration: BoxDecoration(
-                                          color: statusConnectH_W
-                                              ? Colors.green
-                                              : Colors.red,
-                                          borderRadius:
-                                              BorderRadius.circular(50)),
-                                    ),
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    Image.asset(
-                                      "assets/ye990.png",
-                                      height: 50,
-                                      width: 50,
-                                    ),
-                                    Container(
-                                      height: 20,
-                                      width: 20,
-                                      decoration: BoxDecoration(
-                                          color: statusConnectBP
-                                              ? Colors.green
-                                              : Colors.red,
-                                          borderRadius:
-                                              BorderRadius.circular(50)),
-                                    ),
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    Image.asset(
-                                      "assets/unnamed.jpg",
-                                      height: 50,
-                                      width: 50,
-                                    ),
-                                    Container(
-                                      height: 20,
-                                      width: 20,
-                                      decoration: BoxDecoration(
-                                          color: statusConnectSPO2
-                                              ? Colors.green
-                                              : Colors.red,
-                                          borderRadius:
-                                              BorderRadius.circular(50)),
-                                    ),
-                                  ],
-                                ),
-                              ],
+                  Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        warnTemp != ""
+                            ? Text(warnTemp, style: textStyle)
+                            : const SizedBox(),
+                        warnSys != ""
+                            ? Text(warnSys, style: textStyle)
+                            : const SizedBox(),
+                        warnDia != ""
+                            ? Text(warnDia, style: textStyle)
+                            : const SizedBox(),
+                        warnSpo2 != ""
+                            ? Text(warnSpo2, style: textStyle)
+                            : const SizedBox(),
+                        warnbmi != ""
+                            ? Text(warnbmi, style: textStyle)
+                            : const SizedBox(),
+                      ]),
+                  Center(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        BoxRecord(
+                            image: 'assets/jhv.png',
+                            texthead: 'SYS',
+                            keyvavlue: provider.sysHealthrecord),
+                        BoxRecord(
+                            image: 'assets/jhvkb.png',
+                            texthead: 'DIA',
+                            keyvavlue: provider.diaHealthrecord),
+                        BoxRecord(
+                            image: 'assets/jhbjk;.png',
+                            texthead: 'PULSE',
+                            keyvavlue: provider.pulseHealthrecord)
+                      ],
+                    ),
+                  ),
+                  Center(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        BoxRecord(
+                            image: 'assets/kauo.png',
+                            texthead: 'SPO2',
+                            keyvavlue: provider.spo2Healthrecord),
+                        BoxRecord(
+                            image: 'assets/jhgh.png',
+                            texthead: 'TEMP',
+                            keyvavlue: provider.tempHealthrecord),
+                      ],
+                    ),
+                  ),
+                  Center(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        BoxRecord(
+                            image: 'assets/shr.png',
+                            texthead: 'HEIGHT',
+                            keyvavlue: provider.heightHealthrecord),
+                        BoxRecord(
+                            image: 'assets/srhnate.png',
+                            texthead: 'WEIGHT',
+                            keyvavlue: provider.weightHealthrecord),
+                        BoxRecord(
+                            image: 'assets/srhnate.png',
+                            texthead: 'BMI',
+                            keyvavlue: provider.bmiHealthrecord),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: height * 0.03),
+                  Center(
+                    child: buttonsend
+                        ? ElevatedButton(
+                            style: stylebutter(Colors.green),
+                            onPressed: () {
+                              setState(() {
+                                buttonsend = !buttonsend;
+                              });
+                              getClaimCode();
+                            },
+                            child: Text(S.of(context)!.enter_exam,
+                                style: TextStyle(
+                                    fontSize: width * 0.03,
+                                    color: Colors.white)))
+                        : const SizedBox(child: CircularProgressIndicator()),
+                  ),
+                  SizedBox(height: height * 0.03),
+                  Center(
+                    child: GestureDetector(
+                        onTap: () {
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      const Userinformation()));
+                        },
+                        child: Container(
+                          width: width * 0.1,
+                          decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey)),
+                          child: Center(
+                            child: Text(
+                              S.of(context)!.leave,
+                              style: TextStyle(
+                                  color: Colors.red, fontSize: width * 0.03),
                             ),
-                          )
-                        ]),
-                      ),
-                    );
-                  },
-                  label: const Icon(Icons.settings)),
-            ],
-          )
-        ]));
+                          ),
+                        )),
+                  ),
+                  Row(
+                    children: [
+                      ElevatedButton.icon(
+                          onPressed: () {
+                            showModalBottomSheet(
+                              backgroundColor:
+                                  const Color.fromARGB(0, 255, 255, 255),
+                              isScrollControlled: true,
+                              shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.vertical(
+                                      top: Radius.circular(10))),
+                              context: context,
+                              builder: (context) => Container(
+                                height: height * 0.3,
+                                decoration: const BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(20),
+                                        topRight: Radius.circular(20))),
+                                child: Column(children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Container(
+                                        height: height * 0.01,
+                                        width: width * 0.4,
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(50),
+                                            color: Colors.grey)),
+                                  ),
+                                  SizedBox(
+                                    width: width,
+                                    child: Column(
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Image.asset(
+                                              "assets/1117.png",
+                                              height: 50,
+                                              width: 50,
+                                            ),
+                                            Container(
+                                              height: 20,
+                                              width: 20,
+                                              decoration: BoxDecoration(
+                                                  color: statusConnectH_W
+                                                      ? Colors.green
+                                                      : Colors.red,
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          50)),
+                                            ),
+                                          ],
+                                        ),
+                                        Row(
+                                          children: [
+                                            Image.asset(
+                                              "assets/ye990.png",
+                                              height: 50,
+                                              width: 50,
+                                            ),
+                                            Container(
+                                              height: 20,
+                                              width: 20,
+                                              decoration: BoxDecoration(
+                                                  color: statusConnectBP
+                                                      ? Colors.green
+                                                      : Colors.red,
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          50)),
+                                            ),
+                                          ],
+                                        ),
+                                        Row(
+                                          children: [
+                                            Image.asset(
+                                              "assets/unnamed.jpg",
+                                              height: 50,
+                                              width: 50,
+                                            ),
+                                            Container(
+                                              height: 20,
+                                              width: 20,
+                                              decoration: BoxDecoration(
+                                                  color: statusConnectSPO2
+                                                      ? Colors.green
+                                                      : Colors.red,
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          50)),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  )
+                                ]),
+                              ),
+                            );
+                          },
+                          label: const Icon(Icons.settings)),
+                    ],
+                  )
+                ])),
+          ),
+        ],
+      ),
+    );
   }
 }

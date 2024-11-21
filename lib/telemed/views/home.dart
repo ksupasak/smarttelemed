@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:smarttelemed/telemed/background.dart/background.dart';
 import 'package:smarttelemed/telemed/provider/provider.dart';
 import 'package:smarttelemed/telemed/setting/ui/numpad.dart';
-import 'package:smarttelemed/telemed/views/ui/popup.dart';
+
 import 'package:smarttelemed/telemed/views/ui/stylebutton.dart';
 import 'package:smarttelemed/telemed/views/userInformation.dart';
 
@@ -23,11 +23,13 @@ class HomeTelemed extends StatefulWidget {
 
 class _HomeTelemedState extends State<HomeTelemed> {
   Timer? timerreadIDCard;
+  Timer? checkcardout;
   bool shownumpad = false, status = false;
 
+  String texthead = '';
   @override
   void initState() {
-    //  getIdCard();
+    getIdCard();
     context.read<DataProvider>().id = '';
     super.initState();
   }
@@ -41,17 +43,24 @@ class _HomeTelemedState extends State<HomeTelemed> {
   void getIdCard() async {
     DataProvider provider = context.read<DataProvider>();
     provider.debugPrintV("Start Crde Reader--------------------------------=");
-    timerreadIDCard = Timer.periodic(const Duration(seconds: 1), (timer) async {
+    timerreadIDCard = Timer.periodic(const Duration(seconds: 3), (timer) async {
       var url = Uri.parse('http://localhost:8189/api/smartcard/read');
       var res = await http.get(url);
       var resTojson = json.decode(res.body);
       debugPrint("Crde Reader--------------------------------=");
       if (res.statusCode == 200) {
         context.read<DataProvider>().updateuserinformation(resTojson);
-        timerreadIDCard?.cancel();
         provider
             .debugPrintV("Stop Crde Reader--------------------------------=");
+        if (!provider.require_VN) {
+          provider.debugPrintV("บันทึกข้อมูลจาก CardลงProvider");
+          provider.updateuserCard(resTojson);
+        }
         senvisitGateway();
+      } else if (res.statusCode == 500) {
+        setState(() {
+          texthead = '';
+        });
       }
     });
   }
@@ -69,49 +78,31 @@ class _HomeTelemedState extends State<HomeTelemed> {
       if (resTojsonGateway != null) {
         if (resTojsonGateway["statuscode"] == 400 ||
             resTojsonGateway["statuscode"] == 404) {
-          provider.debugPrintV("ไม่มี VN ติดต่อเจ้าหน้าที่ ");
-          showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return Popup(
-                  texthead: S.of(context)!.no_hn,
-                  textbody: provider.text_no_hn,
-                  buttonbar: [
-                    ElevatedButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        child: Text(S.of(context)!.leave))
-                  ],
-                );
-              });
+          provider.debugPrintV("มี ไม่ข้อมูลในระบบ ไม่มีHN");
+          setState(() {
+            texthead = S.of(context)!.hn + provider.text_no_hn;
+          });
         }
         if (resTojsonGateway["statuscode"] == 100) {
-          provider.debugPrintV("มี VN ");
-          provider.updateusergateway(resTojsonGateway);
-          senId();
+          if (resTojsonGateway["data"]["vn"] != "") {
+            provider.debugPrintV("มี VN ");
+            provider.updateusergateway(resTojsonGateway);
+            senId();
+          } else if (resTojsonGateway["data"]["vn"] == "") {
+            provider.debugPrintV("ไม่มี VN ติดต่อเจ้าหน้าที่ ");
+            setState(() {
+              texthead = S.of(context)!.no_vn + provider.text_no_vn;
+            });
+            if (!provider.require_VN) {
+              timerreadIDCard?.cancel();
+              provider.debugPrintV("อนุญาติให้เข้าระบบเเบไม่มีVN");
+              senId();
+            }
+          }
         }
       }
     } else {
       provider.debugPrintV("เลขบัตรประชาชนไม่ครบ");
-
-      showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return Popup(
-              texthead: 'เลขบัตรประชาชนไม่ครบ',
-              textbody: 'กรุณากรองเลขบัตรประชาชนไห้ครบ',
-              pathicon: 'assets/warning (1).png',
-              buttonbar: [
-                ElevatedButton(
-                    style: stylebutter(Colors.white),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: Text(S.of(context)!.leave))
-              ],
-            );
-          });
       setState(() {
         status = false;
       });
@@ -123,7 +114,6 @@ class _HomeTelemedState extends State<HomeTelemed> {
     setState(() {
       status = true;
     });
-
     provider.debugPrintV(
         "sen get_patient ESM :${provider.platfromURL}/get_patient");
     var url = Uri.parse('${provider.platfromURL}/get_patient');
@@ -156,6 +146,8 @@ class _HomeTelemedState extends State<HomeTelemed> {
         provider.debugPrintV("StatusresTojson :${resTojson["message"]}");
       }
       if (resTojson["message"] == "success") {
+        timerreadIDCard?.cancel();
+        checkcardout?.cancel;
         Future.delayed(const Duration(seconds: 1), () {
           Navigator.pushReplacement(context,
               MaterialPageRoute(builder: (context) => const Userinformation()));
@@ -163,6 +155,8 @@ class _HomeTelemedState extends State<HomeTelemed> {
       }
     } else {
       provider.debugPrintV("มีข้อมูลในระบบESM");
+      timerreadIDCard?.cancel();
+      checkcardout?.cancel;
       Timer(const Duration(seconds: 1), () {
         timerreadIDCard?.cancel();
         setState(() {
@@ -197,6 +191,12 @@ class _HomeTelemedState extends State<HomeTelemed> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
+                        Text(
+                          texthead,
+                          style: TextStyle(
+                              color: Colors.red, fontSize: width * 0.03),
+                        ),
+                        SizedBox(height: height * 0.005),
                         Container(
                           width: width * 0.7,
                           height: height * 0.07,
@@ -216,8 +216,7 @@ class _HomeTelemedState extends State<HomeTelemed> {
                             ],
                           ),
                         ),
-                        SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.005),
+                        SizedBox(height: height * 0.005),
                         shownumpad == true
                             ? Column(
                                 children: [
