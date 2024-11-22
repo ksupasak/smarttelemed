@@ -300,12 +300,12 @@ class _NumpadState extends State<Numpad> {
                             padding: const EdgeInsets.all(2.0),
                             child: GestureDetector(
                                 onTap: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              const Setting()));
-                                  debugPrint('ตั่งค่า');
+                                  // Navigator.pushReplacement(
+                                  //     context,
+                                  //     MaterialPageRoute(
+                                  //         builder: (context) =>
+                                  //             const Setting()));
+                                  // debugPrint('ตั่งค่า');
                                 },
                                 child: Container(
                                   color: Colors.white,

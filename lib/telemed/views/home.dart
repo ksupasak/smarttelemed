@@ -7,7 +7,8 @@ import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:smarttelemed/telemed/background.dart/background.dart';
 import 'package:smarttelemed/telemed/provider/provider.dart';
-import 'package:smarttelemed/telemed/setting/ui/numpad.dart';
+import 'package:smarttelemed/telemed/setting/setting.dart';
+import 'package:smarttelemed/telemed/views/ui/numpad.dart';
 
 import 'package:smarttelemed/telemed/views/ui/stylebutton.dart';
 import 'package:smarttelemed/telemed/views/userInformation.dart';
@@ -42,21 +43,21 @@ class _HomeTelemedState extends State<HomeTelemed> {
 
   void getIdCard() async {
     DataProvider provider = context.read<DataProvider>();
-    provider.debugPrintV("Start Crde Reader--------------------------------=");
+    provider.debugPrintV("Start Card Reader--------------------------------=");
     timerreadIDCard = Timer.periodic(const Duration(seconds: 3), (timer) async {
       var url = Uri.parse('http://localhost:8189/api/smartcard/read');
       var res = await http.get(url);
       var resTojson = json.decode(res.body);
-      debugPrint("Crde Reader--------------------------------=");
+      debugPrint("Carde= Reader--------------------------------=");
       if (res.statusCode == 200) {
         context.read<DataProvider>().updateuserinformation(resTojson);
         provider
-            .debugPrintV("Stop Crde Reader--------------------------------=");
+            .debugPrintV("Stop Card Reader--------------------------------=");
         if (!provider.require_VN) {
           provider.debugPrintV("บันทึกข้อมูลจาก CardลงProvider");
           provider.updateuserCard(resTojson);
         }
-        senvisitGateway();
+        sendvisitGateway();
       } else if (res.statusCode == 500) {
         setState(() {
           texthead = '';
@@ -65,7 +66,7 @@ class _HomeTelemedState extends State<HomeTelemed> {
     });
   }
 
-  void senvisitGateway() async {
+  void sendvisitGateway() async {
     DataProvider provider = context.read<DataProvider>();
     if (provider.id.length == 13) {
       provider.debugPrintV(
@@ -84,19 +85,23 @@ class _HomeTelemedState extends State<HomeTelemed> {
           });
         }
         if (resTojsonGateway["statuscode"] == 100) {
-          if (resTojsonGateway["data"]["vn"] != "") {
+          if (resTojsonGateway["data"]["vn"] != null &&
+              resTojsonGateway["data"]["vn"] != "") {
             provider.debugPrintV("มี VN ");
             provider.updateusergateway(resTojsonGateway);
-            senId();
-          } else if (resTojsonGateway["data"]["vn"] == "") {
-            provider.debugPrintV("ไม่มี VN ติดต่อเจ้าหน้าที่ ");
+            sendId();
+          } else if (resTojsonGateway["data"]["vn"] == null ||
+              resTojsonGateway["data"]["vn"] == "") {
             setState(() {
-              texthead = S.of(context)!.no_vn + provider.text_no_vn;
+              if (provider.require_VN) {
+                texthead = S.of(context)!.no_vn + provider.text_no_vn;
+                provider.debugPrintV("ไม่มี VN ติดต่อเจ้าหน้าที่ ");
+              }
             });
             if (!provider.require_VN) {
               timerreadIDCard?.cancel();
               provider.debugPrintV("อนุญาติให้เข้าระบบเเบไม่มีVN");
-              senId();
+              sendId();
             }
           }
         }
@@ -109,7 +114,7 @@ class _HomeTelemedState extends State<HomeTelemed> {
     }
   }
 
-  void senId() async {
+  void sendId() async {
     DataProvider provider = context.read<DataProvider>();
     setState(() {
       status = true;
@@ -180,6 +185,20 @@ class _HomeTelemedState extends State<HomeTelemed> {
       body: Stack(
         children: [
           const Background(),
+          // Positioned(
+          //     bottom: 5,
+          //     left: 5,
+          //     child: ElevatedButton(
+          //         style: stylebutter(Colors.red),
+          //         onPressed: () {
+          //           timerreadIDCard?.cancel();
+          //           provider.debugPrintV('Setting');
+          //           Navigator.pushReplacement(
+          //               context,
+          //               MaterialPageRoute(
+          //                   builder: (context) => const Setting()));
+          //         },
+          //         child: const Text("ตั่งค่า"))),
           Positioned(
             child: SizedBox(
               width: width,
@@ -230,7 +249,7 @@ class _HomeTelemedState extends State<HomeTelemed> {
                                                   : Colors.grey),
                                           onPressed: () {
                                             if (!provider.requirel_id_card) {
-                                              senvisitGateway();
+                                              sendvisitGateway();
                                             } else {
                                               provider.debugPrintV(
                                                   "การตั่งค่าปังคับใช้บัตรเปิดอยู่");
@@ -267,6 +286,20 @@ class _HomeTelemedState extends State<HomeTelemed> {
               ),
             ),
           ),
+          Positioned(
+              bottom: 5,
+              left: 5,
+              child: GestureDetector(
+                  onTap: () {
+                    timerreadIDCard?.cancel();
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const Setting()));
+                    provider.debugPrintV('Setting');
+                  },
+                  child: Container(
+                      color: Colors.white, child: const Text("ตั่งค่า"))))
         ],
       ),
     );

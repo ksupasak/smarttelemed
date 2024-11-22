@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smarttelemed/telemed/background.dart/background.dart';
@@ -6,8 +8,9 @@ import 'package:smarttelemed/telemed/views/healthrecord.dart';
 import 'package:smarttelemed/telemed/views/home.dart';
 import 'package:smarttelemed/telemed/views/ui/informationCard.dart';
 import 'package:smarttelemed/telemed/views/ui/stylebutton.dart';
-
+import 'package:http/http.dart' as http;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:smarttelemed/telemed/views/waiting.dart';
 
 class Userinformation extends StatefulWidget {
   const Userinformation({super.key});
@@ -17,6 +20,7 @@ class Userinformation extends StatefulWidget {
 }
 
 class _UserinformationState extends State<Userinformation> {
+  bool button = false;
   String birthdate(String datas) {
     if (datas != "") {
       return "${datas[8]}${datas[9]}/${datas[5]}${datas[6]}/${datas[0]}${datas[1]}${datas[2]}${datas[3]}";
@@ -25,8 +29,36 @@ class _UserinformationState extends State<Userinformation> {
     }
   }
 
+  void checkhealthrecord() async {
+    DataProvider provider = context.read<DataProvider>();
+    provider.debugPrintV("checkhealthrecord");
+    var url =
+        Uri.parse('${context.read<DataProvider>().platfromURL}/get_hr_today');
+    var res = await http.post(url, body: {
+      'public_id': context.read<DataProvider>().id,
+    });
+    var resToJson = json.decode(res.body);
+
+    if (res.statusCode == 200) {
+      if (resToJson["health_records"].length != 0) {
+        provider
+            .debugPrintV("มี health_records :${resToJson["health_records"]}");
+        setState(() {
+          button = true;
+        });
+      } else {
+        provider.debugPrintV(
+            "ไม่มี health_records :${resToJson["health_records"]}");
+        setState(() {
+          button = false;
+        });
+      }
+    }
+  }
+
   @override
   void initState() {
+    checkhealthrecord();
     super.initState();
   }
 
@@ -191,13 +223,29 @@ class _UserinformationState extends State<Userinformation> {
                 ),
                 SizedBox(height: height * 0.02),
                 Center(
-                  child: ElevatedButton(
-                      style: stylebutter(Colors.blue),
-                      onPressed: () {},
-                      child: Text(S.of(context)!.enter_exam,
+                    child: ElevatedButton(
+                        style: stylebutter(button ? Colors.blue : Colors.grey),
+                        onPressed: () {
+                          if (button) {
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const WaitingApp()));
+                          }
+                        },
+                        child: Text(S.of(context)!.enter_exam,
+                            style: TextStyle(
+                                fontSize: width * 0.03, color: Colors.white)))),
+                !button
+                    ? Center(
+                        child: Text(
+                          "(กรุณาตรวจสุขภาพก่อน)",
                           style: TextStyle(
-                              fontSize: width * 0.03, color: Colors.white))),
-                ),
+                              color: const Color.fromARGB(145, 244, 67, 54),
+                              fontSize: width * 0.03),
+                        ),
+                      )
+                    : const Text(""),
                 SizedBox(height: height * 0.03),
                 Center(
                   child: GestureDetector(

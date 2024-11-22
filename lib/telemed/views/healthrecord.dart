@@ -475,6 +475,15 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
   @override
   void initState() {
     context.read<DataProvider>().bmiHealthrecord = TextEditingController();
+    context.read<DataProvider>().spo2Healthrecord = TextEditingController();
+    context.read<DataProvider>().sysHealthrecord = TextEditingController();
+    context.read<DataProvider>().heightHealthrecord = TextEditingController();
+    context.read<DataProvider>().weightHealthrecord = TextEditingController();
+    context.read<DataProvider>().diaHealthrecord = TextEditingController();
+    context.read<DataProvider>().pulseHealthrecord = TextEditingController();
+
+    context.read<DataProvider>().tempHealthrecord = TextEditingController();
+
     super.initState();
 
     startH_W();
