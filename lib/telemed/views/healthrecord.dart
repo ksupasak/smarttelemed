@@ -71,7 +71,7 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
 
     try {
       for (var name in SerialPort.availablePorts) {
-        provider.debugPrintV('scan $name');
+        provider.debugPrintV('scan bp $name');
         final port = SerialPort(name);
         if (port.vendorId == 8137) {
           provider.debugPrintV("found BP");
@@ -95,7 +95,7 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
             statusConnectBP = true;
           });
           reader.stream.listen((data) {
-            provider.debugPrintV('$data');
+            provider.debugPrintV(' $data');
 
             if (data[0] == 50) {
               status = 1;
@@ -200,7 +200,7 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
 
     try {
       for (var name in SerialPort.availablePorts) {
-        provider.debugPrintV('scan $name');
+        provider.debugPrintV('scan spo2 $name');
         final port = SerialPort(name);
         if (port.vendorId == 1659) {
           provider.debugPrintV("found SPO2");
@@ -225,6 +225,7 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
             statusConnectSPO2 = true;
           });
           reader.stream.listen((data) {
+            provider.debugPrintV('data SPO2: $data');
             if (data[0] == 42) {
               status = 1;
             }
