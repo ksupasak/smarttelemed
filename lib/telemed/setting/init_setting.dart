@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 import 'package:sembast/sembast.dart';
 import 'package:smarttelemed/telemed/local/local.dart';
 import 'package:smarttelemed/telemed/provider/provider.dart';
+import 'package:smarttelemed/telemed/splash_screen/splashScreen.dart';
 
 class Initsetting extends StatefulWidget {
   const Initsetting({super.key});
@@ -20,6 +21,7 @@ class Initsetting extends StatefulWidget {
 
 class _InitsettingState extends State<Initsetting> {
   TextEditingController platfromURL = TextEditingController();
+  TextEditingController platfromURLGateway = TextEditingController();
   TextEditingController name_hospital = TextEditingController();
 
   TextEditingController care_unit_id = TextEditingController();
@@ -36,6 +38,7 @@ class _InitsettingState extends State<Initsetting> {
   void test() {
     platfromURL.text =
         'https://emr-life.com/expert/telemed/StmsApi'; // 'https://emr-life.com/clinic_master/clinic/StmsApi';
+    platfromURLGateway.text = "https://goodwide.pythonanywhere.com";
   }
 
   void sync() async {
@@ -53,7 +56,7 @@ class _InitsettingState extends State<Initsetting> {
                   width: MediaQuery.of(context).size.width,
                   child: Center(
                       child: Text(
-                    'Add Id Hospital success',
+                    'Add ID Hospital success',
                     style: TextStyle(
                         fontSize: MediaQuery.of(context).size.width * 0.03),
                   )))));
@@ -88,6 +91,7 @@ class _InitsettingState extends State<Initsetting> {
   void safe() async {
     context.read<DataProvider>().name_hospital = name_hospital.text;
     context.read<DataProvider>().platfromURL = platfromURL.text;
+    context.read<DataProvider>().platfromURLGateway = platfromURLGateway.text;
     context.read<DataProvider>().care_unit_id = care_unit_id.text;
     context.read<DataProvider>().password = passwordsetting.text;
     context.read<DataProvider>().care_unit = care_unit.text;
@@ -100,8 +104,8 @@ class _InitsettingState extends State<Initsetting> {
         setState(() {
           status_safe = false;
           Navigator.pop(context);
-          // Navigator.pushReplacement(context,
-          //     MaterialPageRoute(builder: (context) => const Splash_Screen()));
+          Navigator.pushReplacement(context,
+              MaterialPageRoute(builder: (context) => const SplashScreen()));
         });
       });
     });
@@ -114,6 +118,7 @@ class _InitsettingState extends State<Initsetting> {
         app.text = record['myapp'].toString();
         name_hospital.text = record['name_hospital'].toString();
         platfromURL.text = record['platfromURL'].toString();
+        platfromURLGateway.text = record['platfromURLGateway'].toString();
         care_unit_id.text = record['care_unit_id'].toString();
         care_unit.text = record['care_unit'].toString();
         passwordsetting.text = record['passwordsetting'].toString();
@@ -121,6 +126,7 @@ class _InitsettingState extends State<Initsetting> {
 
       print(name_hospital.text);
       print(platfromURL.text);
+      print(platfromURLGateway);
       print(care_unit.text);
       print(care_unit_id.text);
       print(passwordsetting.text);
@@ -206,7 +212,7 @@ class _InitsettingState extends State<Initsetting> {
                     onTap: () {
                       test();
                     },
-                    child: Icon(
+                    child: const Icon(
                       Icons.download,
                       color: Colors.black,
                     ),
@@ -219,11 +225,11 @@ class _InitsettingState extends State<Initsetting> {
                       safe();
                     },
                     child: status_safe == false
-                        ? Icon(
+                        ? const Icon(
                             Icons.save,
                             color: Colors.black,
                           )
-                        : CircularProgressIndicator(),
+                        : const CircularProgressIndicator(),
                   ),
                 ),
               ],
@@ -235,8 +241,8 @@ class _InitsettingState extends State<Initsetting> {
                     child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
+                      const Padding(
+                        padding: EdgeInsets.all(8.0),
                         child: Row(children: [
                           Text('Set Up', style: TextStyle(color: Colors.grey))
                         ]),
@@ -246,7 +252,7 @@ class _InitsettingState extends State<Initsetting> {
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(5),
                             color: Colors.white,
-                            boxShadow: [
+                            boxShadow: const [
                               BoxShadow(
                                   blurRadius: 1,
                                   color: Color.fromARGB(255, 225, 225, 225),
@@ -259,6 +265,9 @@ class _InitsettingState extends State<Initsetting> {
                               BoxTextFieldSetting(
                                   keyvavlue: platfromURL,
                                   texthead: 'PlatfromURL'),
+                              BoxTextFieldSetting(
+                                  keyvavlue: platfromURLGateway,
+                                  texthead: 'PlatfromURLGateway'),
                               BoxTextFieldSetting(
                                   keyvavlue: id_hospital,
                                   texthead: 'Id_Hospital'),

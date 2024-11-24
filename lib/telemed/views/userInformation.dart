@@ -270,7 +270,36 @@ class _UserinformationState extends State<Userinformation> {
                 )
               ],
             ),
-          )
+          ),
+          Positioned(
+            bottom: 5,
+            left: 5,
+            child: GestureDetector(
+                onTap: () {
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return Scaffold(
+                          appBar: AppBar(),
+                          body: Container(
+                            height: height * 0.8,
+                            child: ListView.builder(
+                                itemCount:
+                                    context.read<DataProvider>().debug.length,
+                                itemBuilder: (context, index) {
+                                  return Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                        "$index ${context.read<DataProvider>().debug[index]}"),
+                                  );
+                                }),
+                          ),
+                        );
+                      });
+                },
+                child:
+                    Container(color: Colors.white, child: const Text("log"))),
+          ),
         ],
       ),
     );

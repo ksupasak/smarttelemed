@@ -12,7 +12,7 @@ class DataProvider with ChangeNotifier {
   String app = '';
   String name_hospital = '';
   String platfromURL = '';
-  String platfromURLgeatway = 'https://goodwide.pythonanywhere.com';
+  String platfromURLGateway = ''; //'https://goodwide.pythonanywhere.com';
   String password = '';
   String care_unit = '';
   String care_unit_id = '';

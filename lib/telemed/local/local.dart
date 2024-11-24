@@ -43,6 +43,7 @@ Future<void> addDataInfoToDatabase(DataProvider data) async {
     'myapp': data.app,
     'name_hospital': data.name_hospital,
     'platfromURL': data.platfromURL,
+    'platfromURLGateway': data.platfromURLGateway,
     'care_unit_id': data.care_unit_id,
     'passwordsetting': data.password,
     'care_unit': data.care_unit,

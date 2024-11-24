@@ -22,7 +22,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     setdata();
-    fullscreen();
+    // fullscreen();
     super.initState();
   }
 
@@ -54,6 +54,7 @@ class _SplashScreenState extends State<SplashScreen> {
         provider.app = record['myapp'].toString();
         provider.name_hospital = record['name_hospital'].toString();
         provider.platfromURL = record['platfromURL'].toString();
+        provider.platfromURLGateway = record['platfromURLGateway'].toString();
         provider.care_unit = record['care_unit'].toString();
         provider.care_unit_id = record['care_unit_id'].toString();
         provider.password = record['passwordsetting'].toString();
@@ -62,6 +63,8 @@ class _SplashScreenState extends State<SplashScreen> {
       provider.debugPrintV("App :${provider.app}");
       provider.debugPrintV("Name Hospital :${provider.name_hospital}");
       provider.debugPrintV("PlatfromURL :${provider.platfromURL}");
+      provider
+          .debugPrintV("platfromURLGateway :${provider.platfromURLGateway}");
       provider.debugPrintV("Care Unit :${provider.care_unit}");
       provider.debugPrintV("Care Unit Id :${provider.care_unit_id}");
       provider.debugPrintV("Password Setting :${provider.password}");

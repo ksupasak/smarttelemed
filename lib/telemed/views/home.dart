@@ -3,7 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:smarttelemed/telemed/background.dart/background.dart';
@@ -71,16 +71,17 @@ class _HomeTelemedState extends State<HomeTelemed> {
     DataProvider provider = context.read<DataProvider>();
     if (provider.id.length == 13) {
       provider.debugPrintV(
-          "senvisitGateway :${provider.platfromURLgeatway}/api/patient?cid=${provider.id}");
+          "senvisitGateway :${provider.platfromURLGateway}/api/patient?cid=${provider.id}"); //https://goodwide.pythonanywhere.com/api/patient?cid=
       var url = Uri.parse(
-          '${provider.platfromURLgeatway}/api/patient?cid=${provider.id}');
+          '${provider.platfromURLGateway}/api/patient?cid=${provider.id}');
       var res = await http.get(url);
+      provider.debugPrintV("red $res");
       var resTojsonGateway = json.decode(res.body);
-      debugPrint(resTojsonGateway.toString());
+      provider.debugPrintV("resTojsonGateway ${resTojsonGateway.toString()}");
       if (resTojsonGateway != null) {
         if (resTojsonGateway["statuscode"] == 400 ||
             resTojsonGateway["statuscode"] == 404) {
-          provider.debugPrintV("มี ไม่ข้อมูลในระบบ ไม่มีHN");
+          provider.debugPrintV("ไม่ข้อมีมูลในระบบ ไม่มีHN");
           setState(() {
             texthead = S.of(context)!.hn + provider.text_no_hn;
           });
@@ -195,10 +196,17 @@ class _HomeTelemedState extends State<HomeTelemed> {
                   SizedBox(
                     height: height,
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.end,
                       children: [
+                        Center(
+                          child: SizedBox(
+                            width: width * 0.2,
+                            height: width * 0.2,
+                            child: SvgPicture.asset('assets/splash/logo.svg'),
+                          ),
+                        ),
                         Text(
-                          "กรุณาเสียบบัตรประชาชนหรือ เเสกนHN เพื่อทำรายการต่อ",
+                          "กรุณาเสียบบัตรประชาชนหรือ เเสกน HN เพื่อทำรายการต่อ",
                           style: TextStyle(
                               fontSize: width * 0.035,
                               fontWeight: FontWeight.w500),
@@ -249,8 +257,9 @@ class _HomeTelemedState extends State<HomeTelemed> {
                                     },
                                     child: Text(
                                       S.of(context)!.confirm,
-                                      style:
-                                          const TextStyle(color: Colors.white),
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: width * 0.04),
                                     ))
                                 : SizedBox(
                                     width: MediaQuery.of(context).size.width *
@@ -300,19 +309,55 @@ class _HomeTelemedState extends State<HomeTelemed> {
             ),
           ),
           Positioned(
-              bottom: 5,
-              left: 5,
-              child: GestureDetector(
-                  onTap: () {
-                    timerreadIDCard?.cancel();
-                    Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const Setting()));
-                    provider.debugPrintV('Setting');
-                  },
-                  child: Container(
-                      color: Colors.white, child: const Text("ตั่งค่า"))))
+            bottom: 5,
+            left: 5,
+            child: SizedBox(
+              width: width,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  GestureDetector(
+                      onTap: () {
+                        timerreadIDCard?.cancel();
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const Setting()));
+                        provider.debugPrintV('Setting');
+                      },
+                      child: Container(
+                          color: Colors.white, child: const Text("ตั่งค่า"))),
+                  GestureDetector(
+                      onTap: () {
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return Scaffold(
+                                appBar: AppBar(),
+                                body: Container(
+                                  height: height * 0.8,
+                                  child: ListView.builder(
+                                      itemCount: context
+                                          .read<DataProvider>()
+                                          .debug
+                                          .length,
+                                      itemBuilder: (context, index) {
+                                        return Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text(
+                                              "$index ${context.read<DataProvider>().debug[index]}"),
+                                        );
+                                      }),
+                                ),
+                              );
+                            });
+                      },
+                      child: Container(
+                          color: Colors.white, child: const Text("log"))),
+                ],
+              ),
+            ),
+          )
         ],
       ),
     );
