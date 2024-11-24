@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
@@ -6,6 +8,7 @@ import 'package:smarttelemed/telemed/local/local.dart';
 import 'package:smarttelemed/telemed/provider/provider.dart';
 import 'package:smarttelemed/telemed/setting/setting.dart';
 import 'package:smarttelemed/telemed/views/home.dart';
+import 'package:window_manager/window_manager.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -19,7 +22,16 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     setdata();
+    fullscreen();
     super.initState();
+  }
+
+  void fullscreen() async {
+    if (Platform.isWindows) {
+      await windowManager.ensureInitialized();
+      windowManager.setFullScreen(
+          context.read<DataProvider>().windowManagersetFullScreen);
+    }
   }
 
   void setdata() async {
@@ -127,7 +139,7 @@ class _SplashScreenState extends State<SplashScreen> {
       }
     }
     setState(() {
-      Future.delayed(const Duration(seconds: 2), () {
+      Future.delayed(const Duration(seconds: 1), () {
         Navigator.pushReplacement(context,
             MaterialPageRoute(builder: (context) => const HomeTelemed()));
       });

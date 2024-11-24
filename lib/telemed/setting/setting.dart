@@ -6,6 +6,7 @@ import 'package:smarttelemed/telemed/setting/init_setting.dart';
 import 'package:smarttelemed/telemed/setting/language.dart';
 import 'package:smarttelemed/telemed/setting/min_max.dart';
 import 'package:smarttelemed/telemed/setting/settingListPrinter.dart';
+import 'package:smarttelemed/telemed/setting/shutdownWindows.dart';
 import 'package:smarttelemed/telemed/setting/talamed_setting.dart';
 import 'package:smarttelemed/telemed/setting/ui/boxSetting.dart';
 import 'package:smarttelemed/telemed/splash_screen/splashScreen.dart';
@@ -85,6 +86,15 @@ class _SettingState extends State<Setting> {
                                         const SettingListPrinter()));
                           },
                           child: BoxSetting(text: 'ListPrinter')),
+                      GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const ShutdownWindows()));
+                          },
+                          child: BoxSetting(text: 'Additional Exit')),
                       GestureDetector(
                           onTap: () {
                             Navigator.pushReplacement(

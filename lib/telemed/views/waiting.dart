@@ -43,6 +43,8 @@ class _WaitingAppState extends State<WaitingApp> {
   }
 
   void checkfinished() async {
+    DataProvider provider = context.read<DataProvider>();
+    provider.debugPrintV("เช็คการสถานะการตรวจ");
     var url =
         Uri.parse('${context.read<DataProvider>().platfromURL}/check_quick');
     var res = await http.post(url, body: {
@@ -51,9 +53,10 @@ class _WaitingAppState extends State<WaitingApp> {
     });
 
     resToJson = json.decode(res.body);
+    provider.debugPrintV("message :${resToJson["message"]}");
     if (resToJson["message"] == "finished") {
-      debugPrint("การตรวจเสร็จสิ้น ${resToJson["message"]}");
-      debugPrint("เลือกพิมพ์ผลหรือตรวจใหม่");
+      provider.debugPrintV("การตรวจเสร็จสิ้น ${resToJson["message"]}");
+      provider.debugPrintV("เลือกพิมพ์ผลหรือตรวจใหม่");
       setState(() {});
     } else {
       checkQuick();
@@ -113,6 +116,8 @@ class _WaitingAppState extends State<WaitingApp> {
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
     return Scaffold(
       backgroundColor: Colors.white,
       body: resToJson != null
@@ -124,8 +129,15 @@ class _WaitingAppState extends State<WaitingApp> {
                       ? splash_completed(context)
                       : resToJson["message"] == "finished"
                           ? choice(context)
-                          : null
-          : const Text("Loading..."),
+                          : const Text("message error")
+          : SizedBox(
+              height: height,
+              width: width,
+              child: Center(
+                  child: Text(
+                "Loading...",
+                style: TextStyle(fontSize: width * 0.03),
+              ))),
     );
   }
 
@@ -176,15 +188,18 @@ class _WaitingAppState extends State<WaitingApp> {
                                   builder: (context) =>
                                       const Userinformation()));
                         },
-                        child: Container(
-                          width: width * 0.1,
-                          decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey)),
-                          child: Center(
-                            child: Text(
-                              S.of(context)!.leave,
-                              style: TextStyle(
-                                  color: Colors.red, fontSize: width * 0.03),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Container(
+                            width: width * 0.1,
+                            decoration: BoxDecoration(
+                                border: Border.all(color: Colors.grey)),
+                            child: Center(
+                              child: Text(
+                                S.of(context)!.leave,
+                                style: TextStyle(
+                                    color: Colors.red, fontSize: width * 0.03),
+                              ),
                             ),
                           ),
                         )),
@@ -211,7 +226,12 @@ class _WaitingAppState extends State<WaitingApp> {
                     child: ListView(
                   children: [
                     SizedBox(height: height * 0.15),
-                    const Center(child: Text("เตรียมตัว")),
+                    Center(
+                        child: Text(
+                      "เตรียมตัว",
+                      style: TextStyle(
+                          fontSize: width * 0.03, color: Colors.black),
+                    )),
                     Center(
                       child: Container(
                         height: width * 0.5,
@@ -225,7 +245,7 @@ class _WaitingAppState extends State<WaitingApp> {
                     Center(
                       child: bottonStatus
                           ? ElevatedButton(
-                              style: stylebutter(Colors.blue),
+                              style: stylebutter(Colors.green),
                               onPressed: () {
                                 getvideocalldata();
                               },

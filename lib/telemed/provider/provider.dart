@@ -8,6 +8,7 @@ class DataProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  bool windowManagersetFullScreen = true;
   String app = '';
   String name_hospital = '';
   String platfromURL = '';
@@ -34,7 +35,7 @@ class DataProvider with ChangeNotifier {
     "maxbmi": '',
   };
   String printername = '';
-  Locale languageApp = const Locale('th');
+  Locale? languageApp;
 
   void setlanguageApp(Locale locale) {
     languageApp = locale;
@@ -65,7 +66,7 @@ class DataProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Map datagateway = {};
+  //Map datagateway = {};
   String hn = '';
   String vn = '';
   String prefixName = '';
@@ -83,7 +84,7 @@ class DataProvider with ChangeNotifier {
     fname = data['data']['fname'];
     lname = data['data']['lname'];
     phone = data['data']['phone'];
-    imgae = data['data']['img'];
+    imgae = ""; //data['data']['img'];
     birthdate = data['data']['birthdate'];
     notifyListeners();
   }

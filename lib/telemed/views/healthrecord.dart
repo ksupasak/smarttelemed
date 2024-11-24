@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:audioplayers/audioplayers.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_libserialport/flutter_libserialport.dart';
@@ -41,6 +42,10 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
   bool statusConnectSPO2 = false;
   bool statusConnectBP = false;
 ///////////////////////////////////////////////////////////////////////////
+  final player = AudioPlayer();
+  void playAudio() async {
+    await player.play(UrlSource('assets/ScreenRecorderProject15.mp3'));
+  }
 
   void initPorts() {
     try {
@@ -118,7 +123,9 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
                           .datamin_max['minsys']
                           .toString())) {
                     warnSys = "SYS ต่ำเกินไป";
-                    setState(() {});
+                    setState(() {
+                      playAudio();
+                    });
                   }
                 }
                 if (context.read<DataProvider>().datamin_max['maxsys'] != '') {
@@ -128,7 +135,9 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
                           .datamin_max['maxsys']
                           .toString())) {
                     warnSys = "SYS สูงเกินไป";
-                    setState(() {});
+                    setState(() {
+                      playAudio();
+                    });
                   }
                 }
 
@@ -139,7 +148,9 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
                           .datamin_max['mindia']
                           .toString())) {
                     warnDia = "DIA ต่ำเกินไป";
-                    setState(() {});
+                    setState(() {
+                      playAudio();
+                    });
                   }
                 }
                 if (context.read<DataProvider>().datamin_max['maxdia'] != '') {
@@ -149,7 +160,9 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
                           .datamin_max['maxdia']
                           .toString())) {
                     warnDia = "DIA สูงเกินไป";
-                    setState(() {});
+                    setState(() {
+                      playAudio();
+                    });
                   }
                 }
                 context.read<DataProvider>().sysHealthrecord.text =
@@ -228,7 +241,9 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
                               .datamin_max['minspo2']
                               .toString())) {
                         warnSpo2 = "Spo2 ต่ำเกินไป";
-                        setState(() {});
+                        setState(() {
+                          playAudio();
+                        });
                       }
                     }
                     context.read<DataProvider>().spo2Healthrecord.text =
@@ -298,7 +313,9 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
                           .datamin_max['mintemp']
                           .toString())) {
                     warnTemp = "อุณหภูมิ ต่ำเกินไป";
-                    setState(() {});
+                    setState(() {
+                      playAudio();
+                    });
                   }
                 }
                 if (context.read<DataProvider>().datamin_max['maxtemp'] != '') {
@@ -308,7 +325,9 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
                           .datamin_max['maxtemp']
                           .toString())) {
                     warnTemp = "อุณหภูมิ สูงเกินไป";
-                    setState(() {});
+                    setState(() {
+                      playAudio();
+                    });
                   }
                 }
               } else {
@@ -334,7 +353,9 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
                             .datamin_max['minbmi']
                             .toString())) {
                       warnbmi = "BMI ต่ำเกินไป";
-                      setState(() {});
+                      setState(() {
+                        playAudio();
+                      });
                     }
                   }
                   if (context.read<DataProvider>().datamin_max['maxbmi'] !=
@@ -345,7 +366,9 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
                             .datamin_max['maxbmi']
                             .toString())) {
                       warnbmi = "BMI สูงเกินไป";
-                      setState(() {});
+                      setState(() {
+                        playAudio();
+                      });
                     }
                   }
                 }
@@ -642,7 +665,7 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
                               });
                               getClaimCode();
                             },
-                            child: Text(S.of(context)!.enter_exam,
+                            child: Text("ส่ง",
                                 style: TextStyle(
                                     fontSize: width * 0.03,
                                     color: Colors.white)))

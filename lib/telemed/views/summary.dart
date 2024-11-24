@@ -31,15 +31,19 @@ class _SummaryState extends State<Summary> {
   late pw.Font thaiFont;
   @override
   void initState() {
+    exam();
     get_queue();
     _loadThaiFont();
+
     super.initState();
   }
 
   Future<void> get_queue() async {
-    var url = Uri.parse('${context.read<DataProvider>().platfromURL}/list_q');
+    var url =
+        Uri.parse('${context.read<DataProvider>().platfromURL}/check_quick');
     var res = await http.post(url, body: {
       'care_unit_id': context.read<DataProvider>().care_unit_id,
+      'public_id': context.read<DataProvider>().id,
     });
     setState(() {
       resTojson2 = json.decode(res.body);
@@ -108,7 +112,7 @@ class _SummaryState extends State<Summary> {
       final logoData = await rootBundle.load('assets/logo.png');
       logoBytes = logoData.buffer.asUint8List();
     } catch (e) {
-      print("Logo not found: $e");
+      debugPrint("Logo not found: $e");
     }
     //  img Logo
 
@@ -128,10 +132,10 @@ class _SummaryState extends State<Summary> {
         'คุณ : ${resTojson2['personal']['first_name']} ${resTojson2['personal']['last_name']} \n';
 
     msgDetail =
-        'น้ำหนัก : ${resTojson2['data']['weight']} | ส่วนสูง: ${resTojson2['data']['height']} \n';
+        'น้ำหนัก : ${resTojson2['health_records'][0]['weight']} | ส่วนสูง: ${resTojson2['health_records'][0]['height']} \n';
     msgDetail +=
-        'อุณภูมิ : ${resTojson2['data']['temp']}  | BP: ${resTojson2['data']['bp']} \n';
-    msgDetail += 'PULSE : ${resTojson2['data']['pulse_rate']} \n';
+        'อุณภูมิ : ${resTojson2['health_records'][0]['temp']}  | BP: ${resTojson2['health_records'][0]['bp']} \n';
+    msgDetail += 'PULSE : ${resTojson2['health_records'][0]['pulse_rate']} \n';
 
     dataBarcode = resTojson2["personal"]["hn"];
     dataQrcode = resTojson2["personal"]["hn"];
@@ -339,6 +343,7 @@ class _SummaryState extends State<Summary> {
                     ],
                   ),
                   child: ListView(children: [
+                    SizedBox(height: height * 0.02),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -346,6 +351,7 @@ class _SummaryState extends State<Summary> {
                             style: TextStyle(fontSize: width * 0.04)),
                       ],
                     ),
+                    SizedBox(height: height * 0.02),
                     Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                       SizedBox(
                         width: width * 0.25,
@@ -389,14 +395,20 @@ class _SummaryState extends State<Summary> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Center(
-                  child: ElevatedButton(
-                      style: stylebutter(Colors.green),
-                      onPressed: () {
-                        //  printexam();
-                      },
-                      child: Text("ปริ้นผลตรวจ",
-                          style: TextStyle(
-                              color: Colors.white, fontSize: width * 0.03))),
+                  child: resTojson2 != null
+                      ? ElevatedButton(
+                          style: stylebutter(Colors.green),
+                          onPressed: () {
+                            printexam();
+                          },
+                          child: Text("ปริ้นผลตรวจ",
+                              style: TextStyle(
+                                  color: Colors.white, fontSize: width * 0.03)))
+                      : SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.05,
+                          height: MediaQuery.of(context).size.width * 0.05,
+                          child: const CircularProgressIndicator(),
+                        ),
                 ),
               ),
               Center(

@@ -2,7 +2,8 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-
+import 'package:flutter/services.dart';
+import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:smarttelemed/telemed/background.dart/background.dart';
@@ -85,10 +86,10 @@ class _HomeTelemedState extends State<HomeTelemed> {
           });
         }
         if (resTojsonGateway["statuscode"] == 100) {
+          provider.updateusergateway(resTojsonGateway);
           if (resTojsonGateway["data"]["vn"] != null &&
               resTojsonGateway["data"]["vn"] != "") {
             provider.debugPrintV("มี VN ");
-            provider.updateusergateway(resTojsonGateway);
             sendId();
           } else if (resTojsonGateway["data"]["vn"] == null ||
               resTojsonGateway["data"]["vn"] == "") {
@@ -185,20 +186,6 @@ class _HomeTelemedState extends State<HomeTelemed> {
       body: Stack(
         children: [
           const Background(),
-          // Positioned(
-          //     bottom: 5,
-          //     left: 5,
-          //     child: ElevatedButton(
-          //         style: stylebutter(Colors.red),
-          //         onPressed: () {
-          //           timerreadIDCard?.cancel();
-          //           provider.debugPrintV('Setting');
-          //           Navigator.pushReplacement(
-          //               context,
-          //               MaterialPageRoute(
-          //                   builder: (context) => const Setting()));
-          //         },
-          //         child: const Text("ตั่งค่า"))),
           Positioned(
             child: SizedBox(
               width: width,
@@ -210,6 +197,12 @@ class _HomeTelemedState extends State<HomeTelemed> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
+                        Text(
+                          "กรุณาเสียบบัตรประชาชนหรือ เเสกนHN เพื่อทำรายการต่อ",
+                          style: TextStyle(
+                              fontSize: width * 0.035,
+                              fontWeight: FontWeight.w500),
+                        ),
                         Text(
                           texthead,
                           style: TextStyle(
@@ -236,49 +229,69 @@ class _HomeTelemedState extends State<HomeTelemed> {
                           ),
                         ),
                         SizedBox(height: height * 0.005),
-                        shownumpad == true
-                            ? Column(
-                                children: [
-                                  Numpad(),
-                                  SizedBox(height: height * 0.01),
-                                  status == false
-                                      ? ElevatedButton(
-                                          style: stylebutter(
-                                              !provider.requirel_id_card
-                                                  ? Colors.green
-                                                  : Colors.grey),
-                                          onPressed: () {
-                                            if (!provider.requirel_id_card) {
-                                              sendvisitGateway();
-                                            } else {
-                                              provider.debugPrintV(
-                                                  "การตั่งค่าปังคับใช้บัตรเปิดอยู่");
-                                            }
-                                          },
-                                          child: Text(
-                                            S.of(context)!.confirm,
-                                            style: const TextStyle(
-                                                color: Colors.white),
-                                          ))
-                                      : SizedBox(
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.05,
-                                          height: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.05,
-                                          child:
-                                              const CircularProgressIndicator(),
-                                        ),
-                                ],
-                              )
-                            : SizedBox(
-                                height: height * 0.3,
-                                width: width * 0.5,
-                                child: Image.asset('assets/ppasc.png'),
-                              )
+                        Column(
+                          children: [
+                            Numpad(),
+                            SizedBox(height: height * 0.01),
+                            status == false
+                                ? ElevatedButton(
+                                    style: stylebutter(
+                                        !provider.requirel_id_card
+                                            ? Colors.green
+                                            : Colors.grey),
+                                    onPressed: () {
+                                      if (!provider.requirel_id_card) {
+                                        sendvisitGateway();
+                                      } else {
+                                        provider.debugPrintV(
+                                            "การตั่งค่าปังคับใช้บัตรเปิดอยู่");
+                                      }
+                                    },
+                                    child: Text(
+                                      S.of(context)!.confirm,
+                                      style:
+                                          const TextStyle(color: Colors.white),
+                                    ))
+                                : SizedBox(
+                                    width: MediaQuery.of(context).size.width *
+                                        0.05,
+                                    height: MediaQuery.of(context).size.width *
+                                        0.05,
+                                    child: const CircularProgressIndicator(),
+                                  ),
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            SizedBox(
+                              height: height * 0.2,
+                              width: width * 0.4,
+                              child: Image.asset('assets/ppasc.png'),
+                            ),
+                            SizedBox(
+                              height: height * 0.2,
+                              width: width * 0.4,
+                              child: Image.asset('assets/Frame.png'),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 0, 50, 0),
+                              child: SizedBox(
+                                height: height * 0.1,
+                                width: width * 0.05,
+                                child: Image.asset(
+                                  'assets/pngtree.png',
+                                  fit: BoxFit.fill,
+                                ),
+                              ),
+                            ),
+                          ],
+                        )
                       ],
                     ),
                   ),

@@ -5,6 +5,22 @@ import 'package:smarttelemed/telemed/splash_screen/splashScreen.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+class LocaleProvider extends ChangeNotifier {
+  // Locale _locale =  Locale('en'); // ค่าเริ่มต้นเป็นภาษาอังกฤษ
+
+  Locale locales = Locale("th");
+
+  void setLocale(Locale locale) {
+    locales = locale;
+    notifyListeners(); // แจ้งให้ UI อัปเดต
+  }
+
+  void clearLocale() {
+    locales = const Locale('en'); // คืนค่าเป็นค่าเริ่มต้น
+    notifyListeners();
+  }
+}
+
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
@@ -30,8 +46,8 @@ class _MyAppState extends State<MyApp> {
           Locale('en'),
           Locale('th'),
         ],
-        locale: Locale('en'),
-        color: Colors.grey,
+        locale: LocaleProvider().locales,
+        color: Colors.white,
         debugShowCheckedModeBanner: false,
         home: const Scaffold(body: SplashScreen()),
       ),

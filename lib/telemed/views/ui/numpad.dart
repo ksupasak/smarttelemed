@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 import 'dart:async';
 
 import 'package:smarttelemed/telemed/provider/provider.dart';
-import 'package:smarttelemed/telemed/setting/setting.dart';
 
 class Numpad extends StatefulWidget {
   Numpad({super.key});
