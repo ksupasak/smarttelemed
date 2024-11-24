@@ -10,7 +10,6 @@ import 'package:provider/provider.dart';
 import 'package:sembast/sembast.dart';
 import 'package:smarttelemed/telemed/local/local.dart';
 import 'package:smarttelemed/telemed/provider/provider.dart';
-import 'package:smarttelemed/telemed/splash_screen/splashScreen.dart';
 
 class Initsetting extends StatefulWidget {
   const Initsetting({super.key});
@@ -38,7 +37,7 @@ class _InitsettingState extends State<Initsetting> {
   void test() {
     platfromURL.text =
         'https://emr-life.com/expert/telemed/StmsApi'; // 'https://emr-life.com/clinic_master/clinic/StmsApi';
-    platfromURLGateway.text = "https://goodwide.pythonanywhere.com";
+    platfromURLGateway.text = "http://localhost:5051";
   }
 
   void sync() async {
@@ -104,8 +103,6 @@ class _InitsettingState extends State<Initsetting> {
         setState(() {
           status_safe = false;
           Navigator.pop(context);
-          Navigator.pushReplacement(context,
-              MaterialPageRoute(builder: (context) => const SplashScreen()));
         });
       });
     });

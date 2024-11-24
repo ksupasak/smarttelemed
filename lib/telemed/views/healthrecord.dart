@@ -667,7 +667,7 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
                             },
                             child: Text("ส่ง",
                                 style: TextStyle(
-                                    fontSize: width * 0.03,
+                                    fontSize: width * 0.035,
                                     color: Colors.white)))
                         : const SizedBox(child: CircularProgressIndicator()),
                   ),

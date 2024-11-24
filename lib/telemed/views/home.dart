@@ -1,10 +1,12 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart' as http;
+import 'package:http/io_client.dart';
 import 'package:provider/provider.dart';
 import 'package:smarttelemed/telemed/background.dart/background.dart';
 import 'package:smarttelemed/telemed/provider/provider.dart';
@@ -27,7 +29,8 @@ class _HomeTelemedState extends State<HomeTelemed> {
   Timer? timerreadIDCard;
   Timer? checkcardout;
   bool shownumpad = false, status = false;
-
+  var resTojsonGateway;
+  var resTojson_getIdCard;
   String texthead = '';
   @override
   void initState() {
@@ -48,15 +51,18 @@ class _HomeTelemedState extends State<HomeTelemed> {
     timerreadIDCard = Timer.periodic(const Duration(seconds: 3), (timer) async {
       var url = Uri.parse('http://localhost:8189/api/smartcard/read');
       var res = await http.get(url);
-      var resTojson = json.decode(res.body);
+      resTojson_getIdCard = json.decode(res.body);
       debugPrint("Carde= Reader--------------------------------=");
       if (res.statusCode == 200) {
-        context.read<DataProvider>().updateuserinformation(resTojson);
+        context.read<DataProvider>().updateuserinformation(resTojson_getIdCard);
         provider
             .debugPrintV("Stop Card Reader--------------------------------=");
         if (!provider.require_VN) {
           provider.debugPrintV("บันทึกข้อมูลจาก CardลงProvider");
-          provider.updateuserCard(resTojson);
+          provider.updateuserCard(resTojson_getIdCard);
+          setState(() {
+            status = true;
+          });
         }
         sendvisitGateway();
       } else if (res.statusCode == 500) {
@@ -69,15 +75,43 @@ class _HomeTelemedState extends State<HomeTelemed> {
 
   void sendvisitGateway() async {
     DataProvider provider = context.read<DataProvider>();
+    provider.debugPrintV("เปิด client https");
     if (provider.id.length == 13) {
-      provider.debugPrintV(
-          "senvisitGateway :${provider.platfromURLGateway}/api/patient?cid=${provider.id}"); //https://goodwide.pythonanywhere.com/api/patient?cid=
-      var url = Uri.parse(
-          '${provider.platfromURLGateway}/api/patient?cid=${provider.id}');
-      var res = await http.get(url);
-      provider.debugPrintV("red $res");
-      var resTojsonGateway = json.decode(res.body);
+      try {
+        var url = Uri.parse(
+            '${provider.platfromURLGateway}/api/patient?cid=${provider.id}');
+        provider.debugPrintV(
+            "senvisitGateway :${provider.platfromURLGateway}/api/patient?cid=${provider.id}");
+        var response = await http.get(url);
+        provider.debugPrintV("response $response");
+        resTojsonGateway = json.decode(response.body);
+      } catch (e) {
+        provider.debugPrintV("error senvisitGateway $e");
+        provider.debugPrintV("ข้ามการอ่านข้อมูลผ่านGateway");
+        provider.debugPrintV(
+            "get ข้อมูลจากบัตรประชน เปลี่ยนเป็นขอมูลจำรอง gateway");
+        String databirthDate = resTojson_getIdCard['birthDate'];
+        String birthdate =
+            "${databirthDate[0]}${databirthDate[1]}${databirthDate[2]}${databirthDate[3]}-${databirthDate[4]}${databirthDate[5]}-${databirthDate[6]}${databirthDate[7]}";
+        Map data = {
+          "data": {
+            "hn": "123456",
+            "vn": "Text1234",
+            "prefix_name": "",
+            "fname": resTojson_getIdCard['fname'],
+            "lname": resTojson_getIdCard['lname'],
+            "phone": "0987654321",
+            "birthdate": birthdate
+          }
+        };
+        provider.updateusergateway(data);
+        sendId();
+      } finally {
+        //   client.close();
+        // provider.debugPrintV("ปิด client https");
+      }
       provider.debugPrintV("resTojsonGateway ${resTojsonGateway.toString()}");
+
       if (resTojsonGateway != null) {
         if (resTojsonGateway["statuscode"] == 400 ||
             resTojsonGateway["statuscode"] == 404) {
@@ -155,12 +189,18 @@ class _HomeTelemedState extends State<HomeTelemed> {
       if (resTojson["message"] == "success") {
         timerreadIDCard?.cancel();
         checkcardout?.cancel;
+        setState(() {
+          status = false;
+        });
         Future.delayed(const Duration(seconds: 1), () {
           Navigator.pushReplacement(context,
               MaterialPageRoute(builder: (context) => const Userinformation()));
         });
       }
     } else {
+      setState(() {
+        status = false;
+      });
       provider.debugPrintV("มีข้อมูลในระบบESM");
       timerreadIDCard?.cancel();
       checkcardout?.cancel;
@@ -326,7 +366,11 @@ class _HomeTelemedState extends State<HomeTelemed> {
                         provider.debugPrintV('Setting');
                       },
                       child: Container(
-                          color: Colors.white, child: const Text("ตั่งค่า"))),
+                          color: Colors.white,
+                          child: Text(
+                            "ตั่งค่า",
+                            style: TextStyle(fontSize: width * 0.03),
+                          ))),
                   GestureDetector(
                       onTap: () {
                         showDialog(

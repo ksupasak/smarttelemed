@@ -235,7 +235,8 @@ class _UserinformationState extends State<Userinformation> {
                         },
                         child: Text(S.of(context)!.enter_exam,
                             style: TextStyle(
-                                fontSize: width * 0.03, color: Colors.white)))),
+                                fontSize: width * 0.035,
+                                color: Colors.white)))),
                 !button
                     ? Center(
                         child: Text(
@@ -263,7 +264,7 @@ class _UserinformationState extends State<Userinformation> {
                           child: Text(
                             S.of(context)!.leave,
                             style: TextStyle(
-                                color: Colors.red, fontSize: width * 0.03),
+                                color: Colors.red, fontSize: width * 0.035),
                           ),
                         ),
                       )),

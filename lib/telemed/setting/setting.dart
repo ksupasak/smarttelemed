@@ -97,6 +97,7 @@ class _SettingState extends State<Setting> {
                           child: BoxSetting(text: 'Additional Exit')),
                       GestureDetector(
                           onTap: () {
+                            //  Navigator.pop(context);
                             Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
