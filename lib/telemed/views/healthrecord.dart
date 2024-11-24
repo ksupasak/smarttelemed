@@ -42,16 +42,18 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
   bool statusConnectSPO2 = false;
   bool statusConnectBP = false;
 ///////////////////////////////////////////////////////////////////////////
+
   final player = AudioPlayer();
   void playAudio() async {
     await player.play(UrlSource('assets/ScreenRecorderProject15.mp3'));
   }
 
   void initPorts() {
+    DataProvider provider = context.read<DataProvider>();
     try {
-      debugPrint('Available ports: ${availablePorts.length}');
+      provider.debugPrintV('Available ports: ${availablePorts.length}');
     } catch (e) {
-      debugPrint('Error retrieving ports: $e');
+      provider.debugPrintV('Error retrieving ports: $e');
       setState(() => availablePorts = []);
     }
   }
@@ -65,19 +67,21 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
   }
 
   void startBP() async {
+    DataProvider provider = context.read<DataProvider>();
+
     try {
       for (var name in SerialPort.availablePorts) {
-        debugPrint('scan $name');
+        provider.debugPrintV('scan $name');
         final port = SerialPort(name);
         if (port.vendorId == 8137) {
-          debugPrint("found BP");
+          provider.debugPrintV("found BP");
           int status = 0;
           if (!port.openReadWrite()) {
             print(SerialPort.lastError);
           }
           currentportBP = port;
 
-          debugPrint("open BP");
+          provider.debugPrintV("open BP");
 
           SerialPortConfig config = port.config;
           config.baudRate = 9600;
@@ -86,12 +90,12 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
           List<int> buffer = [];
           final reader = SerialPortReader(port);
 
-          debugPrint("reader BP");
+          provider.debugPrintV("reader BP");
           setState(() {
             statusConnectBP = true;
           });
           reader.stream.listen((data) {
-            debugPrint('$data');
+            provider.debugPrintV('$data');
 
             if (data[0] == 50) {
               status = 1;
@@ -101,10 +105,10 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
               buffer.addAll(data);
 
               if (true) {
-                debugPrint('Buffer: $buffer');
+                provider.debugPrintV('Buffer BP: $buffer');
 
                 String txt = intArrayToString(buffer);
-                debugPrint(txt);
+                provider.debugPrintV(txt);
 
                 List<String> splitList = txt.split(";");
 
@@ -114,7 +118,7 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
 
                 int pr = int.parse(splitList[6].split(":")[1].split(" ")[0]);
 
-                debugPrint('Sys: $sys, Dia:$dia pr: $pr');
+                provider.debugPrintV('Sys: $sys, Dia:$dia pr: $pr');
 
                 if (context.read<DataProvider>().datamin_max['minsys'] != '') {
                   if (sys <
@@ -183,7 +187,7 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
         }
       }
     } on Exception catch (_) {
-      debugPrint("throwing new error");
+      provider.debugPrintV("throwing new error");
       setState(() {
         statusConnectBP = false;
       });
@@ -192,20 +196,22 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
 
 //////////////////////////////////////////////////////////////////////////////
   void startSpo2() async {
+    DataProvider provider = context.read<DataProvider>();
+
     try {
       for (var name in SerialPort.availablePorts) {
-        debugPrint('scan $name');
+        provider.debugPrintV('scan $name');
         final port = SerialPort(name);
         if (port.vendorId == 1659) {
-          debugPrint("found SPO2");
+          provider.debugPrintV("found SPO2");
           int status = 0;
           if (!port.openReadWrite()) {
-            debugPrint(SerialPort.lastError.toString());
+            provider.debugPrintV(SerialPort.lastError.toString());
             exit(-1);
           }
           currentportspo2 = port;
 
-          debugPrint("open SPO2");
+          provider.debugPrintV("open SPO2");
 
           SerialPortConfig config = port.config;
           config.baudRate = 38400;
@@ -214,7 +220,7 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
           List<int> buffer = [];
           final reader = SerialPortReader(port);
 
-          debugPrint("reader SPO2");
+          provider.debugPrintV("reader SPO2");
           setState(() {
             statusConnectSPO2 = true;
           });
@@ -227,11 +233,11 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
               buffer.addAll(data);
 
               if (buffer.length == 11) {
-                debugPrint('Buffer: $buffer');
+                provider.debugPrintV('Buffer SPO2: $buffer');
                 if (buffer[2] == 83) {
                   int spo2 = buffer[5];
                   int pulse = buffer[6];
-                  debugPrint('SpO2: $spo2, Pulse:$pulse');
+                  provider.debugPrintV('SpO2: $spo2, Pulse:$pulse');
                   if (spo2 > 0 && pulse > 0) {
                     if (context.read<DataProvider>().datamin_max['minspo2'] !=
                         '') {
@@ -260,7 +266,7 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
         }
       }
     } on Exception catch (_) {
-      debugPrint("throwing new error");
+      provider.debugPrintV("throwing new error");
       setState(() {
         statusConnectSPO2 = false;
       });
@@ -270,33 +276,36 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
 /////////////////////////////////////////////////////////////////////////////
 
   void startH_W() async {
+    DataProvider provider = context.read<DataProvider>();
+
     try {
       for (var name in SerialPort.availablePorts) {
-        debugPrint('scan $name');
         final port = SerialPort(name);
+        provider.debugPrintV('scan W_H$name port:${port.vendorId}');
         if (port.vendorId == 6790) {
-          debugPrint("found W_H");
-
+          provider.debugPrintV("found W_H");
           if (!port.openReadWrite()) {
-            debugPrint(SerialPort.lastError.toString());
+            provider.debugPrintV(
+                "SerialPort.lastError :${SerialPort.lastError.toString()}");
           }
           currentportHW = port;
-          debugPrint("open W_H");
+          provider.debugPrintV("open W_H");
           SerialPortConfig config = port.config;
           config.baudRate = 9600;
           port.config = config;
           List<int> buffer = [];
           final reader = SerialPortReader(port);
-          debugPrint("reader W_H");
+          provider.debugPrintV("reader W_H");
           setState(() {
             statusConnectH_W = true;
           });
+
           reader.stream.listen((data) {
-            debugPrint("reader.stream.listen${data.toString()}");
+            provider.debugPrintV("reader.stream.listen W_H:${data.toString()}");
             buffer.addAll(data);
             if (data[data.length - 1] == 10) {
               String txt = intArrayToString(buffer);
-              debugPrint(txt);
+              provider.debugPrintV(txt);
 
               List<String> splitList = txt.split(" ");
 
@@ -380,8 +389,8 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
         }
       }
     } on Exception catch (e) {
-      debugPrint("throwing new error");
-      debugPrint(e.toString());
+      provider.debugPrintV("throwing new error");
+      provider.debugPrintV(e.toString());
       setState(() {
         statusConnectH_W = false;
       });
@@ -391,12 +400,16 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
 ////////////////////////////////////////////////////////////////////////////
 
   void getClaimCode() async {
-    debugPrint("getClaimCode");
-    debugPrint("pid : ${context.read<DataProvider>().id}");
-    debugPrint("claimType : ${context.read<DataProvider>().claimType}");
-    debugPrint("mobile : ${context.read<DataProvider>().phone}");
-    debugPrint("correlationId : ${context.read<DataProvider>().correlationId}");
-    debugPrint("hn : ${context.read<DataProvider>().hn}");
+    DataProvider provider = context.read<DataProvider>();
+
+    provider.debugPrintV("getClaimCode");
+    provider.debugPrintV("pid : ${context.read<DataProvider>().id}");
+    provider
+        .debugPrintV("claimType : ${context.read<DataProvider>().claimType}");
+    provider.debugPrintV("mobile : ${context.read<DataProvider>().phone}");
+    provider.debugPrintV(
+        "correlationId : ${context.read<DataProvider>().correlationId}");
+    provider.debugPrintV("hn : ${context.read<DataProvider>().hn}");
     if (context.read<DataProvider>().claimType != "") {
       var url =
           Uri.parse('http://localhost:8189/api/nhso-service/confirm-save');
@@ -412,10 +425,10 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
       var res = await http.post(url,
           headers: {'Content-Type': 'application/json'}, body: body);
       var resTojson = json.decode(res.body);
-      debugPrint("statusCode getClaimCode ${res.statusCode}");
+      provider.debugPrintV("statusCode getClaimCode ${res.statusCode}");
       if (res.statusCode == 200) {
-        debugPrint("getClaimCode สำเร็จ ");
-        debugPrint(resTojson.toString());
+        provider.debugPrintV("getClaimCode สำเร็จ ");
+        provider.debugPrintV(resTojson.toString());
         context.read<DataProvider>().updateclaimCode(resTojson);
         sendDataHealthrecord();
       } else if (res.statusCode == 400) {
@@ -460,7 +473,10 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
 ////////////////////////////////////////////////////////////////////////////
 
   void sendDataHealthrecord() async {
-    debugPrint("ส่งค่าHealthrecord${context.read<DataProvider>().platfromURL}");
+    DataProvider provider = context.read<DataProvider>();
+
+    provider.debugPrintV(
+        "ส่งค่าHealthrecord${context.read<DataProvider>().platfromURL}");
     var url =
         Uri.parse('${context.read<DataProvider>().platfromURL}/add_visit');
     var res = await http.post(url, body: {
@@ -478,13 +494,11 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
           "${context.read<DataProvider>().sysHealthrecord.text}/${context.read<DataProvider>().diaHealthrecord.text}",
       "claim_code": context.read<DataProvider>().claimCode.toString(),
     });
-    debugPrint("ส่งค่าHealthrecordสำเร็จ");
-    debugPrint(res.statusCode.toString());
 
     if (res.statusCode == 200) {
       var resTojson = json.decode(res.body);
-      debugPrint("ส่งค่าHealthrecord สำเร็จ");
-      debugPrint(resTojson.toString());
+      provider.debugPrintV("ส่งค่าHealthrecord สำเร็จ");
+      provider.debugPrintV(resTojson.toString());
       sendHealthrecordGateway();
     }
   }
