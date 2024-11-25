@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 class DataProvider with ChangeNotifier {
   List<String> debug = [];
   void debugPrintV(String data) {
+    if (data.length >= 1000) {
+      debug.removeAt(0);
+    }
     debug.add(data);
     debugPrint(data);
     notifyListeners();
@@ -48,14 +51,24 @@ class DataProvider with ChangeNotifier {
   String claimType = '';
   String claimTypeName = '';
   String correlationId = '';
+  String fname = '';
+  String lname = '';
+  String birthdate = '';
+  String age = '';
   void updateuserinformation(Map data) {
     debugPrintV("พบข้อมูล ID Card :$data");
-
     dataUserIDCard = data;
     id = data["pid"];
+    fname = data["fname"];
+    lname = data["lname"];
     claimType = data['claimTypes'][0]["claimType"];
     claimTypeName = data['claimTypes'][0]["claimTypeName"];
     correlationId = data["correlationId"];
+    age = data["age"];
+    String databirthDate;
+    databirthDate = data['birthDate'];
+    birthdate =
+        "${databirthDate[0]}${databirthDate[1]}${databirthDate[2]}${databirthDate[3]}-${databirthDate[4]}${databirthDate[5]}-${databirthDate[6]}${databirthDate[7]}";
     notifyListeners();
   }
 
@@ -66,17 +79,15 @@ class DataProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  //Map datagateway = {};
+  Map datagateway = {};
   String hn = '';
   String vn = '';
   String prefixName = '';
-  String fname = '';
-  String lname = '';
   String phone = '';
   String imgae = '';
-  String birthdate = '';
   void updateusergateway(Map data) {
     //https://goodwide.pythonanywhere.com/api/patient?cid=1111111111111
+    datagateway = data;
     debugPrintV("พบข้อมูล gateway $data");
     hn = data['data']['hn'];
     vn = data['data']['vn'];
@@ -89,16 +100,12 @@ class DataProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void updateuserCard(Map data) {
-    debugPrintV("พบข้อมูล Crde Reader :$data");
-    String databirthDate;
-    fname = data['fname'];
-    lname = data['lname'];
-    databirthDate = data['birthDate'];
-    birthdate =
-        "${databirthDate[0]}${databirthDate[1]}${databirthDate[2]}${databirthDate[3]}-${databirthDate[4]}${databirthDate[5]}-${databirthDate[6]}${databirthDate[7]}";
-    notifyListeners();
-  }
+  // void updateuserCard(Map data) {
+  //   debugPrintV("พบข้อมูล Crde Reader :$data");
+  //   fname = data['fname'];
+  //   lname = data['lname'];
+  //   notifyListeners();
+  // }
 
 /////////////////////////////////////
   TextEditingController sysHealthrecord = TextEditingController();

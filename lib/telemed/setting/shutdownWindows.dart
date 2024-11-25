@@ -38,18 +38,9 @@ class _ShutdownWindowsState extends State<ShutdownWindows> {
             padding: const EdgeInsets.all(8.0),
             child: ElevatedButton(
               onPressed: () {
-                SystemNavigator.pop();
-              },
-              child: const Text("Exit App"),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: ElevatedButton(
-              onPressed: () {
                 restartWindows();
               },
-              child: Text("RestartWindows"),
+              child: const Text("RestartWindows"),
             ),
           ),
           Padding(
@@ -58,7 +49,7 @@ class _ShutdownWindowsState extends State<ShutdownWindows> {
               onPressed: () {
                 shutdownWindows();
               },
-              child: Text("ShutdownWindows"),
+              child: const Text("ShutdownWindows"),
             ),
           ),
         ],

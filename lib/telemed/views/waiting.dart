@@ -245,14 +245,15 @@ class _WaitingAppState extends State<WaitingApp> {
                     Center(
                       child: bottonStatus
                           ? ElevatedButton(
-                              style: stylebutter(Colors.green),
+                              style: stylebutter(
+                                  Colors.green, width * 0.4, height * 0.08),
                               onPressed: () {
                                 getvideocalldata();
                               },
                               child: Text(
                                 "เข้าห้องสนทนา",
                                 style: TextStyle(
-                                    fontSize: width * 0.03,
+                                    fontSize: width * 0.06,
                                     color: Colors.white),
                               ))
                           : const CircularProgressIndicator(
@@ -392,7 +393,7 @@ class _WaitingAppState extends State<WaitingApp> {
               SizedBox(height: height * 0.02),
               Center(
                 child: ElevatedButton(
-                    style: stylebutter(Colors.blue),
+                    style: stylebutter(Colors.blue, width * 0.4, height * 0.08),
                     onPressed: () {
                       Navigator.pushReplacement(
                           context,
@@ -402,20 +403,21 @@ class _WaitingAppState extends State<WaitingApp> {
                     child: Text(
                       "ดูผลตรวจ",
                       style: TextStyle(
-                          color: Colors.white, fontSize: width * 0.03),
+                          color: Colors.white, fontSize: width * 0.06),
                     )),
               ),
               SizedBox(height: height * 0.02),
               Center(
                 child: ElevatedButton(
-                    style: stylebutter(Colors.green),
+                    style:
+                        stylebutter(Colors.green, width * 0.4, height * 0.08),
                     onPressed: () {
                       add_appoint_today();
                     },
                     child: Text(
                       "ตรวจซ้ำ",
                       style: TextStyle(
-                          color: Colors.white, fontSize: width * 0.03),
+                          color: Colors.white, fontSize: width * 0.06),
                     )),
               ),
               SizedBox(height: height * 0.02),

@@ -28,7 +28,8 @@ class _LanguageAppState extends State<LanguageApp> {
             padding: const EdgeInsets.all(8.0),
             child: Center(
                 child: ElevatedButton(
-                    style: stylebutter(Colors.black),
+                    style:
+                        stylebutter(Colors.black, width * 0.4, height * 0.08),
                     onPressed: () {
                       provider.setlanguageApp(const Locale("en"));
                       setState(() {});
@@ -43,7 +44,8 @@ class _LanguageAppState extends State<LanguageApp> {
             padding: const EdgeInsets.all(8.0),
             child: Center(
                 child: ElevatedButton(
-                    style: stylebutter(Colors.black),
+                    style:
+                        stylebutter(Colors.black, width * 0.4, height * 0.08),
                     onPressed: () {
                       provider.setlanguageApp(const Locale("th"));
                       setState(() {});

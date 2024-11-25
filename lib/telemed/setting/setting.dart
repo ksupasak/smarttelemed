@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 import 'package:smarttelemed/telemed/background.dart/background.dart';
@@ -9,7 +11,7 @@ import 'package:smarttelemed/telemed/setting/settingListPrinter.dart';
 import 'package:smarttelemed/telemed/setting/shutdownWindows.dart';
 import 'package:smarttelemed/telemed/setting/talamed_setting.dart';
 import 'package:smarttelemed/telemed/setting/ui/boxSetting.dart';
-import 'package:smarttelemed/telemed/splash_screen/splashScreen.dart';
+import 'package:smarttelemed/telemed/views/home.dart';
 
 class Setting extends StatefulWidget {
   const Setting({super.key});
@@ -101,8 +103,18 @@ class _SettingState extends State<Setting> {
                             Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) =>
-                                        const SplashScreen()));
+                                    builder: (context) => const HomeTelemed()));
+                          },
+                          child: BoxSetting(text: 'Go to Home')),
+                      GestureDetector(
+                          onTap: () {
+                            //  Navigator.pop(context);
+                            // Navigator.pushReplacement(
+                            //     context,
+                            //     MaterialPageRoute(
+                            //         builder: (context) =>
+                            //             const SplashScreen()));
+                            exit(0);
                           },
                           child: BoxSetting(text: 'Exit')),
                     ],

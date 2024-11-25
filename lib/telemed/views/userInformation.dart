@@ -166,6 +166,9 @@ class _UserinformationState extends State<Userinformation> {
                                       Text(S.of(context)!.birth_date,
                                           style: TextStyle(
                                               fontSize: width * 0.03)),
+                                      Text("อายุ",
+                                          style: TextStyle(
+                                              fontSize: width * 0.03)),
                                       Text(S.of(context)!.hn,
                                           style: TextStyle(
                                               fontSize: width * 0.03)),
@@ -191,6 +194,9 @@ class _UserinformationState extends State<Userinformation> {
                                       Text(birthdate(provider.birthdate),
                                           style: TextStyle(
                                               fontSize: width * 0.03)),
+                                      Text(provider.age,
+                                          style: TextStyle(
+                                              fontSize: width * 0.03)),
                                       Text(provider.hn,
                                           style: TextStyle(
                                               fontSize: width * 0.03)),
@@ -210,7 +216,8 @@ class _UserinformationState extends State<Userinformation> {
                 SizedBox(height: height * 0.02),
                 Center(
                   child: ElevatedButton(
-                      style: stylebutter(Colors.green),
+                      style:
+                          stylebutter(Colors.green, width * 0.4, height * 0.08),
                       onPressed: () {
                         Navigator.pushReplacement(
                             context,
@@ -219,12 +226,13 @@ class _UserinformationState extends State<Userinformation> {
                       },
                       child: Text(S.of(context)!.health_check,
                           style: TextStyle(
-                              fontSize: width * 0.03, color: Colors.white))),
+                              fontSize: width * 0.06, color: Colors.white))),
                 ),
                 SizedBox(height: height * 0.02),
                 Center(
                     child: ElevatedButton(
-                        style: stylebutter(button ? Colors.blue : Colors.grey),
+                        style: stylebutter(button ? Colors.blue : Colors.grey,
+                            width * 0.4, height * 0.08),
                         onPressed: () {
                           if (button) {
                             Navigator.pushReplacement(
@@ -235,8 +243,7 @@ class _UserinformationState extends State<Userinformation> {
                         },
                         child: Text(S.of(context)!.enter_exam,
                             style: TextStyle(
-                                fontSize: width * 0.035,
-                                color: Colors.white)))),
+                                fontSize: width * 0.06, color: Colors.white)))),
                 !button
                     ? Center(
                         child: Text(

@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:smarttelemed/telemed/background.dart/background.dart';
 import 'package:smarttelemed/telemed/provider/provider.dart';
 import 'package:http/http.dart' as http;
+import 'package:smarttelemed/telemed/views/home.dart';
 import 'package:smarttelemed/telemed/views/ui/informationCard.dart';
 import 'package:smarttelemed/telemed/views/ui/stylebutton.dart';
 import 'package:smarttelemed/telemed/views/userInformation.dart';
@@ -45,9 +46,9 @@ class _SummaryState extends State<Summary> {
       'care_unit_id': context.read<DataProvider>().care_unit_id,
       'public_id': context.read<DataProvider>().id,
     });
-    setState(() {
-      resTojson2 = json.decode(res.body);
-    });
+
+    resTojson2 = json.decode(res.body);
+    setState(() {});
   }
 
   Future<void> exam() async {
@@ -279,6 +280,8 @@ class _SummaryState extends State<Summary> {
         printer: selectedPrinter!,
         onLayout: (PdfPageFormat format) async => pdfBytes,
       );
+      Navigator.pushReplacement(context,
+          MaterialPageRoute(builder: (context) => const HomeTelemed()));
     } else {
       print("No printer selected.");
     }
@@ -329,7 +332,7 @@ class _SummaryState extends State<Summary> {
               SizedBox(height: height * 0.02),
               Center(
                 child: Container(
-                  height: height * 0.3,
+                  height: height * 0.5,
                   width: width * 0.8,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(15),
@@ -365,16 +368,7 @@ class _SummaryState extends State<Summary> {
                             Text(dx, style: TextStyle(fontSize: width * 0.03)),
                       ),
                     ]),
-                    Center(
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Container(
-                          width: width * 0.8,
-                          height: 1,
-                          color: Colors.grey,
-                        ),
-                      ),
-                    ),
+                    SizedBox(height: height * 0.01),
                     Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                       SizedBox(
                         width: width * 0.25,
@@ -388,22 +382,90 @@ class _SummaryState extends State<Summary> {
                             style: TextStyle(fontSize: width * 0.03)),
                       ),
                     ]),
-                    SizedBox(height: height * 0.05),
+                    Center(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          width: width * 0.8,
+                          height: 1,
+                          color: Colors.grey,
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: height * 0.01),
+                    Center(
+                        child: Text("ค่าวัดสุขภาพ",
+                            style: TextStyle(fontSize: width * 0.04))),
+                    SizedBox(height: height * 0.01),
+                    resTojson2 != null
+                        ? Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Text(
+                                resTojson2["health_records"][0]["bmi"] != null
+                                    ? "BMI :${resTojson2["health_records"][0]["bmi"]}"
+                                    : "",
+                                style: TextStyle(fontSize: width * 0.03),
+                              ),
+                              Text(
+                                resTojson2["health_records"][0]["weight"] !=
+                                        null
+                                    ? "Weight :${resTojson2["health_records"][0]["weight"]}"
+                                    : "",
+                                style: TextStyle(fontSize: width * 0.03),
+                              ),
+                              Text(
+                                resTojson2["health_records"][0]["height"] !=
+                                        null
+                                    ? "Height :${resTojson2["health_records"][0]["height"]}"
+                                    : "",
+                                style: TextStyle(fontSize: width * 0.03),
+                              ),
+                            ],
+                          )
+                        : const SizedBox(),
+                    resTojson2 != null
+                        ? Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Text(
+                                resTojson2["health_records"][0]["bp"] != null
+                                    ? "BP :${resTojson2["health_records"][0]["bp"]}"
+                                    : "",
+                                style: TextStyle(fontSize: width * 0.03),
+                              ),
+                              Text(
+                                resTojson2["health_records"][0]["spo2"] != null
+                                    ? "Spo2 :${resTojson2["health_records"][0]["spo2"]}"
+                                    : "",
+                                style: TextStyle(fontSize: width * 0.03),
+                              ),
+                              Text(
+                                resTojson2["health_records"][0]["temp"] != null
+                                    ? "Temp :${resTojson2["health_records"][0]["temp"]}"
+                                    : "",
+                                style: TextStyle(fontSize: width * 0.03),
+                              ),
+                            ],
+                          )
+                        : const SizedBox(),
                   ]),
                 ),
               ),
+              SizedBox(height: height * 0.02),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Center(
                   child: resTojson2 != null
                       ? ElevatedButton(
-                          style: stylebutter(Colors.green),
+                          style: stylebutter(
+                              Colors.green, width * 0.4, height * 0.08),
                           onPressed: () {
                             printexam();
                           },
                           child: Text("ปริ้นผลตรวจ",
                               style: TextStyle(
-                                  color: Colors.white, fontSize: width * 0.03)))
+                                  color: Colors.white, fontSize: width * 0.06)))
                       : SizedBox(
                           width: MediaQuery.of(context).size.width * 0.05,
                           height: MediaQuery.of(context).size.width * 0.05,

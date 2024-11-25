@@ -34,6 +34,7 @@ class _InitsettingState extends State<Initsetting> {
   var resTojson2;
   int? numindex;
   bool status_safe = false;
+  bool statusSync = true;
   void test() {
     platfromURL.text =
         'https://emr-life.com/expert/telemed/StmsApi'; // 'https://emr-life.com/clinic_master/clinic/StmsApi';
@@ -41,6 +42,9 @@ class _InitsettingState extends State<Initsetting> {
   }
 
   void sync() async {
+    setState(() {
+      statusSync = false;
+    });
     try {
       var url = Uri.parse('${platfromURL.text}/list_care_unit');
       var res = await http.post(url, body: {'code': id_hospital.text});
@@ -49,30 +53,30 @@ class _InitsettingState extends State<Initsetting> {
       setState(() {
         print('addข้อมูลใหม่');
 
-        if (resTojson2['message'] == 'success') {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: Container(
-                  width: MediaQuery.of(context).size.width,
-                  child: Center(
-                      child: Text(
-                    'Add ID Hospital success',
-                    style: TextStyle(
-                        fontSize: MediaQuery.of(context).size.width * 0.03),
-                  )))));
-          setState(() {
-            name_hospital.text = 'NAME HOSPITAL';
-          });
-        } else if (resTojson2['message'] == 'not found customer') {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: Container(
-                  width: MediaQuery.of(context).size.width,
-                  child: Center(
-                      child: Text(
-                    'ไม่พบ ID Hospital',
-                    style: TextStyle(
-                        fontSize: MediaQuery.of(context).size.width * 0.03),
-                  )))));
-        } else {}
+        // if (resTojson2['message'] == 'success') {
+        //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        //       content: Container(
+        //           width: MediaQuery.of(context).size.width,
+        //           child: Center(
+        //               child: Text(
+        //             'Add ID Hospital success',
+        //             style: TextStyle(
+        //                 fontSize: MediaQuery.of(context).size.width * 0.03),
+        //           )))));
+        //   setState(() {
+        //     name_hospital.text = 'NAME HOSPITAL';
+        //   });
+        // } else if (resTojson2['message'] == 'not found customer') {
+        //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        //       content: Container(
+        //           width: MediaQuery.of(context).size.width,
+        //           child: Center(
+        //               child: Text(
+        //             'ไม่พบ ID Hospital',
+        //             style: TextStyle(
+        //                 fontSize: MediaQuery.of(context).size.width * 0.03),
+        //           )))));
+        // } else {}
       });
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -85,6 +89,9 @@ class _InitsettingState extends State<Initsetting> {
                     fontSize: MediaQuery.of(context).size.width * 0.03),
               )))));
     }
+    setState(() {
+      statusSync = true;
+    });
   }
 
   void safe() async {
@@ -270,13 +277,15 @@ class _InitsettingState extends State<Initsetting> {
                                   texthead: 'Id_Hospital'),
                               Container(
                                   child: Center(
-                                      child: GestureDetector(
-                                          onTap: () {
-                                            sync();
-                                          },
-                                          child: Container(
-                                            child: Icon(Icons.sync_alt),
-                                          )))),
+                                      child: statusSync
+                                          ? GestureDetector(
+                                              onTap: () {
+                                                sync();
+                                              },
+                                              child: Container(
+                                                child: Icon(Icons.sync_alt),
+                                              ))
+                                          : Text("Loading..."))),
                               Container(
                                 height: resTojson2 != null
                                     ? resTojson2['data'].length != 0
