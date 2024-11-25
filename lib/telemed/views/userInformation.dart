@@ -7,6 +7,7 @@ import 'package:smarttelemed/telemed/provider/provider.dart';
 import 'package:smarttelemed/telemed/views/healthrecord.dart';
 import 'package:smarttelemed/telemed/views/home.dart';
 import 'package:smarttelemed/telemed/views/ui/informationCard.dart';
+import 'package:smarttelemed/telemed/views/ui/popup.dart';
 import 'package:smarttelemed/telemed/views/ui/stylebutton.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -53,6 +54,56 @@ class _UserinformationState extends State<Userinformation> {
           button = false;
         });
       }
+    }
+  }
+
+  void agreement() {
+    if (context.read<DataProvider>().id.length == 13) {
+      String texthead =
+          'ข้อตกลงในการให้ความยินยอมในการเก็บรวบรวมและใช้ข้อมูลส่วนบุคคล';
+      String textbody =
+          'ผู้ใช้งานต้องมีสิทธิหลักประกันสุขภาพแห่งชาติ หรือสิทธิอื่น ๆอายุ 15 ปี บริบูรณ์ขึ้นไปลงทะเบียนด้วยตนเองเท่านั้น ยังไม่สามารถลงทะเบียนแทนบุคคลในครอบครัวได้ (ในปัจจุบัน)เพื่อประโยชน์ในการใช้ Line Official Account สปสช. เปลี่ยนหน่วยบริการด้วยตนเองบนมือถือ สำนักงานหลักประกันสุขภาพแห่งชาติ (สปสช.) ขอให้ผู้ใช้งานโปรดแสดงความยินยอมให้ สปสช. เก็บรวบรวม ใช้ หรือเปิดเผยข้อมูลส่วนบุคคลของผู้ใช้งาน รวมถึงข้อมูลส่วนตัว เช่น ชื่อ นามสกุล เลขบัตรประชาชน และข้อมูลอื่นที่เกี่ยวข้องกับสิทธิของผู้ใช้งาน เพื่อการตรวจสอบสิทธิ และให้บริการที่เกี่ยวข้องกับสิทธิหลักประกันสุขภาพแห่งชาติ หรือสิทธิอื่น ๆ ตามกฎหมายในกรณีที่จำเป็น ผู้ใช้งานสามารถขอถอนความยินยอมได้ตลอดเวลา และหากมีข้อสงสัยเกี่ยวกับความยินยอมนี้ ผู้ใช้งานสามารถติดต่อสำนักงานหลักประกันสุขภาพแห่งชาติ ผ่าน Line Official Account สปสช.สอบถามรายละเอียดเพิ่มเติมได้ที่: สายด่วน สปสช. 1330 (เปิดบริการ 24 ชั่วโมง)';
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return Popup(
+              texthead: texthead,
+              textbody: textbody,
+              buttonbar: [
+                ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                    ),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Text("ยกเลิก",
+                        style: TextStyle(fontSize: 20, color: Colors.red))),
+                ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      shadowColor: Colors.green,
+                      backgroundColor: Colors.green,
+                      elevation: 5,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                    ),
+                    onPressed: () {
+                      Navigator.pop(context);
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const WaitingApp()));
+                    },
+                    child: const Text(
+                      "ตกลง",
+                      style: TextStyle(fontSize: 32, color: Colors.white),
+                    ))
+              ],
+            );
+          });
     }
   }
 
@@ -235,10 +286,7 @@ class _UserinformationState extends State<Userinformation> {
                             width * 0.4, height * 0.08),
                         onPressed: () {
                           if (button) {
-                            Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => const WaitingApp()));
+                            agreement();
                           }
                         },
                         child: Text(S.of(context)!.enter_exam,

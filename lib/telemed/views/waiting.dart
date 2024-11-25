@@ -65,7 +65,7 @@ class _WaitingAppState extends State<WaitingApp> {
 
   Future<void> checkQuick() async {
     DataProvider provider = context.read<DataProvider>();
-
+    bool one = true;
     timerCheck = Timer.periodic(const Duration(seconds: 2), (timer) async {
       var url =
           Uri.parse('${context.read<DataProvider>().platfromURL}/check_quick');
@@ -80,15 +80,30 @@ class _WaitingAppState extends State<WaitingApp> {
         // debugPrint(resToJson["message"]);
         if (resToJson["message"] == "waiting") {
           debugPrint("รอหมอเลียกตรวจ ${resToJson["message"]}");
+          setState(() {
+            one = true;
+          });
         }
         if (resToJson["message"] == "processing") {
           debugPrint("หมอกำลังตรวจ ${resToJson["message"]}");
+          if (one) {
+            setState(() {
+              one = false;
+            });
+            getvideocalldata();
+          }
         }
         if (resToJson["message"] == "completed") {
           debugPrint("หมอกำลังลงผลตรวจ ${resToJson["message"]}");
+          setState(() {
+            one = true;
+          });
         }
         if (resToJson["message"] == "finished") {
           debugPrint("การตรวจเสร็จสิ้น ${resToJson["message"]}");
+          setState(() {
+            one = true;
+          });
           timerCheck!.cancel();
           Navigator.pushReplacement(context,
               MaterialPageRoute(builder: (context) => const Summary()));
@@ -98,6 +113,7 @@ class _WaitingAppState extends State<WaitingApp> {
   }
 
   Future<void> getvideocalldata() async {
+    print("-------------");
     setState(() {
       bottonStatus = false;
     });
@@ -221,47 +237,67 @@ class _WaitingAppState extends State<WaitingApp> {
         ? SafeArea(
             child: Stack(
               children: [
-                const backgrund(),
                 Positioned(
-                    child: ListView(
-                  children: [
-                    SizedBox(height: height * 0.15),
-                    Center(
-                        child: Text(
-                      "เตรียมตัว",
-                      style: TextStyle(
-                          fontSize: width * 0.03, color: Colors.black),
-                    )),
-                    Center(
-                      child: Container(
-                        height: width * 0.5,
-                        width: width * 0.5,
-                        decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey)),
-                      ),
+                    child: SizedBox(
+                        width: width,
+                        height: height,
+                        child: SvgPicture.asset(
+                          'assets/splash/backlogo.svg',
+                          fit: BoxFit.fill,
+                        ))),
+                Positioned(
+                    child: SizedBox(
+                  width: width,
+                  height: width,
+                  child: Center(
+                    child: SizedBox(
+                      width: width * 0.8,
+                      height: width * 0.8,
+                      child: SvgPicture.asset('assets/splash/logo.svg'),
                     ),
-                    const Icon(Icons.camera),
-                    const Icon(Icons.mic),
-                    Center(
-                      child: bottonStatus
-                          ? ElevatedButton(
-                              style: stylebutter(
-                                  Colors.green, width * 0.4, height * 0.08),
-                              onPressed: () {
-                                getvideocalldata();
+                  ),
+                )),
+                Positioned(
+                  bottom: 5,
+                  child: SizedBox(
+                    height: height * 0.4,
+                    width: width,
+                    child: Column(
+                      children: [
+                        Text('รอหมอ', style: TextStyle(fontSize: width * 0.1)),
+                        const CircularProgressIndicator(
+                          color: Color.fromARGB(255, 0, 139, 130),
+                        ),
+                        Center(
+                          child: GestureDetector(
+                              onTap: () {
+                                Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const Userinformation()));
                               },
-                              child: Text(
-                                "เข้าห้องสนทนา",
-                                style: TextStyle(
-                                    fontSize: width * 0.06,
-                                    color: Colors.white),
-                              ))
-                          : const CircularProgressIndicator(
-                              color: Color.fromARGB(255, 0, 139, 130),
-                            ),
-                    )
-                  ],
-                ))
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Container(
+                                  width: width * 0.1,
+                                  decoration: BoxDecoration(
+                                      border: Border.all(color: Colors.grey)),
+                                  child: Center(
+                                    child: Text(
+                                      S.of(context)!.leave,
+                                      style: TextStyle(
+                                          color: Colors.red,
+                                          fontSize: width * 0.03),
+                                    ),
+                                  ),
+                                ),
+                              )),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
               ],
             ),
           )
