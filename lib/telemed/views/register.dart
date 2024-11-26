@@ -11,7 +11,9 @@ import 'package:http/http.dart' as http;
 import 'package:smarttelemed/telemed/background.dart/background.dart';
 import 'package:smarttelemed/telemed/provider/provider.dart';
 import 'package:smarttelemed/telemed/views/home.dart';
+import 'package:smarttelemed/telemed/views/ui/popup.dart';
 import 'package:smarttelemed/telemed/views/userInformation.dart';
+import 'package:virtual_keyboard_multi_language/virtual_keyboard_multi_language.dart';
 
 class Register extends StatefulWidget {
   const Register({super.key});
@@ -22,6 +24,11 @@ class Register extends StatefulWidget {
 
 class _RegisterState extends State<Register> {
   bool status = false;
+  String text = '';
+  bool shiftEnabled = false;
+  bool isNumericMode = false;
+  bool keyboardHN = false;
+  bool keyboardPhone = false;
   Uint8List? resTojsonImage;
   TextEditingController prefix_name = TextEditingController();
   TextEditingController first_name = TextEditingController();
@@ -80,21 +87,26 @@ class _RegisterState extends State<Register> {
       if (res.statusCode == 200) {
         provider.debugPrintV("สมัคข้อมูลในESMสำเร็จ");
         provider.debugPrintV("StatusresTojson :${resTojson["message"]}");
-      }
-      if (resTojson["message"] == "success") {
-        setState(() {
-          status = false;
-        });
-        Future.delayed(const Duration(seconds: 1), () {
-          Navigator.pushReplacement(context,
-              MaterialPageRoute(builder: (context) => const Userinformation()));
-        });
-      } else {
-        provider
-            .debugPrintV("สมัคข้อมูลในESMใม่สำเร็จ error:${res.statusCode}");
-        setState(() {
-          status = false;
-        });
+        if (resTojson["message"] == "success") {
+          provider.debugPrintV("เพิ่มข้อมูลลงprovider ");
+          provider.hn = hn.text;
+          provider.phone = phone.text;
+          setState(() {
+            status = false;
+          });
+          Future.delayed(const Duration(seconds: 1), () {
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const Userinformation()));
+          });
+        } else {
+          provider
+              .debugPrintV("สมัคข้อมูลในESMใม่สำเร็จ error:${res.statusCode}");
+          setState(() {
+            status = false;
+          });
+        }
       }
     } catch (e) {
       provider.debugPrintV("สมัคข้อมูลในESMใม่สำเร็จ error:$e");
@@ -134,7 +146,7 @@ class _RegisterState extends State<Register> {
             )));
   }
 
-  Widget textdatauser({TextEditingController? child}) {
+  Widget textdatauser({TextEditingController? child, String? namekeyboard}) {
     double width = MediaQuery.of(context).size.width;
     //double height = MediaQuery.of(context).size.height;
     TextStyle style2 =
@@ -153,19 +165,21 @@ class _RegisterState extends State<Register> {
                   }
                 },
                 onTap: () async {
-                  try {
-                    // ใช้คำสั่ง run แทน start
-                    final result =
-                        await Process.run('C:\\Windows\\System32\\osk.exe', []);
-                    if (result.exitCode != 0) {
-                      print('Failed to start keyboard: ${result.stderr}');
+                  setState(() {
+                    if (namekeyboard == "hn") {
+                      keyboardHN = true;
+                      keyboardPhone = false;
+                      setState(() {});
                     }
-                  } catch (e) {
-                    print('Error starting keyboard: $e');
-                  }
+                    if (namekeyboard == "phone") {
+                      keyboardPhone = true;
+                      keyboardHN = false;
+                      setState(() {});
+                    }
+                  });
                 },
                 onEditingComplete: () {
-                  FocusScope.of(context).unfocus();
+                  //  FocusScope.of(context).unfocus();
                 },
                 controller: child,
                 style: style2),
@@ -179,6 +193,34 @@ class _RegisterState extends State<Register> {
   Decoration boxDecorate = BoxDecoration(boxShadow: const [
     BoxShadow(offset: Offset(0, 2.5), blurRadius: 3, color: Color(0xff31D6AA))
   ], borderRadius: BorderRadius.circular(10), color: Colors.white);
+  _onKeyPress(VirtualKeyboardKey key) {
+    if (key.keyType == VirtualKeyboardKeyType.String) {
+      text = text + ((shiftEnabled ? key.capsText : key.text) ?? '');
+    } else if (key.keyType == VirtualKeyboardKeyType.Action) {
+      switch (key.action) {
+        case VirtualKeyboardKeyAction.Backspace:
+          if (text.length == 0) return;
+          text = text.substring(0, text.length - 1);
+          break;
+        case VirtualKeyboardKeyAction.Return:
+          setState(() {
+            keyboardHN = false;
+            keyboardPhone = false;
+          });
+          break;
+        case VirtualKeyboardKeyAction.Space:
+          text = text + (key.text ?? '');
+          break;
+        case VirtualKeyboardKeyAction.Shift:
+          shiftEnabled = !shiftEnabled;
+          break;
+
+        default:
+      }
+    }
+    // Update the screen
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -189,98 +231,177 @@ class _RegisterState extends State<Register> {
     TextStyle style2 =
         TextStyle(fontSize: width * 0.04, color: const Color(0xff003D5C));
     return Scaffold(
-      body: Stack(
-        children: [
-          const Background(),
-          Positioned(
-            child: Center(
-              child: ListView(
-                children: [
-                  SizedBox(height: height * 0.1),
-                  Center(
-                    child: Container(
-                      width: width * 0.85,
-                      decoration: boxDecorate,
-                      child: Column(
-                        children: [
-                          Text('ลงทะเบียน', style: textStyle),
-                          SizedBox(
-                            width: width * 0.8,
-                            child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text('คำนำหน้าชื่อ :${prefix_name.text}',
-                                      style: style2),
-                                  // textdatauser(child: prefix_name),
-                                  Text('ชื่อ :${first_name.text}',
-                                      style: style2),
-                                  //  textdatauser(child: first_name),
-                                  Text('นามสกุล :${last_name.text}',
-                                      style: style2),
-                                  //   textdatauser(child: last_name),
-                                  Text(
-                                      'วันเกิด(ปี เดือน วัน) :${birthdate.text}',
-                                      style: style2),
-                                  //   textdatauser(child: birthdate),
-                                  Text('เลขประจำตัวประชาชน :${id.text}',
-                                      style: style2),
-                                  //   textdatauser(child: id),
-                                  Text('เบอร์โทร', style: style2),
-                                  textdatauser(child: phone),
-                                  phone.text == ""
-                                      ? const Center(
-                                          child: Text(
-                                          "กรุณากรอก็เบอร์โทร",
-                                          style: TextStyle(color: Colors.red),
-                                        ))
-                                      : const SizedBox(),
-                                  Text('รหัส HN', style: style2),
-                                  textdatauser(child: hn),
-                                  hn.text == ""
-                                      ? const Center(
-                                          child: Text(
-                                          "กรุณากรอก็HN",
-                                          style: TextStyle(color: Colors.red),
-                                        ))
-                                      : const SizedBox()
-                                ]),
-                          ),
-                          SizedBox(height: height * 0.03),
-                          GestureDetector(
-                            onTap: regter,
-                            child: Container(
-                              width: width * 0.35,
-                              height: height * 0.06,
-                              decoration: BoxDecoration(
-                                  color: const Color(0xff31D6AA),
-                                  borderRadius: BorderRadius.circular(10),
-                                  boxShadow: const [
-                                    BoxShadow(
-                                        color: Colors.grey,
-                                        offset: Offset(0, 2),
-                                        blurRadius: 2)
+      body: GestureDetector(
+        onTap: () {
+          keyboardHN = false;
+          keyboardPhone = false;
+          setState(() {});
+        },
+        child: Stack(
+          children: [
+            const Background(),
+            Positioned(
+              child: Center(
+                child: ListView(
+                  children: [
+                    SizedBox(height: height * 0.1),
+                    Center(
+                      child: Container(
+                        width: width * 0.85,
+                        decoration: boxDecorate,
+                        child: Column(
+                          children: [
+                            Text('ลงทะเบียน', style: textStyle),
+                            SizedBox(
+                              width: width * 0.8,
+                              child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text('คำนำหน้าชื่อ :${prefix_name.text}',
+                                        style: style2),
+                                    // textdatauser(child: prefix_name),
+                                    Text('ชื่อ :${first_name.text}',
+                                        style: style2),
+                                    //  textdatauser(child: first_name),
+                                    Text('นามสกุล :${last_name.text}',
+                                        style: style2),
+                                    //   textdatauser(child: last_name),
+                                    Text(
+                                        'วันเกิด(ปี เดือน วัน) :${birthdate.text}',
+                                        style: style2),
+                                    //   textdatauser(child: birthdate),
+                                    Text('เลขประจำตัวประชาชน :${id.text}',
+                                        style: style2),
+                                    //   textdatauser(child: id),
+                                    Text('เบอร์โทร', style: style2),
+                                    textdatauser(
+                                        child: phone, namekeyboard: "hn"),
+                                    phone.text == ""
+                                        ? Center(
+                                            child: Text(
+                                            phone.text.length > 10
+                                                ? "เลขเกิน10หลัก"
+                                                : "กรุณากรอก็เบอร์โทร",
+                                            style: TextStyle(color: Colors.red),
+                                          ))
+                                        : Center(
+                                            child: Text(
+                                            phone.text.length > 10
+                                                ? "เลขเกิน10หลัก"
+                                                : "",
+                                            style: TextStyle(color: Colors.red),
+                                          )),
+                                    Text('รหัส HN', style: style2),
+                                    textdatauser(
+                                        child: hn, namekeyboard: "phone"),
+                                    hn.text == ""
+                                        ? const Center(
+                                            child: Text(
+                                            "กรุณากรอก็HN",
+                                            style: TextStyle(color: Colors.red),
+                                          ))
+                                        : const SizedBox(),
                                   ]),
-                              child: Row(
-                                children: [
-                                  Image.asset('assets/rsjyrsk.png'),
-                                  Text('ลงทะเบียน',
-                                      style: TextStyle(
-                                          fontSize: width * 0.04,
-                                          color: Colors.white))
-                                ],
-                              ),
                             ),
-                          ),
-                          SizedBox(height: height * 0.03),
-                        ],
+                            SizedBox(height: height * 0.03),
+                            keyboardHN
+                                ? Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Container(
+                                      color: Colors.black,
+                                      child: Column(
+                                        children: [
+                                          VirtualKeyboard(
+                                              height: 300,
+                                              width: 500,
+                                              textColor: Colors.white,
+                                              textController: phone,
+                                              defaultLayouts: const [
+                                                VirtualKeyboardDefaultLayouts
+                                                    .English
+                                              ],
+                                              type: VirtualKeyboardType.Numeric,
+                                              postKeyPress: _onKeyPress),
+                                        ],
+                                      ),
+                                    ),
+                                  )
+                                : const SizedBox(),
+                            keyboardPhone
+                                ? Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Container(
+                                      color: Colors.black,
+                                      child: Column(
+                                        children: [
+                                          VirtualKeyboard(
+                                              height: 300,
+                                              width: 500,
+                                              textColor: Colors.white,
+                                              textController: hn,
+                                              defaultLayouts: const [
+                                                VirtualKeyboardDefaultLayouts
+                                                    .English
+                                              ],
+                                              type: isNumericMode
+                                                  ? VirtualKeyboardType.Numeric
+                                                  : VirtualKeyboardType
+                                                      .Alphanumeric,
+                                              postKeyPress: _onKeyPress),
+                                        ],
+                                      ),
+                                    ),
+                                  )
+                                : const SizedBox(),
+                            !status
+                                ? GestureDetector(
+                                    onTap: () {
+                                      if (hn.text != "" && phone.text != "") {
+                                        regter();
+                                      }
+                                    },
+                                    child: Container(
+                                      width: width * 0.35,
+                                      height: height * 0.06,
+                                      decoration: BoxDecoration(
+                                          color: const Color(0xff31D6AA),
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          boxShadow: const [
+                                            BoxShadow(
+                                                color: Colors.grey,
+                                                offset: Offset(0, 2),
+                                                blurRadius: 2)
+                                          ]),
+                                      child: Row(
+                                        children: [
+                                          Image.asset('assets/rsjyrsk.png'),
+                                          Text('ลงทะเบียน',
+                                              style: TextStyle(
+                                                  fontSize: width * 0.04,
+                                                  color: Colors.white))
+                                        ],
+                                      ),
+                                    ),
+                                  )
+                                : SizedBox(
+                                    width: MediaQuery.of(context).size.width *
+                                        0.05,
+                                    height: MediaQuery.of(context).size.width *
+                                        0.05,
+                                    child: const CircularProgressIndicator(),
+                                  ),
+                            SizedBox(height: height * 0.03),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
       bottomNavigationBar: SizedBox(
         child: Row(

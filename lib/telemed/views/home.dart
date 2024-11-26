@@ -151,6 +151,7 @@ class _HomeTelemedState extends State<HomeTelemed> {
           });
         }
         if (resTojsonGateway["statuscode"] == 100) {
+          provider.debugPrintV("เพิ่มข้อมูลจากgatewayลงprovider");
           provider.updateusergateway(resTojsonGateway);
           if (resTojsonGateway["data"]["vn"] != null &&
               resTojsonGateway["data"]["vn"] != "") {
@@ -224,7 +225,7 @@ class _HomeTelemedState extends State<HomeTelemed> {
           'last_name': provider.lname,
           'tel': provider.phone,
           'hn': provider.hn,
-          // 'picture64': provider.imgae,
+          'picture64': provider.imgae,
         });
         var resTojson = json.decode(res.body);
         if (res.statusCode == 200) {
@@ -384,8 +385,8 @@ class _HomeTelemedState extends State<HomeTelemed> {
                                         !provider.requirel_id_card
                                             ? Colors.green
                                             : Colors.grey,
-                                        width * 0.4,
-                                        height * 0.08),
+                                        width * provider.buttonSized_w,
+                                        height * provider.buttonSized_h),
                                     onPressed: () {
                                       if (!provider.requirel_id_card) {
                                         sendvisitGateway();

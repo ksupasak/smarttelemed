@@ -267,8 +267,10 @@ class _UserinformationState extends State<Userinformation> {
                 SizedBox(height: height * 0.02),
                 Center(
                   child: ElevatedButton(
-                      style:
-                          stylebutter(Colors.green, width * 0.4, height * 0.08),
+                      style: stylebutter(
+                          Colors.green,
+                          width * provider.buttonSized_w,
+                          height * provider.buttonSized_h),
                       onPressed: () {
                         Navigator.pushReplacement(
                             context,
@@ -282,8 +284,10 @@ class _UserinformationState extends State<Userinformation> {
                 SizedBox(height: height * 0.02),
                 Center(
                     child: ElevatedButton(
-                        style: stylebutter(button ? Colors.blue : Colors.grey,
-                            width * 0.4, height * 0.08),
+                        style: stylebutter(
+                            button ? Colors.blue : Colors.grey,
+                            width * provider.buttonSized_w,
+                            height * provider.buttonSized_h),
                         onPressed: () {
                           if (button) {
                             agreement();

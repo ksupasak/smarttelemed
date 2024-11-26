@@ -6,7 +6,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
 import 'package:http/http.dart' as http;
-import 'package:smarttelemed/myapp/widgetdew.dart';
 import 'package:smarttelemed/telemed/background.dart/background.dart';
 import 'package:smarttelemed/telemed/provider/provider.dart';
 import 'package:smarttelemed/telemed/views/openvidu/videocall.dart';
@@ -154,6 +153,39 @@ class _WaitingAppState extends State<WaitingApp> {
                 "Loading...",
                 style: TextStyle(fontSize: width * 0.03),
               ))),
+      bottomNavigationBar: SizedBox(
+        child: Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(4.0),
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const Userinformation()));
+                },
+                child: Container(
+                  height: height * 0.025,
+                  width: width * 0.15,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(
+                          color: const Color.fromARGB(255, 201, 201, 201),
+                          width: width * 0.002)),
+                  child: Center(
+                      child: Text(
+                    '< ย้อนกลับ',
+                    style: TextStyle(
+                        fontSize: width * 0.03,
+                        color: const Color.fromARGB(255, 201, 201, 201)),
+                  )),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -195,31 +227,31 @@ class _WaitingAppState extends State<WaitingApp> {
                   const CircularProgressIndicator(
                     color: Color.fromARGB(255, 0, 139, 130),
                   ),
-                  Center(
-                    child: GestureDetector(
-                        onTap: () {
-                          Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      const Userinformation()));
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Container(
-                            width: width * 0.1,
-                            decoration: BoxDecoration(
-                                border: Border.all(color: Colors.grey)),
-                            child: Center(
-                              child: Text(
-                                S.of(context)!.leave,
-                                style: TextStyle(
-                                    color: Colors.red, fontSize: width * 0.03),
-                              ),
-                            ),
-                          ),
-                        )),
-                  )
+                  // Center(
+                  //   child: GestureDetector(
+                  //       onTap: () {
+                  //         Navigator.pushReplacement(
+                  //             context,
+                  //             MaterialPageRoute(
+                  //                 builder: (context) =>
+                  //                     const Userinformation()));
+                  //       },
+                  //       child: Padding(
+                  //         padding: const EdgeInsets.all(8.0),
+                  //         child: Container(
+                  //           width: width * 0.1,
+                  //           decoration: BoxDecoration(
+                  //               border: Border.all(color: Colors.grey)),
+                  //           child: Center(
+                  //             child: Text(
+                  //               S.of(context)!.leave,
+                  //               style: TextStyle(
+                  //                   color: Colors.red, fontSize: width * 0.03),
+                  //             ),
+                  //           ),
+                  //         ),
+                  //       )),
+                  // )
                 ],
               ),
             ),
@@ -268,32 +300,6 @@ class _WaitingAppState extends State<WaitingApp> {
                         const CircularProgressIndicator(
                           color: Color.fromARGB(255, 0, 139, 130),
                         ),
-                        Center(
-                          child: GestureDetector(
-                              onTap: () {
-                                Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const Userinformation()));
-                              },
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Container(
-                                  width: width * 0.1,
-                                  decoration: BoxDecoration(
-                                      border: Border.all(color: Colors.grey)),
-                                  child: Center(
-                                    child: Text(
-                                      S.of(context)!.leave,
-                                      style: TextStyle(
-                                          color: Colors.red,
-                                          fontSize: width * 0.03),
-                                    ),
-                                  ),
-                                ),
-                              )),
-                        )
                       ],
                     ),
                   ),
@@ -366,28 +372,28 @@ class _WaitingAppState extends State<WaitingApp> {
                   const CircularProgressIndicator(
                     color: Color.fromARGB(255, 0, 139, 130),
                   ),
-                  Center(
-                    child: GestureDetector(
-                        onTap: () {
-                          Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      const Userinformation()));
-                        },
-                        child: Container(
-                          width: width * 0.1,
-                          decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey)),
-                          child: Center(
-                            child: Text(
-                              S.of(context)!.leave,
-                              style: TextStyle(
-                                  color: Colors.red, fontSize: width * 0.03),
-                            ),
-                          ),
-                        )),
-                  )
+                  // Center(
+                  //   child: GestureDetector(
+                  //       onTap: () {
+                  //         Navigator.pushReplacement(
+                  //             context,
+                  //             MaterialPageRoute(
+                  //                 builder: (context) =>
+                  //                     const Userinformation()));
+                  //       },
+                  //       child: Container(
+                  //         width: width * 0.1,
+                  //         decoration: BoxDecoration(
+                  //             border: Border.all(color: Colors.grey)),
+                  //         child: Center(
+                  //           child: Text(
+                  //             S.of(context)!.leave,
+                  //             style: TextStyle(
+                  //                 color: Colors.red, fontSize: width * 0.03),
+                  //           ),
+                  //         ),
+                  //       )),
+                  // )
                 ],
               ),
             ),
@@ -400,6 +406,7 @@ class _WaitingAppState extends State<WaitingApp> {
   Widget choice(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
+    DataProvider provider = context.read<DataProvider>();
     return Stack(
       children: [
         const Background(),
@@ -429,7 +436,10 @@ class _WaitingAppState extends State<WaitingApp> {
               SizedBox(height: height * 0.02),
               Center(
                 child: ElevatedButton(
-                    style: stylebutter(Colors.blue, width * 0.4, height * 0.08),
+                    style: stylebutter(
+                        Colors.blue,
+                        width * provider.buttonSized_w,
+                        height * provider.buttonSized_h),
                     onPressed: () {
                       Navigator.pushReplacement(
                           context,
@@ -445,8 +455,10 @@ class _WaitingAppState extends State<WaitingApp> {
               SizedBox(height: height * 0.02),
               Center(
                 child: ElevatedButton(
-                    style:
-                        stylebutter(Colors.green, width * 0.4, height * 0.08),
+                    style: stylebutter(
+                        Colors.green,
+                        width * provider.buttonSized_w,
+                        height * provider.buttonSized_h),
                     onPressed: () {
                       add_appoint_today();
                     },
@@ -457,27 +469,27 @@ class _WaitingAppState extends State<WaitingApp> {
                     )),
               ),
               SizedBox(height: height * 0.02),
-              Center(
-                child: GestureDetector(
-                    onTap: () {
-                      Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const Userinformation()));
-                    },
-                    child: Container(
-                      width: width * 0.1,
-                      decoration:
-                          BoxDecoration(border: Border.all(color: Colors.grey)),
-                      child: Center(
-                        child: Text(
-                          S.of(context)!.leave,
-                          style: TextStyle(
-                              color: Colors.red, fontSize: width * 0.03),
-                        ),
-                      ),
-                    )),
-              )
+              // Center(
+              //   child: GestureDetector(
+              //       onTap: () {
+              //         Navigator.pushReplacement(
+              //             context,
+              //             MaterialPageRoute(
+              //                 builder: (context) => const Userinformation()));
+              //       },
+              //       child: Container(
+              //         width: width * 0.1,
+              //         decoration:
+              //             BoxDecoration(border: Border.all(color: Colors.grey)),
+              //         child: Center(
+              //           child: Text(
+              //             S.of(context)!.leave,
+              //             style: TextStyle(
+              //                 color: Colors.red, fontSize: width * 0.03),
+              //           ),
+              //         ),
+              //       )),
+              // )
             ],
           ),
         )

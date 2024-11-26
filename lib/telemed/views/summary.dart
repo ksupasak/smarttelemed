@@ -110,7 +110,7 @@ class _SummaryState extends State<Summary> {
     //  img Logo
     Uint8List? logoBytes;
     try {
-      final logoData = await rootBundle.load('assets/logo.png');
+      final logoData = await rootBundle.load('assets/icon/ic_launcher.png');
       logoBytes = logoData.buffer.asUint8List();
     } catch (e) {
       debugPrint("Logo not found: $e");
@@ -300,204 +300,254 @@ class _SummaryState extends State<Summary> {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
-
+    DataProvider provider = context.read<DataProvider>();
     return Scaffold(
-        body: Stack(
-      children: [
-        const Background(),
-        Positioned(
+      body: Stack(
+        children: [
+          const Background(),
+          Positioned(
             child: SizedBox(
-          width: width,
-          height: height,
-          child: ListView(
-            children: [
-              SizedBox(height: height * 0.13),
-              Center(
-                child: Container(
-                    width: width * 0.8,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10),
-                      boxShadow: const [
-                        BoxShadow(
-                            blurRadius: 0.5,
-                            color: Color(0xff48B5AA),
-                            offset: Offset(0, 3)),
-                      ],
-                    ),
-                    child: const Center(
-                      child: InformationCard(),
-                    )),
-              ),
-              SizedBox(height: height * 0.02),
-              Center(
-                child: Container(
-                  height: height * 0.5,
-                  width: width * 0.8,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                    color: Colors.white,
-                    boxShadow: const [
-                      BoxShadow(
-                          blurRadius: 2,
-                          spreadRadius: 2,
-                          color: Color.fromARGB(255, 188, 188, 188),
-                          offset: Offset(0, 2)),
-                    ],
-                  ),
-                  child: ListView(children: [
-                    SizedBox(height: height * 0.02),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text("ผลการตรวจ",
-                            style: TextStyle(fontSize: width * 0.04)),
-                      ],
-                    ),
-                    SizedBox(height: height * 0.02),
-                    Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                      SizedBox(
-                        width: width * 0.25,
-                        child: Text("DX :",
-                            style: TextStyle(
-                                color: Colors.green, fontSize: width * 0.03)),
-                      ),
-                      SizedBox(
-                        width: width * 0.5,
-                        child:
-                            Text(dx, style: TextStyle(fontSize: width * 0.03)),
-                      ),
-                    ]),
-                    SizedBox(height: height * 0.01),
-                    Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                      SizedBox(
-                        width: width * 0.25,
-                        child: Text("Doctor Note :",
-                            style: TextStyle(
-                                color: Colors.green, fontSize: width * 0.03)),
-                      ),
-                      SizedBox(
-                        width: width * 0.5,
-                        child: Text(doctor_note,
-                            style: TextStyle(fontSize: width * 0.03)),
-                      ),
-                    ]),
-                    Center(
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Container(
-                          width: width * 0.8,
-                          height: 1,
-                          color: Colors.grey,
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: height * 0.01),
-                    Center(
-                        child: Text("ค่าวัดสุขภาพ",
-                            style: TextStyle(fontSize: width * 0.04))),
-                    SizedBox(height: height * 0.01),
-                    resTojson2 != null
-                        ? Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Text(
-                                resTojson2["health_records"][0]["bmi"] != null
-                                    ? "BMI :${resTojson2["health_records"][0]["bmi"]}"
-                                    : "",
-                                style: TextStyle(fontSize: width * 0.03),
-                              ),
-                              Text(
-                                resTojson2["health_records"][0]["weight"] !=
-                                        null
-                                    ? "Weight :${resTojson2["health_records"][0]["weight"]}"
-                                    : "",
-                                style: TextStyle(fontSize: width * 0.03),
-                              ),
-                              Text(
-                                resTojson2["health_records"][0]["height"] !=
-                                        null
-                                    ? "Height :${resTojson2["health_records"][0]["height"]}"
-                                    : "",
-                                style: TextStyle(fontSize: width * 0.03),
-                              ),
-                            ],
-                          )
-                        : const SizedBox(),
-                    resTojson2 != null
-                        ? Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Text(
-                                resTojson2["health_records"][0]["bp"] != null
-                                    ? "BP :${resTojson2["health_records"][0]["bp"]}"
-                                    : "",
-                                style: TextStyle(fontSize: width * 0.03),
-                              ),
-                              Text(
-                                resTojson2["health_records"][0]["spo2"] != null
-                                    ? "Spo2 :${resTojson2["health_records"][0]["spo2"]}"
-                                    : "",
-                                style: TextStyle(fontSize: width * 0.03),
-                              ),
-                              Text(
-                                resTojson2["health_records"][0]["temp"] != null
-                                    ? "Temp :${resTojson2["health_records"][0]["temp"]}"
-                                    : "",
-                                style: TextStyle(fontSize: width * 0.03),
-                              ),
-                            ],
-                          )
-                        : const SizedBox(),
-                  ]),
-                ),
-              ),
-              SizedBox(height: height * 0.02),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Center(
-                  child: resTojson2 != null
-                      ? ElevatedButton(
-                          style: stylebutter(
-                              Colors.green, width * 0.4, height * 0.08),
-                          onPressed: () {
-                            printexam();
-                          },
-                          child: Text("ปริ้นผลตรวจ",
-                              style: TextStyle(
-                                  color: Colors.white, fontSize: width * 0.06)))
-                      : SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.05,
-                          height: MediaQuery.of(context).size.width * 0.05,
-                          child: const CircularProgressIndicator(),
-                        ),
-                ),
-              ),
-              Center(
-                child: GestureDetector(
-                    onTap: () {
-                      Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const Userinformation()));
-                    },
+              width: width,
+              height: height,
+              child: ListView(
+                children: [
+                  SizedBox(height: height * 0.13),
+                  Center(
                     child: Container(
-                      width: width * 0.1,
-                      decoration:
-                          BoxDecoration(border: Border.all(color: Colors.grey)),
-                      child: Center(
-                        child: Text(
-                          S.of(context)!.leave,
-                          style: TextStyle(
-                              color: Colors.red, fontSize: width * 0.03),
+                        width: width * 0.8,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(10),
+                          boxShadow: const [
+                            BoxShadow(
+                                blurRadius: 0.5,
+                                color: Color(0xff48B5AA),
+                                offset: Offset(0, 3)),
+                          ],
                         ),
+                        child: const Center(
+                          child: InformationCard(),
+                        )),
+                  ),
+                  SizedBox(height: height * 0.02),
+                  Center(
+                    child: Container(
+                      height: height * 0.5,
+                      width: width * 0.8,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15),
+                        color: Colors.white,
+                        boxShadow: const [
+                          BoxShadow(
+                              blurRadius: 2,
+                              spreadRadius: 2,
+                              color: Color.fromARGB(255, 188, 188, 188),
+                              offset: Offset(0, 2)),
+                        ],
                       ),
-                    )),
-              )
-            ],
-          ),
-        ))
-      ],
-    ));
+                      child: ListView(children: [
+                        SizedBox(height: height * 0.02),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text("ผลการตรวจ",
+                                style: TextStyle(fontSize: width * 0.04)),
+                          ],
+                        ),
+                        SizedBox(height: height * 0.02),
+                        Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SizedBox(
+                                width: width * 0.25,
+                                child: Text("DX :",
+                                    style: TextStyle(
+                                        color: Colors.green,
+                                        fontSize: width * 0.03)),
+                              ),
+                              SizedBox(
+                                width: width * 0.5,
+                                child: Text(dx,
+                                    style: TextStyle(fontSize: width * 0.03)),
+                              ),
+                            ]),
+                        SizedBox(height: height * 0.01),
+                        Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SizedBox(
+                                width: width * 0.25,
+                                child: Text("Doctor Note :",
+                                    style: TextStyle(
+                                        color: Colors.green,
+                                        fontSize: width * 0.03)),
+                              ),
+                              SizedBox(
+                                width: width * 0.5,
+                                child: Text(doctor_note,
+                                    style: TextStyle(fontSize: width * 0.03)),
+                              ),
+                            ]),
+                        Center(
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(
+                              width: width * 0.8,
+                              height: 1,
+                              color: Colors.grey,
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: height * 0.01),
+                        Center(
+                            child: Text("ค่าวัดสุขภาพ",
+                                style: TextStyle(fontSize: width * 0.04))),
+                        SizedBox(height: height * 0.01),
+                        resTojson2 != null
+                            ? Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Text(
+                                    resTojson2["health_records"][0]["bmi"] !=
+                                            null
+                                        ? "BMI :${resTojson2["health_records"][0]["bmi"]}"
+                                        : "",
+                                    style: TextStyle(fontSize: width * 0.03),
+                                  ),
+                                  Text(
+                                    resTojson2["health_records"][0]["weight"] !=
+                                            null
+                                        ? "Weight :${resTojson2["health_records"][0]["weight"]}"
+                                        : "",
+                                    style: TextStyle(fontSize: width * 0.03),
+                                  ),
+                                  Text(
+                                    resTojson2["health_records"][0]["height"] !=
+                                            null
+                                        ? "Height :${resTojson2["health_records"][0]["height"]}"
+                                        : "",
+                                    style: TextStyle(fontSize: width * 0.03),
+                                  ),
+                                ],
+                              )
+                            : const SizedBox(),
+                        resTojson2 != null
+                            ? Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Text(
+                                    resTojson2["health_records"][0]["bp"] !=
+                                            null
+                                        ? "BP :${resTojson2["health_records"][0]["bp"]}"
+                                        : "",
+                                    style: TextStyle(fontSize: width * 0.03),
+                                  ),
+                                  Text(
+                                    resTojson2["health_records"][0]["spo2"] !=
+                                            null
+                                        ? "Spo2 :${resTojson2["health_records"][0]["spo2"]}"
+                                        : "",
+                                    style: TextStyle(fontSize: width * 0.03),
+                                  ),
+                                  Text(
+                                    resTojson2["health_records"][0]["temp"] !=
+                                            null
+                                        ? "Temp :${resTojson2["health_records"][0]["temp"]}"
+                                        : "",
+                                    style: TextStyle(fontSize: width * 0.03),
+                                  ),
+                                ],
+                              )
+                            : const SizedBox(),
+                      ]),
+                    ),
+                  ),
+                  SizedBox(height: height * 0.02),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Center(
+                      child: resTojson2 != null
+                          ? ElevatedButton(
+                              style: stylebutter(
+                                  Colors.green,
+                                  width * provider.buttonSized_w,
+                                  height * provider.buttonSized_h),
+                              onPressed: () {
+                                printexam();
+                              },
+                              child: Text("ปริ้นผลตรวจ",
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: width * 0.06)))
+                          : SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.05,
+                              height: MediaQuery.of(context).size.width * 0.05,
+                              child: const CircularProgressIndicator(),
+                            ),
+                    ),
+                  ),
+                  // Center(
+                  //   child: GestureDetector(
+                  //       onTap: () {
+                  //         Navigator.pushReplacement(
+                  //             context,
+                  //             MaterialPageRoute(
+                  //                 builder: (context) => const Userinformation()));
+                  //       },
+                  //       child: Container(
+                  //         width: width * 0.1,
+                  //         decoration:
+                  //             BoxDecoration(border: Border.all(color: Colors.grey)),
+                  //         child: Center(
+                  //           child: Text(
+                  //             S.of(context)!.leave,
+                  //             style: TextStyle(
+                  //                 color: Colors.red, fontSize: width * 0.03),
+                  //           ),
+                  //         ),
+                  //       )),
+                  // )
+                ],
+              ),
+            ),
+          )
+        ],
+      ),
+      bottomNavigationBar: SizedBox(
+        child: Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(4.0),
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const Userinformation()));
+                },
+                child: Container(
+                  height: height * 0.025,
+                  width: width * 0.15,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(
+                          color: const Color.fromARGB(255, 201, 201, 201),
+                          width: width * 0.002)),
+                  child: Center(
+                      child: Text(
+                    '< ย้อนกลับ',
+                    style: TextStyle(
+                        fontSize: width * 0.03,
+                        color: const Color.fromARGB(255, 201, 201, 201)),
+                  )),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 
 class DataProvider with ChangeNotifier {
+  double buttonSized_w = 0.45;
+  double buttonSized_h = 0.08;
+
   List<String> debug = [];
   void debugPrintV(String data) {
     if (data.length >= 1000) {
@@ -103,7 +106,6 @@ class DataProvider with ChangeNotifier {
   Map datagateway = {};
   String hn = '';
   String vn = '';
-
   String phone = '';
   String imgae = '';
   void updateusergateway(Map data) {
@@ -116,7 +118,7 @@ class DataProvider with ChangeNotifier {
     fname = data['data']['fname'];
     lname = data['data']['lname'];
     phone = data['data']['phone'];
-    imgae = ""; //data['data']['img'];
+    imgae = data['data']['img'].toString();
     birthdate = data['data']['birthdate'];
     notifyListeners();
   }

@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:smarttelemed/myapp/provider/provider.dart';
 
-ButtonStyle stylebutter(Color color, double w, double h) {
+ButtonStyle stylebutter(
+  Color color,
+  double w,
+  double h,
+) {
   DataProvider provider = DataProvider();
   return ElevatedButton.styleFrom(
     fixedSize: Size(w, h),

@@ -68,7 +68,7 @@ dependencies:
   barcode_widget: ^2.0.2
   audioplayers: ^6.1.0
   process_run: ^0.12.2
-
+  virtual_keyboard_multi_language: ^1.1.2
   # openvidu_flutter:
   #    path: "vendors/openvidu-flutter"   
   

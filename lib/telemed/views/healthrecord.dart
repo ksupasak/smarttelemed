@@ -454,8 +454,10 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
               texthead: 'ชำระค่ารักษาพยาบาลเอง',
               buttonbar: [
                 ElevatedButton(
-                    style:
-                        stylebutter(Colors.green, width * 0.4, height * 0.08),
+                    style: stylebutter(
+                        Colors.green,
+                        width * provider.buttonSized_w,
+                        height * provider.buttonSized_h),
                     onPressed: () {
                       setState(() {
                         buttonsend = !buttonsend;
@@ -465,8 +467,10 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
                     },
                     child: Text(S.of(context)!.confirm)),
                 ElevatedButton(
-                    style:
-                        stylebutter(Colors.green, width * 0.4, height * 0.08),
+                    style: stylebutter(
+                        Colors.green,
+                        width * provider.buttonSized_w,
+                        height * provider.buttonSized_h),
                     onPressed: () {
                       Navigator.pop(context);
                     },
@@ -715,7 +719,9 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
                     child: buttonsend
                         ? ElevatedButton(
                             style: stylebutter(
-                                Colors.green, width * 0.4, height * 0.08),
+                                Colors.green,
+                                width * provider.buttonSized_w,
+                                height * provider.buttonSized_h),
                             onPressed: () {
                               setState(() {
                                 buttonsend = !buttonsend;
@@ -729,28 +735,28 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
                         : const SizedBox(child: CircularProgressIndicator()),
                   ),
                   SizedBox(height: height * 0.03),
-                  Center(
-                    child: GestureDetector(
-                        onTap: () {
-                          Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      const Userinformation()));
-                        },
-                        child: Container(
-                          width: width * 0.1,
-                          decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey)),
-                          child: Center(
-                            child: Text(
-                              S.of(context)!.leave,
-                              style: TextStyle(
-                                  color: Colors.red, fontSize: width * 0.03),
-                            ),
-                          ),
-                        )),
-                  ),
+                  // Center(
+                  //   child: GestureDetector(
+                  //       onTap: () {
+                  //         Navigator.pushReplacement(
+                  //             context,
+                  //             MaterialPageRoute(
+                  //                 builder: (context) =>
+                  //                     const Userinformation()));
+                  //       },
+                  //       child: Container(
+                  //         width: width * 0.1,
+                  //         decoration: BoxDecoration(
+                  //             border: Border.all(color: Colors.grey)),
+                  //         child: Center(
+                  //           child: Text(
+                  //             S.of(context)!.leave,
+                  //             style: TextStyle(
+                  //                 color: Colors.red, fontSize: width * 0.03),
+                  //           ),
+                  //         ),
+                  //       )),
+                  // ),
                   Row(
                     children: [
                       ElevatedButton.icon(
@@ -859,7 +865,7 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
           ),
           Positioned(
             bottom: 5,
-            left: 5,
+            right: 5,
             child: GestureDetector(
                 onTap: () {
                   showDialog(
@@ -867,7 +873,7 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
                       builder: (BuildContext context) {
                         return Scaffold(
                           appBar: AppBar(),
-                          body: Container(
+                          body: SizedBox(
                             height: height * 0.8,
                             child: ListView.builder(
                                 itemCount:
@@ -887,6 +893,39 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
                     Container(color: Colors.white, child: const Text("log"))),
           ),
         ],
+      ),
+      bottomNavigationBar: SizedBox(
+        child: Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(4.0),
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const Userinformation()));
+                },
+                child: Container(
+                  height: height * 0.025,
+                  width: width * 0.15,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(
+                          color: const Color.fromARGB(255, 201, 201, 201),
+                          width: width * 0.002)),
+                  child: Center(
+                      child: Text(
+                    '< ย้อนกลับ',
+                    style: TextStyle(
+                        fontSize: width * 0.03,
+                        color: const Color.fromARGB(255, 201, 201, 201)),
+                  )),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
