@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 import 'package:smarttelemed/telemed/background.dart/background.dart';
 import 'package:smarttelemed/telemed/provider/provider.dart';
 import 'package:smarttelemed/telemed/setting/setting.dart';
+import 'package:smarttelemed/telemed/views/register.dart';
 import 'package:smarttelemed/telemed/views/ui/numpad.dart';
 
 import 'package:smarttelemed/telemed/views/ui/stylebutton.dart';
@@ -113,26 +114,26 @@ class _HomeTelemedState extends State<HomeTelemed> {
         var response = await http.get(url);
         provider.debugPrintV("response $response");
         resTojsonGateway = json.decode(response.body);
+        // provider.debugPrintV("resTojsonGateway ลง provider$resTojsonGateway");
       } catch (e) {
         provider.debugPrintV("error senvisitGateway $e");
-        provider.debugPrintV("ข้ามการอ่านข้อมูลผ่านGateway");
-        provider.debugPrintV(
-            "get ข้อมูลจากบัตรประชน เปลี่ยนเป็นขอมูลจำรอง gateway");
-        String databirthDate = resTojson_getIdCard['birthDate'];
-        String birthdate =
-            "${databirthDate[0]}${databirthDate[1]}${databirthDate[2]}${databirthDate[3]}-${databirthDate[4]}${databirthDate[5]}-${databirthDate[6]}${databirthDate[7]}";
-        Map data = {
-          "data": {
-            "hn": "123456",
-            "vn": "Text1234",
-            "prefix_name": "",
-            "fname": resTojson_getIdCard['fname'],
-            "lname": resTojson_getIdCard['lname'],
-            "phone": "0987654321",
-            "birthdate": birthdate
-          }
-        };
-        provider.updateusergateway(data);
+        // provider.debugPrintV("ข้ามการอ่านข้อมูลผ่านGateway");
+        // provider.debugPrintV(
+        //     "get ข้อมูลจากบัตรประชน เปลี่ยนเป็นขอมูลจำรอง gateway");
+        // String databirthDate = resTojson_getIdCard['birthDate'];
+        // String birthdate =
+        //     "${databirthDate[0]}${databirthDate[1]}${databirthDate[2]}${databirthDate[3]}-${databirthDate[4]}${databirthDate[5]}-${databirthDate[6]}${databirthDate[7]}";
+        // Map data = {
+        //   "data": {
+        //     "hn": "123456",
+        //     "vn": "Text1234",
+        //     "prefix_name": "",
+        //     "fname": resTojson_getIdCard['fname'],
+        //     "lname": resTojson_getIdCard['lname'],
+        //     "phone": "0987654321",
+        //     "birthdate": birthdate
+        //   }
+        // };
 
         sendId();
       } finally {
@@ -223,7 +224,7 @@ class _HomeTelemedState extends State<HomeTelemed> {
           'last_name': provider.lname,
           'tel': provider.phone,
           'hn': provider.hn,
-          'picture64': provider.imgae,
+          // 'picture64': provider.imgae,
         });
         var resTojson = json.decode(res.body);
         if (res.statusCode == 200) {
@@ -247,8 +248,11 @@ class _HomeTelemedState extends State<HomeTelemed> {
         provider.debugPrintV("ไม่มี HN หรือ ไม่มี phone");
         setState(() {
           status = false;
+          timerreadIDCard?.cancel();
+          checkcardout?.cancel;
         });
-        //ไปหน้าสมัค
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => const Register()));
       }
     } else {
       setState(() {
@@ -284,8 +288,8 @@ class _HomeTelemedState extends State<HomeTelemed> {
         }
       }
       if (provider.phone == "") {
-        if (resTojson_esm["data"]["tal"] != null) {
-          provider.phone = resTojson_esm["data"]["tal"];
+        if (resTojson_esm["data"]["tel"] != null) {
+          provider.phone = resTojson_esm["data"]["tel"];
           provider.debugPrintV("phone =='' เพิ่ม phone ลง provider");
         } else {
           provider.debugPrintV("ในระบบESMไม่มี phone");
@@ -463,12 +467,17 @@ class _HomeTelemedState extends State<HomeTelemed> {
                           provider.debugPrintV('Setting');
                         }
                       },
-                      child: Container(
-                          color: Colors.white,
-                          child: Text(
-                            "ตั้งค่า",
-                            style: TextStyle(fontSize: width * 0.03),
-                          ))),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                            color: Colors.white,
+                            child: const Icon(Icons.settings)
+                            // Text(
+                            //   "ตั้งค่า",
+                            //   style: TextStyle(fontSize: width * 0.03),
+                            // )
+                            ),
+                      )),
                   GestureDetector(
                       onTap: () {
                         showDialog(

@@ -53,8 +53,10 @@ class DataProvider with ChangeNotifier {
   String correlationId = '';
   String fname = '';
   String lname = '';
+  String prefixName = '';
   String birthdate = '';
   String age = '';
+
   void updateuserinformation(Map data) {
     debugPrintV("พบข้อมูล ID Card :$data");
     dataUserIDCard = data;
@@ -65,11 +67,30 @@ class DataProvider with ChangeNotifier {
     claimTypeName = data['claimTypes'][0]["claimTypeName"];
     correlationId = data["correlationId"];
     age = data["age"];
+    prefixName = getprefix_name(data["titleName"].toString());
     String databirthDate;
     databirthDate = data['birthDate'];
     birthdate =
         "${databirthDate[0]}${databirthDate[1]}${databirthDate[2]}${databirthDate[3]}-${databirthDate[4]}${databirthDate[5]}-${databirthDate[6]}${databirthDate[7]}";
     notifyListeners();
+  }
+
+  String getprefix_name(String titleName) {
+    if (titleName == "001") {
+      return "เด็กชาย";
+    } else if (titleName == "002") {
+      return "เด็กหญิง";
+    } else if (titleName == "003") {
+      return "นาย";
+    }
+    if (titleName == "004") {
+      return "นางสาว";
+    }
+    if (titleName == "005") {
+      return "นาง";
+    } else {
+      return "--";
+    }
   }
 
   String claimCode = '';
@@ -82,7 +103,7 @@ class DataProvider with ChangeNotifier {
   Map datagateway = {};
   String hn = '';
   String vn = '';
-  String prefixName = '';
+
   String phone = '';
   String imgae = '';
   void updateusergateway(Map data) {

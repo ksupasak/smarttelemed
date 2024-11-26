@@ -303,27 +303,27 @@ class _UserinformationState extends State<Userinformation> {
                       )
                     : const Text(""),
                 SizedBox(height: height * 0.03),
-                Center(
-                  child: GestureDetector(
-                      onTap: () {
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const HomeTelemed()));
-                      },
-                      child: Container(
-                        width: width * 0.1,
-                        decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey)),
-                        child: Center(
-                          child: Text(
-                            S.of(context)!.leave,
-                            style: TextStyle(
-                                color: Colors.red, fontSize: width * 0.035),
-                          ),
-                        ),
-                      )),
-                )
+                // Center(
+                //   child: GestureDetector(
+                //       onTap: () {
+                //         Navigator.pushReplacement(
+                //             context,
+                //             MaterialPageRoute(
+                //                 builder: (context) => const HomeTelemed()));
+                //       },
+                //       child: Container(
+                //         width: width * 0.1,
+                //         decoration: BoxDecoration(
+                //             border: Border.all(color: Colors.grey)),
+                //         child: Center(
+                //           child: Text(
+                //             S.of(context)!.leave,
+                //             style: TextStyle(
+                //                 color: Colors.red, fontSize: width * 0.035),
+                //           ),
+                //         ),
+                //       )),
+                // )
               ],
             ),
           ),
@@ -357,6 +357,39 @@ class _UserinformationState extends State<Userinformation> {
                     Container(color: Colors.white, child: const Text("log"))),
           ),
         ],
+      ),
+      bottomNavigationBar: SizedBox(
+        child: Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(4.0),
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const HomeTelemed()));
+                },
+                child: Container(
+                  height: height * 0.025,
+                  width: width * 0.15,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(
+                          color: const Color.fromARGB(255, 201, 201, 201),
+                          width: width * 0.002)),
+                  child: Center(
+                      child: Text(
+                    '< ย้อนกลับ',
+                    style: TextStyle(
+                        fontSize: width * 0.03,
+                        color: const Color.fromARGB(255, 201, 201, 201)),
+                  )),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
