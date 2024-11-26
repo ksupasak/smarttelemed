@@ -18,6 +18,42 @@
     "id_card_number": "เลขบัตรประชาชน",   
     "full_name": "ชื่อ - นามสกุล",   
     "birth_date": "วันเดือนปีเกิด", 
-    "phone_number": "เบอร์โทร"
+    "phone_number": "เบอร์โทร",
+
+    "home_promptIdOrScanHN":"กรุณาเสียบบัตรประชาชนหรือ เเสกน HN เพื่อทำรายการต่อ",
+    "home_CardSettingEnabled":"การตั้งค่าปังคับใช้บัตรเปิดอยู่",
+    
+
+    "regis_register" : "ลงทะเบียน",
+    "regis_prefix" : "คำนำหน้าชื่อ :",
+    "regis_firstname" : "ชื่อ :",
+    "regis_lastname" : "นามสกุล :",
+    "regis_birthday":"วันเกิด(ปี เดือน วัน) :",
+    "regis_IdCard":"เลขประจำตัวประชาชน :",
+    "regis_phone":"เบอร์โทร",
+    "regis_enterphone":"กรุณากรอกเบอร์โทร",
+    "regis_codeHN":"รหัส HN",
+    "regis_enterHN":"กรุณากรอก HN",
+    "regis_backButton":"< ย้อนกลับ",
+
+    "health_send":"ส่ง"
+
+    "summary_analyze":"วิเคราะห์",
+    "summary_dispMed":"จ่ายยา",
+    "summary_detail":"รายละเอียด",
+    "summary_testResult":"ผลการตรวจ",
+    "summary_dx":"DX",
+    "summary_dc_note":"Doctor Note :",
+    "summary_healthMeasurement":"วัดค่าสุขภาพ",
+    "summary_printTestResults":"ปริ้นผลตรวจ",
+
+    "Userinformation_OK":"ตกลง",
+    "Userinformation_pleaseCheckHealthFirst":"(กรุณาตรวจสุขภาพก่อน)",
+    "Userinformation_back":"< ย้อนกลับ",
+
+    "waitting_cancle":"ยกเลิก",
+    "waitting_ok":"ตกลง",
+    "waitting_pleaseCheckHealthFirst":"(กรุณาตรวจสุขภาพก่อน)",
+
    
 }
