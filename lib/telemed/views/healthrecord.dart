@@ -444,40 +444,36 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
       setState(() {
         buttonsend = !buttonsend;
       });
-      showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            double height = MediaQuery.of(context).size.height;
-            double width = MediaQuery.of(context).size.width;
+      sendDataHealthrecord();
+      // showDialog(
+      //     context: context,
+      //     builder: (BuildContext context) {
+      //       double height = MediaQuery.of(context).size.height;
+      //       double width = MediaQuery.of(context).size.width;
 
-            return Popup(
-              texthead: 'ชำระค่ารักษาพยาบาลเอง',
-              buttonbar: [
-                ElevatedButton(
-                    style: stylebutter(
-                        Colors.green,
-                        width * provider.buttonSized_w,
-                        height * provider.buttonSized_h),
-                    onPressed: () {
-                      setState(() {
-                        buttonsend = !buttonsend;
-                      });
-                      Navigator.pop(context);
-                      sendDataHealthrecord();
-                    },
-                    child: Text(S.of(context)!.confirm)),
-                ElevatedButton(
-                    style: stylebutter(
-                        Colors.green,
-                        width * provider.buttonSized_w,
-                        height * provider.buttonSized_h),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: Text(S.of(context)!.leave))
-              ],
-            );
-          });
+      //       return Popup(
+      //         texthead: 'ชำระค่ารักษาพยาบาลเอง',
+      //         fontSize: width * 0.03,
+      //         buttonbar: [
+      //           ElevatedButton(
+      //               style: stylebutter(
+      //                   Colors.green,
+      //                   width * provider.buttonSized_w,
+      //                   height * provider.buttonSized_h),
+      //               onPressed: () {
+      //                 setState(() {
+      //                   buttonsend = !buttonsend;
+      //                 });
+      //                 Navigator.pop(context);
+      //                 sendDataHealthrecord();
+      //               },
+      //               child: Text(
+      //                 S.of(context)!.confirm,
+      //                 style: TextStyle(fontSize: width * 0.03),
+      //               )),
+      //         ],
+      //       );
+      //     });
     }
   }
 ////////////////////////////////////////////////////////////////////////////
@@ -486,7 +482,7 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
     DataProvider provider = context.read<DataProvider>();
 
     provider.debugPrintV(
-        "ส่งค่าHealthrecord${context.read<DataProvider>().platfromURL}");
+        "ส่งค่าHealthrecord ${context.read<DataProvider>().platfromURL}");
     var url =
         Uri.parse('${context.read<DataProvider>().platfromURL}/add_visit');
     var res = await http.post(url, body: {
@@ -516,44 +512,38 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
   ////////////////////////////////////////////////////////////////////////////
   void sendHealthrecordGateway() async {
     DataProvider provider = context.read<DataProvider>();
+    var body = jsonEncode({
+      "vn": provider.vn,
+      "hn": provider.hn,
+      "cid": provider.id,
+      "bmi": provider.bmiHealthrecord.text,
+      "bpd": provider.diaHealthrecord.text,
+      "bps": provider.sysHealthrecord.text,
+      "fbs": "0",
+      "rr": "0",
+      "pulse": provider.pulseHealthrecord.text,
+      "spo2": provider.spo2Healthrecord.text,
+      "temp": provider.tempHealthrecord.text,
+      "height": provider.heightHealthrecord.text,
+      "weight": provider.weightHealthrecord.text,
+      "cc": "หมายเหตุ"
+    });
     try {
-      var url = Uri.parse(
-          '${provider.platfromURLGateway}/api/patient?cid=${provider.id}');
       provider.debugPrintV(
-          "senvisitGateway :${provider.platfromURLGateway}/api/patient?cid=${provider.id}");
-      var response = await http.post(url, body: {
-        // "temp": context.read<DataProvider>().tempHealthrecord.text,
-        // "weight": context.read<DataProvider>().weightHealthrecord.text,
-        // "bp_sys": context.read<DataProvider>().sysHealthrecord.text,
-        // "bp_dia": context.read<DataProvider>().diaHealthrecord.text,
-        // "pulse_rate": context.read<DataProvider>().pulseHealthrecord.text,
-        // "spo2": context.read<DataProvider>().spo2Healthrecord.text,
-        // "height": context.read<DataProvider>().heightHealthrecord.text,
-        // "bmi": context.read<DataProvider>().bmiHealthrecord.text,
-        // "bp":
-        //     "${context.read<DataProvider>().sysHealthrecord.text}/${context.read<DataProvider>().diaHealthrecord.text}",
-        "claim_code": context.read<DataProvider>().claimCode.toString(),
-        "vn": provider.vn,
-        "hn": provider.hn,
-        "cid": provider.id,
-        "bmi": provider.bmiHealthrecord.text,
-        "bpd": provider.diaHealthrecord.text,
-        "bps": provider.sysHealthrecord.text,
-        "fbs": "N/A",
-        "rr": "N/A",
-        "pulse": provider.pulseHealthrecord.text,
-        "spo2": provider.spo2Healthrecord.text,
-        "temp": provider.tempHealthrecord.text,
-        "height": provider.heightHealthrecord.text,
-        "weight": provider.weightHealthrecord.text,
-        "cc": "มหายเหตุ"
-      });
-      provider.debugPrintV("response $response");
+          "senvisitGateway :${provider.platfromURLGateway}/api/vitalsign");
+      var url = Uri.parse('${provider.platfromURLGateway}/api/vitalsign');
+      var response = await http
+          .post(headers: {'Content-Type': 'application/json'}, url, body: body);
+      provider.debugPrintV("response Gateway$response");
       var resTojsonGateway = json.decode(response.body);
       provider.debugPrintV("resTojsonGateway $resTojsonGateway");
-    } catch (e) {}
-    Navigator.pushReplacement(context,
-        MaterialPageRoute(builder: (context) => const Userinformation()));
+      Navigator.pushReplacement(context,
+          MaterialPageRoute(builder: (context) => const Userinformation()));
+    } catch (e) {
+      provider.debugPrintV("error Gateway $e");
+      Navigator.pushReplacement(context,
+          MaterialPageRoute(builder: (context) => const Userinformation()));
+    }
   }
 
   @override

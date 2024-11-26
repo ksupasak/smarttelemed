@@ -281,7 +281,7 @@ class _RegisterState extends State<Register> {
                                             child: Text(
                                             phone.text.length > 10
                                                 ? "เลขเกิน10หลัก"
-                                                : "กรุณากรอก็เบอร์โทร",
+                                                : "กรุณากรอกก็เบอร์โทร",
                                             style: TextStyle(color: Colors.red),
                                           ))
                                         : Center(
@@ -297,7 +297,7 @@ class _RegisterState extends State<Register> {
                                     hn.text == ""
                                         ? const Center(
                                             child: Text(
-                                            "กรุณากรอก็HN",
+                                            "กรุณากรอกก็HN",
                                             style: TextStyle(color: Colors.red),
                                           ))
                                         : const SizedBox(),
