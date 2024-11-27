@@ -80,6 +80,7 @@ class _SettingListPrinterState extends State<SettingListPrinter> {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
         iconTheme: const IconThemeData(color: Colors.black),
@@ -116,8 +117,22 @@ class _SettingListPrinterState extends State<SettingListPrinter> {
                   onTap: () => selectPrinter(listNamePrinters[index]),
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Text(listNamePrinters[index],
-                        style: TextStyle(fontSize: width * 0.03)),
+                    child: Container(
+                      height: height * 0.05,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          color: const Color.fromARGB(255, 255, 255, 255),
+                          boxShadow: const [
+                            BoxShadow(
+                              blurRadius: 5.0,
+                              color: Color.fromARGB(255, 63, 86, 83),
+                            )
+                          ]),
+                      child: Center(
+                        child: Text(listNamePrinters[index],
+                            style: TextStyle(fontSize: width * 0.03)),
+                      ),
+                    ),
                   ),
                 );
               },

@@ -77,11 +77,80 @@ class _SettingMinMaxState extends State<SettingMinMax> {
     super.initState();
   }
 
+  Widget box(
+      {required String name,
+      required TextEditingController dataTextMin,
+      required TextEditingController dataTextMax}) {
+    double width = MediaQuery.of(context).size.width;
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(5),
+            color: const Color.fromARGB(255, 255, 255, 255),
+            boxShadow: const [
+              BoxShadow(
+                blurRadius: 5.0,
+                color: Color.fromARGB(255, 63, 86, 83),
+              )
+            ]),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                name,
+                style: TextStyle(fontSize: width * 0.03),
+              ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    "Min",
+                    style: TextStyle(fontSize: width * 0.03),
+                  ),
+                ),
+                SizedBox(
+                  width: width * 0.3,
+                  child: TextField(
+                    textAlign: TextAlign.center,
+                    keyboardType: TextInputType.number,
+                    controller: dataTextMin,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    "Max",
+                    style: TextStyle(fontSize: width * 0.03),
+                  ),
+                ),
+                SizedBox(
+                  width: width * 0.3,
+                  child: TextField(
+                    textAlign: TextAlign.center,
+                    keyboardType: TextInputType.number,
+                    controller: dataTextMax,
+                  ),
+                )
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
 
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
         iconTheme: const IconThemeData(color: Colors.black),
@@ -104,171 +173,11 @@ class _SettingMinMaxState extends State<SettingMinMax> {
       ),
       body: ListView(
         children: [
-          Row(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  "SYS",
-                  style: TextStyle(fontSize: width * 0.03),
-                ),
-              ),
-              Text(
-                "min",
-                style: TextStyle(fontSize: width * 0.03),
-              ),
-              SizedBox(
-                width: width * 0.3,
-                child: TextField(
-                  keyboardType: TextInputType.number,
-                  controller: minSYS,
-                ),
-              ),
-              Text(
-                "max",
-                style: TextStyle(fontSize: width * 0.03),
-              ),
-              SizedBox(
-                width: width * 0.3,
-                child: TextField(
-                  keyboardType: TextInputType.number,
-                  controller: maxSYS,
-                ),
-              )
-            ],
-          ),
-          Row(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  "DIA",
-                  style: TextStyle(fontSize: width * 0.03),
-                ),
-              ),
-              Text(
-                "min",
-                style: TextStyle(fontSize: width * 0.03),
-              ),
-              SizedBox(
-                width: width * 0.3,
-                child: TextField(
-                  keyboardType: TextInputType.number,
-                  controller: minDIS,
-                ),
-              ),
-              Text(
-                "max",
-                style: TextStyle(fontSize: width * 0.03),
-              ),
-              SizedBox(
-                width: width * 0.3,
-                child: TextField(
-                  keyboardType: TextInputType.number,
-                  controller: maxDIS,
-                ),
-              )
-            ],
-          ),
-          Row(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  "TEMP",
-                  style: TextStyle(fontSize: width * 0.03),
-                ),
-              ),
-              Text(
-                "min",
-                style: TextStyle(fontSize: width * 0.03),
-              ),
-              SizedBox(
-                width: width * 0.3,
-                child: TextField(
-                  keyboardType: TextInputType.number,
-                  controller: minTEMP,
-                ),
-              ),
-              Text(
-                "max",
-                style: TextStyle(fontSize: width * 0.03),
-              ),
-              SizedBox(
-                width: width * 0.3,
-                child: TextField(
-                  keyboardType: TextInputType.number,
-                  controller: maxTEMP,
-                ),
-              )
-            ],
-          ),
-          Row(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  "SPO2",
-                  style: TextStyle(fontSize: width * 0.03),
-                ),
-              ),
-              Text(
-                "min",
-                style: TextStyle(fontSize: width * 0.03),
-              ),
-              SizedBox(
-                width: width * 0.3,
-                child: TextField(
-                  keyboardType: TextInputType.number,
-                  controller: minSPO2,
-                ),
-              ),
-              Text(
-                "max",
-                style: TextStyle(fontSize: width * 0.03),
-              ),
-              SizedBox(
-                width: width * 0.3,
-                child: TextField(
-                  keyboardType: TextInputType.number,
-                  controller: maxSPO2,
-                ),
-              )
-            ],
-          ),
-          Row(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  "BMI",
-                  style: TextStyle(fontSize: width * 0.03),
-                ),
-              ),
-              Text(
-                "min",
-                style: TextStyle(fontSize: width * 0.03),
-              ),
-              SizedBox(
-                width: width * 0.3,
-                child: TextField(
-                  keyboardType: TextInputType.number,
-                  controller: minBMI,
-                ),
-              ),
-              Text(
-                "max",
-                style: TextStyle(fontSize: width * 0.03),
-              ),
-              SizedBox(
-                width: width * 0.3,
-                child: TextField(
-                  keyboardType: TextInputType.number,
-                  controller: maxBMI,
-                ),
-              )
-            ],
-          )
+          box(name: "SYS", dataTextMin: minSYS, dataTextMax: maxSYS),
+          box(name: "DIA", dataTextMin: minDIS, dataTextMax: maxDIS),
+          box(name: "TEMP", dataTextMin: minTEMP, dataTextMax: maxTEMP),
+          box(name: "SPO2", dataTextMin: minSPO2, dataTextMax: maxSPO2),
+          box(name: "BMI", dataTextMin: minBMI, dataTextMax: maxBMI),
         ],
       ),
     );

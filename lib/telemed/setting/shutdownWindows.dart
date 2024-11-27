@@ -28,6 +28,14 @@ class _ShutdownWindowsState extends State<ShutdownWindows> {
     });
   }
 
+  void restartApp() async {
+    final executable = Platform.executable;
+
+    await Process.start(executable, ['run']);
+
+    exit(0);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,19 +45,49 @@ class _ShutdownWindowsState extends State<ShutdownWindows> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                shadowColor: Colors.grey,
+                elevation: 5,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(5),
+                ),
+              ),
               onPressed: () {
-                restartWindows();
+                restartApp();
               },
-              child: const Text("RestartWindows"),
+              child: const Text("Restart App"),
             ),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                shadowColor: Colors.grey,
+                elevation: 5,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(5),
+                ),
+              ),
+              onPressed: () {
+                restartWindows();
+              },
+              child: const Text("Restart Windows"),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                shadowColor: Colors.grey,
+                elevation: 5,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(5),
+                ),
+              ),
               onPressed: () {
                 shutdownWindows();
               },
-              child: const Text("ShutdownWindows"),
+              child: const Text("Shutdown Windows"),
             ),
           ),
         ],

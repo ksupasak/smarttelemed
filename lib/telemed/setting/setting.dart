@@ -87,7 +87,7 @@ class _SettingState extends State<Setting> {
                                     builder: (context) =>
                                         const SettingListPrinter()));
                           },
-                          child: BoxSetting(text: 'ListPrinter')),
+                          child: BoxSetting(text: 'List Printer')),
                       GestureDetector(
                           onTap: () {
                             Navigator.push(

@@ -101,9 +101,18 @@ class _LanguageAppState extends State<LanguageApp> {
                   child: Container(
                     height: height * 0.05,
                     decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5),
                         color: s == language[index]
                             ? Colors.green
-                            : const Color.fromARGB(255, 226, 226, 226)),
+                            : const Color.fromARGB(255, 226, 226, 226),
+                        boxShadow: [
+                          BoxShadow(
+                            blurRadius: 5.0,
+                            color: s == language[index]
+                                ? Colors.green
+                                : const Color.fromARGB(255, 226, 226, 226),
+                          )
+                        ]),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
