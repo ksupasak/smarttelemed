@@ -6,6 +6,8 @@ import 'package:smarttelemed/telemed/provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:smarttelemed/telemed/views/myapp.dart';
 import 'package:smarttelemed/telemed/views/ui/stylebutton.dart';
+import 'dart:io';
+import 'package:process/process.dart';
 
 class LanguageApp extends StatefulWidget {
   const LanguageApp({super.key});
@@ -28,6 +30,17 @@ class _LanguageAppState extends State<LanguageApp> {
     }
   }
 
+  void restartApp() async {
+    // Get the current executable path
+    final executable = Platform.executable;
+
+    // Start the process again
+    await Process.start(executable, ['run']);
+
+    // Exit the current app
+    exit(0);
+  }
+
   void saveLanguageApp(String s) async {
     setState(() {
       status_safe = true;
@@ -36,6 +49,7 @@ class _LanguageAppState extends State<LanguageApp> {
     setState(() {
       status_safe = false;
     });
+    restartApp();
 
     ///รีสตาส
     ///
