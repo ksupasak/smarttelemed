@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
@@ -101,14 +102,14 @@ class _RegisterState extends State<Register> {
           });
         } else {
           provider
-              .debugPrintV("สมัคข้อมูลในESMใม่สำเร็จ error:${res.statusCode}");
+              .debugPrintV("สมัครข้อมูลในESMใม่สำเร็จ error:${res.statusCode}");
           setState(() {
             status = false;
           });
         }
       }
     } catch (e) {
-      provider.debugPrintV("สมัคข้อมูลในESMใม่สำเร็จ error:$e");
+      provider.debugPrintV("สมัครข้อมูลในESMใม่สำเร็จ error:$e");
       setState(() {
         status = false;
       });
@@ -145,7 +146,10 @@ class _RegisterState extends State<Register> {
             )));
   }
 
-  Widget textdatauser({TextEditingController? child, String? namekeyboard}) {
+  Widget textdatauser({
+    TextEditingController? child,
+    String? namekeyboard,
+  }) {
     double width = MediaQuery.of(context).size.width;
     //double height = MediaQuery.of(context).size.height;
     TextStyle style2 =
@@ -280,12 +284,17 @@ class _RegisterState extends State<Register> {
                                     Text(S.of(context)!.regis_phone,
                                         style: style2),
                                     textdatauser(
-                                        child: phone, namekeyboard: "hn"),
+                                      child: phone,
+                                      namekeyboard: "hn",
+                                    ),
                                     phone.text == ""
                                         ? Center(
                                             child: Text(
+                                            // เลขเกิน 10 หลัก
                                             phone.text.length > 10
-                                                ? "เลขเกิน10หลัก"
+                                                ? S
+                                                    .of(context)!
+                                                    .regis_tenDigitNumberPrompt
                                                 : S
                                                     .of(context)!
                                                     .regis_enterphone,
@@ -294,8 +303,11 @@ class _RegisterState extends State<Register> {
                                           ))
                                         : Center(
                                             child: Text(
+                                            // เลขเกิน 10 หลัก
                                             phone.text.length > 10
-                                                ? "เลขเกิน10หลัก"
+                                                ? S
+                                                    .of(context)!
+                                                    .regis_tenDigitNumberPrompt
                                                 : "",
                                             style: const TextStyle(
                                                 color: Colors.red),
@@ -303,11 +315,13 @@ class _RegisterState extends State<Register> {
                                     Text(S.of(context)!.regis_codeHN,
                                         style: style2),
                                     textdatauser(
-                                        child: hn, namekeyboard: "phone"),
+                                      child: hn,
+                                      namekeyboard: "phone",
+                                    ),
                                     hn.text == ""
                                         ? Center(
                                             child: Text(
-                                            S.of(context)!.regis_enterphone,
+                                            S.of(context)!.regis_enterHN,
                                             style: const TextStyle(
                                                 color: Colors.red),
                                           ))

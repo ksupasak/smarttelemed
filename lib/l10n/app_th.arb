@@ -21,30 +21,58 @@
     "phone_number": "เบอร์โทร",
 
     "home_promptIdOrScanHN":"กรุณาเสียบบัตรประชาชนหรือ เเสกน HN เพื่อทำรายการต่อ",
-    "home_CardSettingEnabled":"การตั้งค่าปังคับใช้บัตรเปิดอยู่",
+    "home_CardSettingEnabled":"การตั้งค่าบังคับใช้บัตรเปิดอยู่",
     
 
-    "regis_register" : "ลงทะเบียน",
-    "regis_prefix" : "คำนำหน้าชื่อ :",
-    "regis_firstname" : "ชื่อ :",
-    "regis_lastname" : "นามสกุล :",
-    "regis_birthday":"วันเกิด(ปี เดือน วัน) :",
-    "regis_IdCard":"เลขประจำตัวประชาชน :",
+    "regis_register" :"ลงทะเบียน",
+    "regis_prefix" : "คำนำหน้าชื่อ ",
+    "regis_firstname" : "ชื่อ ",
+    "regis_lastname" : "นามสกุล ",
+    "regis_birthday":"วันเกิด(ปี เดือน วัน) ",
+    "regis_IdCard":"เลขประจำตัวประชาชน ",
     "regis_phone":"เบอร์โทร",
     "regis_enterphone":"กรุณากรอกเบอร์โทร",
     "regis_codeHN":"รหัส HN",
     "regis_enterHN":"กรุณากรอก HN",
     "regis_backButton":"< ย้อนกลับ",
+    "regis_tenDigitNumberPrompt":"เลขเกิน 10 หลัก",
 
     "health_send":"ส่ง",
+    "health_sys_too_low":"SYS ต่ำเกินไป",
+    "health_sys_too_high":"SYS สูงเกินไป",
+
+    "health_dia_too_low":"DIA ต่ำเกินไป",
+    "health_dia_too_high":"DIA สูงเกินไป",
+
+    "health_spo2_too_low":"Spo2 ต่ำเกินไป",
+    "health_spo2_too_high":"Spo2 สูงเกินไป",
+
+    "health_temp_too_low":"อุณหภูมิ ต่ำเกินไป",
+    "health_temp_too_high":"อุณหภูมิ สูงเกินไป",
+    
+    "health_bmi_too_low":"BMI ต่ำเกินไป",
+    "health_bmi_too_high":"BMI สูงเกินไป",
+    
 
     "summary_analyze":"วิเคราะห์",
     "summary_dispMed":"จ่ายยา",
     "summary_detail":"รายละเอียด",
     "summary_testResult":"ผลการตรวจ",
     "summary_dx":"DX",
-    "summary_dc_note":"Doctor Note :",
+    "summary_dc_note":"คำวินิจฉัยจากแพทย์ :",
     "summary_healthMeasurement":"วัดค่าสุขภาพ",
+
+    "summary_bmi":"วัดค่าสุขภาพ :",
+    "summary_weight":"น้ำหนัก :",
+    "summary_height":"ส่วนสูง :",  
+
+    "summary_bp":"ส่วนสูง :",  
+    "summary_spo2":"ส่วนสูง :",  
+    "summary_temp":"อุณภูมิร่างกาย :",  
+
+ 
+
+
     "summary_printTestResults":"ปริ้นผลตรวจ",
 
     "userinformation_OK":"ตกลง",

@@ -180,10 +180,10 @@ class _SummaryState extends State<Summary> {
       return pw.Column(
         crossAxisAlignment: pw.CrossAxisAlignment.start,
         children: [
-          pw.Text('วิเคราะห์', style: font_sizeBody),
+          pw.Text(S.of(context)!.summary_analyze, style: font_sizeBody),
           pw.Text(dx, style: font_sizeBody),
           pw.Text(
-            'จ่ายยา',
+            S.of(context)!.summary_dispMed,
             style: font_sizeBody,
           ),
           pw.Text(
@@ -191,7 +191,7 @@ class _SummaryState extends State<Summary> {
             style: font_sizeBody,
           ),
           pw.Text(
-            'รายละเอียด',
+            S.of(context)!.summary_detail,
             style: font_sizeBody,
           ),
           pw.Text(
@@ -350,7 +350,7 @@ class _SummaryState extends State<Summary> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text("ผลการตรวจ",
+                            Text(S.of(context)!.summary_testResult,
                                 style: TextStyle(fontSize: width * 0.04)),
                           ],
                         ),
@@ -360,7 +360,7 @@ class _SummaryState extends State<Summary> {
                             children: [
                               SizedBox(
                                 width: width * 0.25,
-                                child: Text("DX :",
+                                child: Text(S.of(context)!.summary_dx, // dx
                                     style: TextStyle(
                                         color: Colors.green,
                                         fontSize: width * 0.03)),
@@ -377,7 +377,10 @@ class _SummaryState extends State<Summary> {
                             children: [
                               SizedBox(
                                 width: width * 0.25,
-                                child: Text("Doctor Note :",
+                                child: Text(
+                                    S
+                                        .of(context)!
+                                        .summary_dc_note, // doctor note
                                     style: TextStyle(
                                         color: Colors.green,
                                         fontSize: width * 0.03)),
@@ -400,7 +403,10 @@ class _SummaryState extends State<Summary> {
                         ),
                         SizedBox(height: height * 0.01),
                         Center(
-                            child: Text("ค่าวัดสุขภาพ",
+                            child: Text(
+                                S
+                                    .of(context)!
+                                    .summary_healthMeasurement, // วัดค่าสุขภาพ
                                 style: TextStyle(fontSize: width * 0.04))),
                         SizedBox(height: height * 0.01),
                         resTojson2 != null
@@ -409,23 +415,26 @@ class _SummaryState extends State<Summary> {
                                     MainAxisAlignment.spaceEvenly,
                                 children: [
                                   Text(
+                                    // BMI :
                                     resTojson2["health_records"][0]["bmi"] !=
                                             null
-                                        ? "BMI :${resTojson2["health_records"][0]["bmi"]}"
+                                        ? "${S.of(context)!.summary_bmi} ${resTojson2["health_records"][0]["bmi"]}"
                                         : "",
                                     style: TextStyle(fontSize: width * 0.03),
                                   ),
                                   Text(
+                                    // Weight :
                                     resTojson2["health_records"][0]["weight"] !=
                                             null
-                                        ? "Weight :${resTojson2["health_records"][0]["weight"]}"
+                                        ? "${S.of(context)!.summary_weight} ${resTojson2["health_records"][0]["weight"]}"
                                         : "",
                                     style: TextStyle(fontSize: width * 0.03),
                                   ),
                                   Text(
+                                    // Height :
                                     resTojson2["health_records"][0]["height"] !=
                                             null
-                                        ? "Height :${resTojson2["health_records"][0]["height"]}"
+                                        ? "${S.of(context)!.summary_height} ${resTojson2["health_records"][0]["height"]}"
                                         : "",
                                     style: TextStyle(fontSize: width * 0.03),
                                   ),
@@ -447,7 +456,7 @@ class _SummaryState extends State<Summary> {
                                   Text(
                                     resTojson2["health_records"][0]["spo2"] !=
                                             null
-                                        ? "Spo2 :${resTojson2["health_records"][0]["spo2"]}"
+                                        ? "ออกซิเจนในเลือด :${resTojson2["health_records"][0]["spo2"]}"
                                         : "",
                                     style: TextStyle(fontSize: width * 0.03),
                                   ),

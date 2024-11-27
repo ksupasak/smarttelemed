@@ -31,21 +31,37 @@
     "phone_number": "Phone Number"  ,
 
     "home_promptIdOrScanHN": "Please insert your ID card or scan the HN to proceed.",
-    "home_CardSettingEnabled": "The mandatory card usage setting is enabled.",
+    "home_CardSettingEnabled": "The card enforcement settings are enabled.",
 
     "regis_register": "Register",
-    "regis_prefix": "Prefix:",
-    "regis_firstname": "First Name:",
-    "regis_lastname": "Last Name:",
-    "regis_birthday": "Date of Birth (Year Month Day):",
-    "regis_IdCard": "ID Card Number:",
-    "regis_phone": "Phone Number",
+    "regis_prefix": "Prefix",
+    "regis_firstname": "First Name",
+    "regis_lastname": "Last Name",
+    "regis_birthday": "Date of Birth (Year Month Day)",
+    "regis_IdCard": "ID Card Number",
+    "regis_phone": "Phone Number :",
     "regis_enterphone": "Please enter your phone number",
     "regis_codeHN": "HN Code",
     "regis_enterHN": "Please enter your HN",
     "regis_backButton": "< Back",
+    "regis_tenDigitNumberPrompt":"Please enter a complete 10-digit number.",
 
     "health_send":"Send",
+    "health_sys_too_low":"The SYS is too low.",
+    "health_sys_too_high":"The SYS is too high.",
+
+    "health_dia_too_low":"The DIA is too low.",
+    "health_dia_too_high":"The DIA is too high.",
+
+    "health_spo2_too_low":"The Spo2 is too low.",
+    "health_spo2_too_high":"The Spo2 is too high.",
+    
+    "health_temp_too_low":"The temperature is too low.",
+    "health_temp_too_high":"The temperature is too high.",
+    
+    "health_bmi_too_low":"The BMI is too low.",
+    "health_bmi_too_high":"The BMI is too high.",
+
 
     "summary_analyze":"Analyze",
     "summary_dispMed":"Dispense medicine",
@@ -54,6 +70,11 @@
     "summary_dx":"DX :",
     "summary_dc_note":"Doctor Note :",
     "summary_healthMeasurement":"HEALTH MEASUREMENT",
+    
+    "summary_bmi":"BMI :",
+    "summary_weight":"Weight :",
+    "summary_height":"Height :",
+
     "summary_printTestResults":"Print Result",
 
     "userinformation_OK":"OK",
