@@ -158,3 +158,37 @@ Future deleteaPrinter() async {
   var store = intMapStoreFactory.store('printer');
   await store.drop(db);
 }
+////////////////////////////
+
+Future<Database> openLanguageApp() async {
+  Directory app = await getApplicationDocumentsDirectory();
+  String dbpart = '${app.path}/languageApp.db';
+  final db = await databaseFactoryIo.openDatabase(dbpart);
+  return db;
+}
+
+Future<List<RecordSnapshot<int, Map<String, Object?>>>> getLanguageApp() async {
+  Database db = await openLanguageApp();
+  var store = intMapStoreFactory.store('languageApp');
+  var records = await store.find(db);
+  return records;
+}
+
+Future<void> addLanguageApp(Map<String, Object?> data) async {
+  deleteaLanguageApp();
+  final db = await openLanguageApp();
+  final store = intMapStoreFactory.store('languageApp');
+  await store.add(db, data);
+  await db.close();
+}
+
+Future deleteaLanguageApp() async {
+  Database db = await openLanguageApp();
+  var store = intMapStoreFactory.store('languageApp');
+  await store.drop(db);
+}
+
+
+
+
+////////////////////////////

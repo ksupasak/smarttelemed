@@ -1,25 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sembast/sembast.dart';
+import 'package:smarttelemed/telemed/local/local.dart';
 import 'package:smarttelemed/telemed/provider/provider.dart';
 import 'package:smarttelemed/telemed/splash_screen/splashScreen.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class LocaleProvider extends ChangeNotifier {
-  // Locale _locale =  Locale('en'); // ค่าเริ่มต้นเป็นภาษาอังกฤษ
+// class LocaleProvider with ChangeNotifier {
+//   // Locale _locale =  Locale('en'); // ค่าเริ่มต้นเป็นภาษาอังกฤษ
 
-  Locale locales = Locale("th");
+//   String S = "th";
 
-  void setLocale(Locale locale) {
-    locales = locale;
-    notifyListeners(); // แจ้งให้ UI อัปเดต
-  }
-
-  void clearLocale() {
-    locales = const Locale('en'); // คืนค่าเป็นค่าเริ่มต้น
-    notifyListeners();
-  }
-}
+//   void setlanguageApp(String s) {
+//     S = s;
+//     debugPrint("-+++--++---+---");
+//     notifyListeners();
+//   }
+// }
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
@@ -29,13 +27,33 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  String s = "th";
+
+  void getS() async {
+    List<RecordSnapshot<int, Map<String, Object?>>>? language =
+        await getLanguageApp();
+    if (language.length != 0) {
+      for (RecordSnapshot<int, Map<String, Object?>> data in language) {
+        s = data["s"].toString();
+        setState(() {});
+      }
+    }
+  }
+
+  @override
+  void initState() {
+    getS();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: ((context) => DataProvider())),
+        //  ChangeNotifierProvider(create: ((context) => LocaleProvider())),
       ],
-      child: const MaterialApp(
+      child: MaterialApp(
         localizationsDelegates: const [
           S.delegate,
           GlobalMaterialLocalizations.delegate,
@@ -46,10 +64,10 @@ class _MyAppState extends State<MyApp> {
           Locale('en'),
           Locale('th'),
         ],
-        locale: Locale('en'), // LocaleProvider().locales,
+        locale: Locale(s), // LocaleProvider().locales,
         color: Colors.white,
         debugShowCheckedModeBanner: false,
-        home: Scaffold(body: SplashScreen()),
+        home: const Scaffold(body: SplashScreen()),
       ),
     );
   }

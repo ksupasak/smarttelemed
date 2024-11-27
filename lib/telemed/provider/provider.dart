@@ -43,11 +43,6 @@ class DataProvider with ChangeNotifier {
   String printername = '';
   Locale? languageApp;
 
-  void setlanguageApp(Locale locale) {
-    languageApp = locale;
-    notifyListeners();
-  }
-
 ///////////////////////////////
   Map dataUserIDCard = {};
   String id = '';
