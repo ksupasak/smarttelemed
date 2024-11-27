@@ -184,6 +184,13 @@ class _HomeTelemedState extends State<HomeTelemed> {
       resTojsonGateway = json.decode(response.body);
       // provider.debugPrintV("resTojsonGateway ลง provider$resTojsonGateway");
     } catch (e) {
+      texthead =
+          "error ${provider.platfromURLGateway}/api/patient?hn=${provider.id}";
+
+      Future.delayed(const Duration(seconds: 5), () {
+        texthead = "";
+        provider.id = "";
+      });
       provider.debugPrintV(
           "error ${provider.platfromURLGateway}/api/patient?hn=${provider.id} : $e");
     }
@@ -339,7 +346,6 @@ class _HomeTelemedState extends State<HomeTelemed> {
           provider.debugPrintV("ในระบบESMไม่มี phone");
         }
       }
-
       Timer(const Duration(seconds: 1), () {
         setState(() {
           Future.delayed(const Duration(seconds: 1), () {
