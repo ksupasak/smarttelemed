@@ -72,14 +72,10 @@
     "summary_spo2":"ส่วนสูง :",  
     "summary_temp":"อุณภูมิร่างกาย :",  
 
- 
-
-
     "summary_printTestResults":"ปริ้นผลตรวจ",
+    "summary_backButton":"< ย้อนกลับ",
 
     "userinformation_OK":"ตกลง",
-
-
     "userinformation_no_treatment_rights": "ไม่มีสิทธิ์การรักษา ชำระค่ารักษาเอง",  
     "userinformation_check_data": "ตรวจสอบข้อมูล",    
     "userinformation_id_card_number": "เลขบัตรประชาชน",   

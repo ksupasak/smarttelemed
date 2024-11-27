@@ -156,7 +156,7 @@ class _SummaryState extends State<Summary> {
         crossAxisAlignment: pw.CrossAxisAlignment.start,
         children: [
           pw.Text(
-            'ผลการตรวจ',
+            S.of(context)!.summary_testResult, // 'ผลการตรวจ',
             style: font_sizeBody,
           ),
           pw.Text(
@@ -456,7 +456,7 @@ class _SummaryState extends State<Summary> {
                                   Text(
                                     resTojson2["health_records"][0]["spo2"] !=
                                             null
-                                        ? "ออกซิเจนในเลือด :${resTojson2["health_records"][0]["spo2"]}"
+                                        ? "Spo2 :${resTojson2["health_records"][0]["spo2"]}"
                                         : "",
                                     style: TextStyle(fontSize: width * 0.03),
                                   ),
@@ -486,7 +486,10 @@ class _SummaryState extends State<Summary> {
                               onPressed: () {
                                 printexam();
                               },
-                              child: Text("ปริ้นผลตรวจ",
+                              child: Text(
+                                  S
+                                      .of(context)!
+                                      .summary_printTestResults, //"ปริ้นผลตรวจ",
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontSize: width * 0.06)))
@@ -546,7 +549,7 @@ class _SummaryState extends State<Summary> {
                           width: width * 0.002)),
                   child: Center(
                       child: Text(
-                    '< ย้อนกลับ',
+                    S.of(context)!.summary_backButton, //'< ย้อนกลับ',
                     style: TextStyle(
                         fontSize: width * 0.03,
                         color: const Color.fromARGB(255, 201, 201, 201)),
