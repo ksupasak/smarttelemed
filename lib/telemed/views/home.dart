@@ -25,6 +25,8 @@ class HomeTelemed extends StatefulWidget {
 }
 
 class _HomeTelemedState extends State<HomeTelemed> {
+  final FocusNode _focusNode = FocusNode();
+  TextEditingController cid = TextEditingController();
   Timer? timerreadIDCard;
   Timer? checkcardout;
   bool shownumpad = false, status = false;
@@ -61,13 +63,20 @@ class _HomeTelemedState extends State<HomeTelemed> {
   @override
   void dispose() {
     timerreadIDCard!.cancel();
+    _focusNode.dispose();
     super.dispose();
   }
 
   void getIdCard() async {
     DataProvider provider = context.read<DataProvider>();
     provider.debugPrintV("Start Card Reader--------------------------------=");
-    timerreadIDCard = Timer.periodic(const Duration(seconds: 3), (timer) async {
+    timerreadIDCard = Timer.periodic(const Duration(seconds: 4), (timer) async {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _focusNode.requestFocus();
+      });
+      setState(() {
+        cid.text = "";
+      });
       try {
         var url = Uri.parse('http://localhost:8189/api/smartcard/read');
         var res = await http.get(url);
@@ -153,59 +162,66 @@ class _HomeTelemedState extends State<HomeTelemed> {
         }
       }
     } else {
-      setState(() {
-        status = true;
-      });
-      provider.debugPrintV("ไม่ใช่เลขบัตรประชาชน");
-      try {
-        var url = Uri.parse(
-            '${provider.platfromURLGateway}/api/patient?hn=${provider.id}');
-        provider.debugPrintV(
-            "senvisitGateway :${provider.platfromURLGateway}/api/patient?hn=${provider.id}");
-        var response = await http.get(url);
-        provider.debugPrintV("response $response");
-        resTojsonGateway = json.decode(response.body);
-        // provider.debugPrintV("resTojsonGateway ลง provider$resTojsonGateway");
-      } catch (e) {
-        provider.debugPrintV(
-            "error ${provider.platfromURLGateway}/api/patient?hn=${provider.id} : $e");
+      sendvisitGatewayHn();
+    }
+  }
+
+  void sendvisitGatewayHn() async {
+    DataProvider provider = context.read<DataProvider>();
+    provider.debugPrintV("sendvisitGatewayHN");
+
+    setState(() {
+      status = true;
+    });
+
+    try {
+      var url = Uri.parse(
+          '${provider.platfromURLGateway}/api/patient?hn=${provider.id}');
+      provider.debugPrintV(
+          "senvisitGateway :${provider.platfromURLGateway}/api/patient?hn=${provider.id}");
+      var response = await http.get(url);
+      provider.debugPrintV("response $response");
+      resTojsonGateway = json.decode(response.body);
+      // provider.debugPrintV("resTojsonGateway ลง provider$resTojsonGateway");
+    } catch (e) {
+      provider.debugPrintV(
+          "error ${provider.platfromURLGateway}/api/patient?hn=${provider.id} : $e");
+    }
+    provider.debugPrintV("resTojsonGatewayHN ${resTojsonGateway.toString()}");
+    if (resTojsonGateway != null) {
+      if (resTojsonGateway["statuscode"] == 400 ||
+          resTojsonGateway["statuscode"] == 404) {
+        provider.debugPrintV("statuscode 400||404 ไม่ข้อมีมูลในระบบ ไม่มีHN");
+        setState(() {
+          texthead = S.of(context)!.hn + provider.text_no_hn;
+        });
       }
-      provider.debugPrintV("resTojsonGateway ${resTojsonGateway.toString()}");
-      if (resTojsonGateway != null) {
-        if (resTojsonGateway["statuscode"] == 400 ||
-            resTojsonGateway["statuscode"] == 404) {
-          provider.debugPrintV("statuscode 400||404 ไม่ข้อมีมูลในระบบ ไม่มีHN");
+      if (resTojsonGateway["statuscode"] == 100) {
+        provider.debugPrintV("เพิ่มข้อมูลจากgatewayHNลงprovider");
+        provider.updateusergateway(resTojsonGateway);
+        if (resTojsonGateway["data"]["vn"] != null &&
+            resTojsonGateway["data"]["vn"] != "") {
+          provider.debugPrintV("statuscode 100 มี VN ");
+          sendId();
+        } else if (resTojsonGateway["data"]["vn"] == null ||
+            resTojsonGateway["data"]["vn"] == "") {
           setState(() {
-            texthead = S.of(context)!.hn + provider.text_no_hn;
-          });
-        }
-        if (resTojsonGateway["statuscode"] == 100) {
-          provider.debugPrintV("เพิ่มข้อมูลจากgatewayลงprovider");
-          provider.updateusergateway(resTojsonGateway);
-          if (resTojsonGateway["data"]["vn"] != null &&
-              resTojsonGateway["data"]["vn"] != "") {
-            provider.debugPrintV("statuscode 100 มี VN ");
-            sendId();
-          } else if (resTojsonGateway["data"]["vn"] == null ||
-              resTojsonGateway["data"]["vn"] == "") {
-            setState(() {
-              if (provider.require_VN) {
-                texthead = S.of(context)!.no_vn + provider.text_no_vn;
-                provider.debugPrintV("ไม่มี VN ติดต่อเจ้าหน้าที่ ");
-              }
-            });
-            if (!provider.require_VN) {
-              timerreadIDCard?.cancel();
-              provider.debugPrintV("อนุญาติให้เข้าระบบเเบไม่มีVN");
-              sendId();
+            if (provider.require_VN) {
+              texthead = S.of(context)!.no_vn + provider.text_no_vn;
+              provider.debugPrintV("ไม่มี VN ติดต่อเจ้าหน้าที่ ");
             }
+          });
+          if (!provider.require_VN) {
+            timerreadIDCard?.cancel();
+            provider.debugPrintV("อนุญาติให้เข้าระบบเเบไม่มีVN");
+            sendId();
           }
         }
       }
-      setState(() {
-        status = false;
-      });
     }
+    setState(() {
+      status = false;
+    });
   }
 
   void sendId() async {
@@ -345,6 +361,15 @@ class _HomeTelemedState extends State<HomeTelemed> {
     return Scaffold(
       body: Stack(
         children: [
+          TextField(
+            controller: cid,
+            focusNode: _focusNode,
+            onSubmitted: (value) {
+              provider.debugPrintV("CID (onSubmitted) = $value");
+              provider.id = cid.text;
+              sendvisitGatewayHn();
+            },
+          ),
           const Background(),
           Positioned(
             child: SizedBox(
