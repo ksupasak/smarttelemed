@@ -85,8 +85,13 @@
     
     "waitting_cancle":"Cancle",
     "waitting_ok":"OK",
-    "waitting_pleaseCheckHealthFirst":"(PLEASE CHECK HEALTH FIRST)"
-
+    "waitting_loading":"oading...",
+    "waitting_pleaseCheckHealthFirst":"(PLEASE CHECK HEALTH FIRST)",
+    "waitting_waitting_doctor":"Waiting for the doctor.",
+    "waitting_results":"Waiting for the test results.",
+    "waitting_review":"Reviewing the test results.",
+    "waitting_under_exam":"Undergoing a re-examination.",
+    "waitting_backButton":"< BACK"
     
     
     

@@ -53,9 +53,7 @@
     "health_bmi_too_low":"BMI ต่ำเกินไป",
     "health_bmi_too_high":"BMI สูงเกินไป",
 
-    "health_backButton":"< ย้อนกลับ",
-
-   
+    "health_backButton":"< ย้อนกลับ", 
     
 
     "summary_analyze":"วิเคราะห์",
@@ -86,7 +84,14 @@
 
     "waitting_cancle":"ยกเลิก",
     "waitting_ok":"ตกลง",
-    "waitting_pleaseCheckHealthFirst":"(กรุณาตรวจสุขภาพก่อน)"
+    "waitting_loading":"กรุณารอสักครู่...",
+    "waitting_pleaseCheckHealthFirst":"(กรุณาตรวจสุขภาพก่อน)",
+    "waitting_doctor":"รอหมอ",
+    "waitting_results":"รอผลตรวจ",
+    "waitting_review":"ดูผลตรวจ",
+    "waitting_under_exam":"ตรวจซ้ำ",
+    "waitting_backButton":"< ย้อนกลับ"
+     
 
    
 }

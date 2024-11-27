@@ -23,7 +23,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     setdata();
 
-    fullscreen();
+    //fullscreen();
     super.initState();
   }
 

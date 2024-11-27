@@ -150,7 +150,8 @@ class _WaitingAppState extends State<WaitingApp> {
               width: width,
               child: Center(
                   child: Text(
-                "Loading...",
+                S.of(context)!.waitting_loading,
+                //"Loading...",
                 style: TextStyle(fontSize: width * 0.03),
               ))),
       bottomNavigationBar: SizedBox(
@@ -175,7 +176,7 @@ class _WaitingAppState extends State<WaitingApp> {
                           width: width * 0.002)),
                   child: Center(
                       child: Text(
-                    '< ย้อนกลับ',
+                    S.of(context)!.waitting_backButton, // '< ย้อนกลับ',
                     style: TextStyle(
                         fontSize: width * 0.03,
                         color: const Color.fromARGB(255, 201, 201, 201)),
@@ -223,7 +224,8 @@ class _WaitingAppState extends State<WaitingApp> {
               width: width,
               child: Column(
                 children: [
-                  Text('รอหมอ', style: TextStyle(fontSize: width * 0.1)),
+                  Text(S.of(context)!.waitting_waitting_doctor, //'รอหมอ',
+                      style: TextStyle(fontSize: width * 0.1)),
                   const CircularProgressIndicator(
                     color: Color.fromARGB(255, 0, 139, 130),
                   ),
@@ -296,7 +298,8 @@ class _WaitingAppState extends State<WaitingApp> {
                     width: width,
                     child: Column(
                       children: [
-                        Text('รอหมอ', style: TextStyle(fontSize: width * 0.1)),
+                        Text(S.of(context)!.waitting_waitting_doctor, //'รอหมอ'
+                            style: TextStyle(fontSize: width * 0.1)),
                         const CircularProgressIndicator(
                           color: Color.fromARGB(255, 0, 139, 130),
                         ),
@@ -316,7 +319,7 @@ class _WaitingAppState extends State<WaitingApp> {
                 secret: "minadadmin",
                 iceServer: "",
               )
-            : const Text("Loading...");
+            : Text(S.of(context)!.waitting_loading);
   }
 
   void add_appoint_today() async {
@@ -368,7 +371,8 @@ class _WaitingAppState extends State<WaitingApp> {
               height: height * 0.4,
               child: Column(
                 children: [
-                  Text('รอผลตรวจ', style: TextStyle(fontSize: width * 0.1)),
+                  Text(S.of(context)!.waitting_results, //'รอผลตรวจ',
+                      style: TextStyle(fontSize: width * 0.1)),
                   const CircularProgressIndicator(
                     color: Color.fromARGB(255, 0, 139, 130),
                   ),
@@ -447,7 +451,7 @@ class _WaitingAppState extends State<WaitingApp> {
                               builder: (context) => const Summary()));
                     },
                     child: Text(
-                      "ดูผลตรวจ",
+                      S.of(context)!.waitting_review, // "ดูผลตรวจ",
                       style: TextStyle(
                           color: Colors.white, fontSize: width * 0.06),
                     )),
@@ -463,7 +467,7 @@ class _WaitingAppState extends State<WaitingApp> {
                       add_appoint_today();
                     },
                     child: Text(
-                      "ตรวจซ้ำ",
+                      S.of(context)!.waitting_under_exam, //"ตรวจซ้ำ",
                       style: TextStyle(
                           color: Colors.white, fontSize: width * 0.06),
                     )),
