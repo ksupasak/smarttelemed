@@ -494,7 +494,7 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
     DataProvider provider = context.read<DataProvider>();
 
     provider.debugPrintV(
-        "ส่งค่าHealthrecord ${context.read<DataProvider>().platfromURL}");
+        "ส่งค่าHealthrecord ${context.read<DataProvider>().platfromURL}/add_visit");
     var url =
         Uri.parse('${context.read<DataProvider>().platfromURL}/add_visit');
     var res = await http.post(url, body: {
@@ -516,7 +516,8 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
     if (res.statusCode == 200) {
       var resTojson = json.decode(res.body);
       provider.debugPrintV("ส่งค่าHealthrecord สำเร็จ");
-      provider.debugPrintV(resTojson.toString());
+      provider.debugPrintV(
+          "resTojson sendDataHealthrecord ${resTojson.toString()}");
       sendHealthrecordGateway();
     }
   }

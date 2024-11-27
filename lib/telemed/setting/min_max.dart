@@ -142,7 +142,7 @@ class _SettingMinMaxState extends State<SettingMinMax> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
-                  "DIS",
+                  "DIA",
                   style: TextStyle(fontSize: width * 0.03),
                 ),
               ),

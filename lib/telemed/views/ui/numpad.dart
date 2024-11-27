@@ -350,8 +350,8 @@ class _NumpadState extends State<Numpad> {
                                         0.18,
                                     height: MediaQuery.of(context).size.height *
                                         0.05,
-                                    child: Center(
-                                        child: Text('ลบ', style: style)))))
+                                    child: const Center(
+                                        child: Icon(Icons.arrow_back)))))
                       ]))
             ]))
       ],

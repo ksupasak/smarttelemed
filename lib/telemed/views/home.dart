@@ -117,28 +117,7 @@ class _HomeTelemedState extends State<HomeTelemed> {
         // provider.debugPrintV("resTojsonGateway ลง provider$resTojsonGateway");
       } catch (e) {
         provider.debugPrintV("error senvisitGateway $e");
-        // provider.debugPrintV("ข้ามการอ่านข้อมูลผ่านGateway");
-        // provider.debugPrintV(
-        //     "get ข้อมูลจากบัตรประชน เปลี่ยนเป็นขอมูลจำรอง gateway");
-        // String databirthDate = resTojson_getIdCard['birthDate'];
-        // String birthdate =
-        //     "${databirthDate[0]}${databirthDate[1]}${databirthDate[2]}${databirthDate[3]}-${databirthDate[4]}${databirthDate[5]}-${databirthDate[6]}${databirthDate[7]}";
-        // Map data = {
-        //   "data": {
-        //     "hn": "123456",
-        //     "vn": "Text1234",
-        //     "prefix_name": "",
-        //     "fname": resTojson_getIdCard['fname'],
-        //     "lname": resTojson_getIdCard['lname'],
-        //     "phone": "0987654321",
-        //     "birthdate": birthdate
-        //   }
-        // };
-
         sendId();
-      } finally {
-        //   client.close();
-        // provider.debugPrintV("ปิด client https");
       }
       provider.debugPrintV("resTojsonGateway ${resTojsonGateway.toString()}");
 
@@ -174,7 +153,55 @@ class _HomeTelemedState extends State<HomeTelemed> {
         }
       }
     } else {
-      provider.debugPrintV("เลขบัตรประชาชนไม่ครบ");
+      setState(() {
+        status = true;
+      });
+      provider.debugPrintV("ไม่ใช่เลขบัตรประชาชน");
+      try {
+        var url = Uri.parse(
+            '${provider.platfromURLGateway}/api/patient?hn=${provider.id}');
+        provider.debugPrintV(
+            "senvisitGateway :${provider.platfromURLGateway}/api/patient?hn=${provider.id}");
+        var response = await http.get(url);
+        provider.debugPrintV("response $response");
+        resTojsonGateway = json.decode(response.body);
+        // provider.debugPrintV("resTojsonGateway ลง provider$resTojsonGateway");
+      } catch (e) {
+        provider.debugPrintV(
+            "error ${provider.platfromURLGateway}/api/patient?hn=${provider.id} : $e");
+      }
+      provider.debugPrintV("resTojsonGateway ${resTojsonGateway.toString()}");
+      if (resTojsonGateway != null) {
+        if (resTojsonGateway["statuscode"] == 400 ||
+            resTojsonGateway["statuscode"] == 404) {
+          provider.debugPrintV("statuscode 400||404 ไม่ข้อมีมูลในระบบ ไม่มีHN");
+          setState(() {
+            texthead = S.of(context)!.hn + provider.text_no_hn;
+          });
+        }
+        if (resTojsonGateway["statuscode"] == 100) {
+          provider.debugPrintV("เพิ่มข้อมูลจากgatewayลงprovider");
+          provider.updateusergateway(resTojsonGateway);
+          if (resTojsonGateway["data"]["vn"] != null &&
+              resTojsonGateway["data"]["vn"] != "") {
+            provider.debugPrintV("statuscode 100 มี VN ");
+            sendId();
+          } else if (resTojsonGateway["data"]["vn"] == null ||
+              resTojsonGateway["data"]["vn"] == "") {
+            setState(() {
+              if (provider.require_VN) {
+                texthead = S.of(context)!.no_vn + provider.text_no_vn;
+                provider.debugPrintV("ไม่มี VN ติดต่อเจ้าหน้าที่ ");
+              }
+            });
+            if (!provider.require_VN) {
+              timerreadIDCard?.cancel();
+              provider.debugPrintV("อนุญาติให้เข้าระบบเเบไม่มีVN");
+              sendId();
+            }
+          }
+        }
+      }
       setState(() {
         status = false;
       });

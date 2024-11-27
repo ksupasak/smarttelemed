@@ -36,8 +36,9 @@ class _LanguageAppState extends State<LanguageApp> {
     setState(() {
       status_safe = false;
     });
-    Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => const MyApp()));
+
+    ///รีสตาส
+    ///
   }
 
   @override
