@@ -52,6 +52,10 @@
     
     "health_bmi_too_low":"BMI ต่ำเกินไป",
     "health_bmi_too_high":"BMI สูงเกินไป",
+
+    "health_backButton":"< ย้อนกลับ",
+
+   
     
 
     "summary_analyze":"วิเคราะห์",

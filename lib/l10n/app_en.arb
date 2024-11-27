@@ -61,6 +61,7 @@
     
     "health_bmi_too_low":"The BMI is too low.",
     "health_bmi_too_high":"The BMI is too high.",
+    "health_backButton": "< Back",
 
 
     "summary_analyze":"Analyze",

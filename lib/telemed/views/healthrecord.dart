@@ -126,7 +126,8 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
                           .read<DataProvider>()
                           .datamin_max['minsys']
                           .toString())) {
-                    warnSys = "SYS ต่ำเกินไป";
+                    warnSys =
+                        S.of(context)!.health_sys_too_low; //"SYS ต่ำเกินไป";
                     setState(() {
                       playAudio();
                     });
@@ -138,7 +139,8 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
                           .read<DataProvider>()
                           .datamin_max['maxsys']
                           .toString())) {
-                    warnSys = "SYS สูงเกินไป";
+                    warnSys =
+                        S.of(context)!.health_sys_too_high; //"SYS สูงเกินไป";
                     setState(() {
                       playAudio();
                     });
@@ -151,7 +153,8 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
                           .read<DataProvider>()
                           .datamin_max['mindia']
                           .toString())) {
-                    warnDia = "DIA ต่ำเกินไป";
+                    warnDia =
+                        S.of(context)!.health_dia_too_low; //"DIA ต่ำเกินไป";
                     setState(() {
                       playAudio();
                     });
@@ -163,7 +166,8 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
                           .read<DataProvider>()
                           .datamin_max['maxdia']
                           .toString())) {
-                    warnDia = "DIA สูงเกินไป";
+                    warnDia =
+                        S.of(context)!.health_dia_too_high; //"DIA สูงเกินไป";
                     setState(() {
                       playAudio();
                     });
@@ -247,7 +251,9 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
                               .read<DataProvider>()
                               .datamin_max['minspo2']
                               .toString())) {
-                        warnSpo2 = "Spo2 ต่ำเกินไป";
+                        warnSpo2 = S
+                            .of(context)!
+                            .health_spo2_too_low; //"Spo2 ต่ำเกินไป";
                         setState(() {
                           playAudio();
                         });
@@ -322,7 +328,9 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
                           .read<DataProvider>()
                           .datamin_max['mintemp']
                           .toString())) {
-                    warnTemp = "อุณหภูมิ ต่ำเกินไป";
+                    warnTemp = S
+                        .of(context)!
+                        .health_temp_too_low; //อุณหภูมิ ต่ำเกินไป";
                     setState(() {
                       playAudio();
                     });
@@ -334,7 +342,9 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
                           .read<DataProvider>()
                           .datamin_max['maxtemp']
                           .toString())) {
-                    warnTemp = "อุณหภูมิ สูงเกินไป";
+                    warnTemp = S
+                        .of(context)!
+                        .health_temp_too_high; //"อุณหภูมิ สูงเกินไป";
                     setState(() {
                       playAudio();
                     });
@@ -362,7 +372,8 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
                             .read<DataProvider>()
                             .datamin_max['minbmi']
                             .toString())) {
-                      warnbmi = "BMI ต่ำเกินไป";
+                      warnbmi =
+                          S.of(context)!.health_bmi_too_low; //"BMI ต่ำเกินไป";
                       setState(() {
                         playAudio();
                       });
@@ -375,7 +386,8 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
                             .read<DataProvider>()
                             .datamin_max['maxbmi']
                             .toString())) {
-                      warnbmi = "BMI สูงเกินไป";
+                      warnbmi =
+                          S.of(context)!.health_bmi_too_high; //"BMI สูงเกินไป";
                       setState(() {
                         playAudio();
                       });
@@ -906,7 +918,7 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
                           width: width * 0.002)),
                   child: Center(
                       child: Text(
-                    '< ย้อนกลับ',
+                    S.of(context)!.health_backButton, // '< ย้อนกลับ'
                     style: TextStyle(
                         fontSize: width * 0.03,
                         color: const Color.fromARGB(255, 201, 201, 201)),
