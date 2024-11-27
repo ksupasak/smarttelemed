@@ -206,22 +206,34 @@ class _UserinformationState extends State<Userinformation> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Text(S.of(context)!.id_card_number,
+                                      Text(
+                                          S
+                                              .of(context)!
+                                              .userinformation_id_card_number,
                                           style: TextStyle(
                                               fontSize: width * 0.03)),
-                                      Text(S.of(context)!.full_name,
+                                      Text(
+                                          S
+                                              .of(context)!
+                                              .userinformation_full_name,
                                           style: TextStyle(
                                               fontSize: width * 0.03)),
-                                      Text(S.of(context)!.birth_date,
+                                      Text(
+                                          S
+                                              .of(context)!
+                                              .userinformation_birth_date,
                                           style: TextStyle(
                                               fontSize: width * 0.03)),
-                                      Text("อายุ",
+                                      Text(S.of(context)!.userinformation_age,
                                           style: TextStyle(
                                               fontSize: width * 0.03)),
-                                      Text(S.of(context)!.hn,
+                                      Text(S.of(context)!.userinformation_hn,
                                           style: TextStyle(
                                               fontSize: width * 0.03)),
-                                      Text(S.of(context)!.phone_number,
+                                      Text(
+                                          S
+                                              .of(context)!
+                                              .userinformation_phone_number,
                                           style: TextStyle(
                                               fontSize: width * 0.03)),
                                     ],

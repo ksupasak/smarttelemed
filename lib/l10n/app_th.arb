@@ -11,7 +11,7 @@
     "no_vn": "ไม่มี VN",
     
     "health_check": "ตรวจสุขภาพ",
-    "enter_exam": "เข้าพบเเพทย์",
+    "enter_exam": "พบเเพทย์",
 
     "no_treatment_rights": "ไม่มีสิทธิ์การรักษา ชำระค่ารักษาเอง",  
     "check_data": "ตรวจสอบข้อมูล",    
@@ -78,9 +78,25 @@
     "summary_printTestResults":"ปริ้นผลตรวจ",
 
     "userinformation_OK":"ตกลง",
+
+
+    "userinformation_no_treatment_rights": "ไม่มีสิทธิ์การรักษา ชำระค่ารักษาเอง",  
+    "userinformation_check_data": "ตรวจสอบข้อมูล",    
+    "userinformation_id_card_number": "เลขบัตรประชาชน",   
+    "userinformation_full_name": "ชื่อ - นามสกุล",   
+    "userinformation_birth_date": "วันเดือนปีเกิด",
+    "userinformation_age":"อายุ", 
+    "userinformation_phone_number": "เบอร์โทร",
+
+    "userinformation_hn": "HN",
+    "userinformation_no_hn": "ไม่มี HN",
+    "userinformation_vn":"VN",
+    "userinformation_no_vn": "ไม่มี VN",
+
+    
     "userinformation_pleaseCheckHealthFirst":"(กรุณาตรวจสุขภาพก่อน)",
     "userinformation_back":"< ย้อนกลับ",
-     "userinformation_cancle":"ยกเลิก",
+    "userinformation_cancle":"ยกเลิก",
 
     "waitting_cancle":"ยกเลิก",
     "waitting_ok":"ตกลง",

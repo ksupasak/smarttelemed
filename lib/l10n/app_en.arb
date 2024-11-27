@@ -20,7 +20,7 @@
     "no_vn": "No VN",
 
     "health_check": "Health Check",
-    "enter_exam": "Enter for Examination",
+    "enter_exam": "Enter Medical",
 
     "no_treatment_rights": "No treatment rights, self-payment required",   
     "check_data": "Check data",   
@@ -79,13 +79,27 @@
     "summary_printTestResults":"Print Result",
 
     "userinformation_OK":"OK",
+
+    "userinformation_no_treatment_rights": "No treatment rights, self-payment required",  
+    "userinformation_check_data": "Check data",    
+    "userinformation_id_card_number": "ID Card Number",   
+    "userinformation_full_name": "Full Name",   
+    "userinformation_birth_date": "Date of Birth",
+    "userinformation_age":"Age", 
+    "userinformation_phone_number": "Phone Number",
+
+    "userinformation_hn": "HN",
+    "userinformation_no_hn": "No HN",
+    "userinformation_vn":"VN",
+    "userinformation_no_vn": "No VN",
+
     "userinformation_pleaseCheckHealthFirst":"(PLEASE CHECK HEALTH FIRST)",
     "userinformation_back":"BACK",
-     "userinformation_cancle":"Cancle",
+    "userinformation_cancle":"Cancle",
     
     "waitting_cancle":"Cancle",
     "waitting_ok":"OK",
-    "waitting_loading":"oading...",
+    "waitting_loading":"Loading...",
     "waitting_pleaseCheckHealthFirst":"(PLEASE CHECK HEALTH FIRST)",
     "waitting_waitting_doctor":"Waiting for the doctor.",
     "waitting_results":"Waiting for the test results.",
