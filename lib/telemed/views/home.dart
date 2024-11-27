@@ -339,7 +339,7 @@ class _HomeTelemedState extends State<HomeTelemed> {
                         ),
                         Center(
                           child: Text(
-                            "กรุณาเสียบบัตรประชาชนหรือ เเสกน HN เพื่อทำรายการต่อ",
+                            S.of(context)!.home_promptIdOrScanHN,
                             style: TextStyle(
                                 fontSize: width * 0.035,
                                 fontWeight: FontWeight.w500),
@@ -392,7 +392,7 @@ class _HomeTelemedState extends State<HomeTelemed> {
                                         sendvisitGateway();
                                       } else {
                                         provider.debugPrintV(
-                                            "การตั่งค่าปังคับใช้บัตรเปิดอยู่");
+                                            "การตั้งค่าปังคับใช้บัตรเปิดอยู่");
                                       }
                                     },
                                     child: Text(

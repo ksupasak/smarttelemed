@@ -35,7 +35,7 @@ class _MyAppState extends State<MyApp> {
       providers: [
         ChangeNotifierProvider(create: ((context) => DataProvider())),
       ],
-      child: MaterialApp(
+      child: const MaterialApp(
         localizationsDelegates: const [
           S.delegate,
           GlobalMaterialLocalizations.delegate,
@@ -46,10 +46,10 @@ class _MyAppState extends State<MyApp> {
           Locale('en'),
           Locale('th'),
         ],
-        locale: LocaleProvider().locales,
+        locale: Locale('en'), // LocaleProvider().locales,
         color: Colors.white,
         debugShowCheckedModeBanner: false,
-        home: const Scaffold(body: SplashScreen()),
+        home: Scaffold(body: SplashScreen()),
       ),
     );
   }

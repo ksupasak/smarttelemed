@@ -1,7 +1,6 @@
 // ignore_for_file: non_constant_identifier_names, use_build_context_synchronously, sort_child_properties_last
 
 import 'dart:convert';
-import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
@@ -11,9 +10,9 @@ import 'package:http/http.dart' as http;
 import 'package:smarttelemed/telemed/background.dart/background.dart';
 import 'package:smarttelemed/telemed/provider/provider.dart';
 import 'package:smarttelemed/telemed/views/home.dart';
-import 'package:smarttelemed/telemed/views/ui/popup.dart';
 import 'package:smarttelemed/telemed/views/userInformation.dart';
 import 'package:virtual_keyboard_multi_language/virtual_keyboard_multi_language.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Register extends StatefulWidget {
   const Register({super.key});
@@ -251,29 +250,35 @@ class _RegisterState extends State<Register> {
                         decoration: boxDecorate,
                         child: Column(
                           children: [
-                            Text('ลงทะเบียน', style: textStyle),
+                            Text(S.of(context)!.regis_register,
+                                style: textStyle),
                             SizedBox(
                               width: width * 0.8,
                               child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text('คำนำหน้าชื่อ :${prefix_name.text}',
+                                    Text(
+                                        '${S.of(context)!.regis_prefix} :${prefix_name.text}',
                                         style: style2),
                                     // textdatauser(child: prefix_name),
-                                    Text('ชื่อ :${first_name.text}',
+                                    Text(
+                                        '${S.of(context)!.regis_firstname} :${first_name.text}',
                                         style: style2),
                                     //  textdatauser(child: first_name),
-                                    Text('นามสกุล :${last_name.text}',
+                                    Text(
+                                        '${S.of(context)!.regis_lastname} :${last_name.text}',
                                         style: style2),
                                     //   textdatauser(child: last_name),
                                     Text(
-                                        'วันเกิด(ปี เดือน วัน) :${birthdate.text}',
+                                        '${S.of(context)!.regis_birthday} :${birthdate.text}',
                                         style: style2),
                                     //   textdatauser(child: birthdate),
-                                    Text('เลขประจำตัวประชาชน :${id.text}',
+                                    Text(
+                                        '${S.of(context)!.regis_IdCard} :${id.text}',
                                         style: style2),
                                     //   textdatauser(child: id),
-                                    Text('เบอร์โทร', style: style2),
+                                    Text(S.of(context)!.regis_phone,
+                                        style: style2),
                                     textdatauser(
                                         child: phone, namekeyboard: "hn"),
                                     phone.text == ""
@@ -281,24 +286,30 @@ class _RegisterState extends State<Register> {
                                             child: Text(
                                             phone.text.length > 10
                                                 ? "เลขเกิน10หลัก"
-                                                : "กรุณากรอกก็เบอร์โทร",
-                                            style: TextStyle(color: Colors.red),
+                                                : S
+                                                    .of(context)!
+                                                    .regis_enterphone,
+                                            style: const TextStyle(
+                                                color: Colors.red),
                                           ))
                                         : Center(
                                             child: Text(
                                             phone.text.length > 10
                                                 ? "เลขเกิน10หลัก"
                                                 : "",
-                                            style: TextStyle(color: Colors.red),
+                                            style: const TextStyle(
+                                                color: Colors.red),
                                           )),
-                                    Text('รหัส HN', style: style2),
+                                    Text(S.of(context)!.regis_codeHN,
+                                        style: style2),
                                     textdatauser(
                                         child: hn, namekeyboard: "phone"),
                                     hn.text == ""
-                                        ? const Center(
+                                        ? Center(
                                             child: Text(
-                                            "กรุณากรอกก็HN",
-                                            style: TextStyle(color: Colors.red),
+                                            S.of(context)!.regis_enterphone,
+                                            style: const TextStyle(
+                                                color: Colors.red),
                                           ))
                                         : const SizedBox(),
                                   ]),
@@ -376,7 +387,7 @@ class _RegisterState extends State<Register> {
                                       child: Row(
                                         children: [
                                           Image.asset('assets/rsjyrsk.png'),
-                                          Text('ลงทะเบียน',
+                                          Text(S.of(context)!.regis_register,
                                               style: TextStyle(
                                                   fontSize: width * 0.04,
                                                   color: Colors.white))
@@ -425,7 +436,7 @@ class _RegisterState extends State<Register> {
                           width: width * 0.002)),
                   child: Center(
                       child: Text(
-                    '< ย้อนกลับ',
+                    S.of(context)!.regis_backButton,
                     style: TextStyle(
                         fontSize: width * 0.03,
                         color: const Color.fromARGB(255, 201, 201, 201)),

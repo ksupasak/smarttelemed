@@ -43,26 +43,27 @@
     "regis_enterphone": "Please enter your phone number",
     "regis_codeHN": "HN Code",
     "regis_enterHN": "Please enter your HN",
-    "regis_backButton": "< Back"
+    "regis_backButton": "< Back",
 
     "health_send":"Send",
 
     "summary_analyze":"Analyze",
-    "summary_dispMed ":"Dispense medicine",
+    "summary_dispMed":"Dispense medicine",
     "summary_detail":"Detail",
     "summary_testResult":"Result",
     "summary_dx":"DX :",
     "summary_dc_note":"Doctor Note :",
     "summary_healthMeasurement":"HEALTH MEASUREMENT",
-    "summary_printTestResults":"Print Result"
+    "summary_printTestResults":"Print Result",
 
-    "Userinformation_OK":"OK",
-    "Userinformation_pleaseCheckHealthFirst":"(PLEASE CHECK HEALTH FIRST)",
-    "Userinformation_back":"BACK",
+    "userinformation_OK":"OK",
+    "userinformation_pleaseCheckHealthFirst":"(PLEASE CHECK HEALTH FIRST)",
+    "userinformation_back":"BACK",
+     "userinformation_cancle":"Cancle",
     
     "waitting_cancle":"Cancle",
     "waitting_ok":"OK",
-    "waitting_pleaseCheckHealthFirst":"(PLEASE CHECK HEALTH FIRST)",
+    "waitting_pleaseCheckHealthFirst":"(PLEASE CHECK HEALTH FIRST)"
 
     
     

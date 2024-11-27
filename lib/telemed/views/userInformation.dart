@@ -79,8 +79,9 @@ class _UserinformationState extends State<Userinformation> {
                     onPressed: () {
                       Navigator.pop(context);
                     },
-                    child: const Text("ยกเลิก",
-                        style: TextStyle(fontSize: 20, color: Colors.red))),
+                    child: Text(S.of(context)!.userinformation_cancle,
+                        style:
+                            const TextStyle(fontSize: 20, color: Colors.red))),
                 ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       shadowColor: Colors.green,
@@ -97,9 +98,9 @@ class _UserinformationState extends State<Userinformation> {
                           MaterialPageRoute(
                               builder: (context) => const WaitingApp()));
                     },
-                    child: const Text(
-                      "ตกลง",
-                      style: TextStyle(fontSize: 32, color: Colors.white),
+                    child: Text(
+                      S.of(context)!.userinformation_OK,
+                      style: const TextStyle(fontSize: 32, color: Colors.white),
                     ))
               ],
             );
@@ -299,7 +300,7 @@ class _UserinformationState extends State<Userinformation> {
                 !button
                     ? Center(
                         child: Text(
-                          "(กรุณาตรวจสุขภาพก่อน)",
+                          S.of(context)!.userinformation_pleaseCheckHealthFirst,
                           style: TextStyle(
                               color: const Color.fromARGB(145, 244, 67, 54),
                               fontSize: width * 0.03),
@@ -341,7 +342,7 @@ class _UserinformationState extends State<Userinformation> {
                       builder: (BuildContext context) {
                         return Scaffold(
                           appBar: AppBar(),
-                          body: Container(
+                          body: SizedBox(
                             height: height * 0.8,
                             child: ListView.builder(
                                 itemCount:
@@ -384,7 +385,7 @@ class _UserinformationState extends State<Userinformation> {
                           width: width * 0.002)),
                   child: Center(
                       child: Text(
-                    '< ย้อนกลับ',
+                    S.of(context)!.userinformation_back,
                     style: TextStyle(
                         fontSize: width * 0.03,
                         color: const Color.fromARGB(255, 201, 201, 201)),

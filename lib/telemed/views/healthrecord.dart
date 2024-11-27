@@ -532,8 +532,8 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
       provider.debugPrintV(
           "senvisitGateway :${provider.platfromURLGateway}/api/vitalsign");
       var url = Uri.parse('${provider.platfromURLGateway}/api/vitalsign');
-      var response = await http
-          .post(headers: {'Content-Type': 'application/json'}, url, body: body);
+      var response = await http.post(url,
+          headers: {'Content-Type': 'application/json'}, body: body);
       provider.debugPrintV("response Gateway$response");
       var resTojsonGateway = json.decode(response.body);
       provider.debugPrintV("resTojsonGateway $resTojsonGateway");
@@ -718,7 +718,7 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
                               });
                               getClaimCode();
                             },
-                            child: Text("ส่ง",
+                            child: Text(S.of(context)!.health_send,
                                 style: TextStyle(
                                     fontSize: width * 0.06,
                                     color: Colors.white)))
