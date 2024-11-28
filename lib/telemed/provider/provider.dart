@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class DataProvider with ChangeNotifier {
+  String version = "V. 1.0.0";
   double buttonSized_w = 0.45;
   double buttonSized_h = 0.08;
 
@@ -105,6 +106,7 @@ class DataProvider with ChangeNotifier {
   String imgae = '';
   void updateusergateway(Map data) {
     //https://goodwide.pythonanywhere.com/api/patient?cid=1111111111111
+    id = data['data']['cid'];
     datagateway = data;
     debugPrintV("พบข้อมูล gateway $data");
     hn = data['data']['hn'];

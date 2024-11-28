@@ -727,7 +727,7 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
                                 height * provider.buttonSized_h),
                             onPressed: () {
                               setState(() {
-                                buttonsend = !buttonsend;
+                                buttonsend = false;
                               });
                               getClaimCode();
                             },

@@ -26,7 +26,7 @@ class HomeTelemed extends StatefulWidget {
 
 class _HomeTelemedState extends State<HomeTelemed> {
   final FocusNode _focusNode = FocusNode();
-  TextEditingController cid = TextEditingController();
+  TextEditingController scanHn = TextEditingController();
   Timer? timerreadIDCard;
   Timer? checkcardout;
   bool shownumpad = false, status = false;
@@ -75,7 +75,7 @@ class _HomeTelemedState extends State<HomeTelemed> {
         _focusNode.requestFocus();
       });
       setState(() {
-        cid.text = "";
+        scanHn.text = "";
       });
       try {
         var url = Uri.parse('http://localhost:8189/api/smartcard/read');
@@ -368,11 +368,11 @@ class _HomeTelemedState extends State<HomeTelemed> {
       body: Stack(
         children: [
           TextField(
-            controller: cid,
+            controller: scanHn,
             focusNode: _focusNode,
             onSubmitted: (value) {
               provider.debugPrintV("CID (onSubmitted) = $value");
-              provider.id = cid.text;
+              provider.id = scanHn.text;
               sendvisitGatewayHn();
             },
           ),
