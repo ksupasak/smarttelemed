@@ -866,35 +866,35 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
                   )
                 ])),
           ),
-          Positioned(
-            bottom: 5,
-            right: 5,
-            child: GestureDetector(
-                onTap: () {
-                  showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return Scaffold(
-                          appBar: AppBar(),
-                          body: SizedBox(
-                            height: height * 0.8,
-                            child: ListView.builder(
-                                itemCount:
-                                    context.read<DataProvider>().debug.length,
-                                itemBuilder: (context, index) {
-                                  return Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(
-                                        "$index ${context.read<DataProvider>().debug[index]}"),
-                                  );
-                                }),
-                          ),
-                        );
-                      });
-                },
-                child:
-                    Container(color: Colors.white, child: const Text("log"))),
-          ),
+          // Positioned(
+          //   bottom: 5,
+          //   right: 5,
+          //   child: GestureDetector(
+          //       onTap: () {
+          //         showDialog(
+          //             context: context,
+          //             builder: (BuildContext context) {
+          //               return Scaffold(
+          //                 appBar: AppBar(),
+          //                 body: SizedBox(
+          //                   height: height * 0.8,
+          //                   child: ListView.builder(
+          //                       itemCount:
+          //                           context.read<DataProvider>().debug.length,
+          //                       itemBuilder: (context, index) {
+          //                         return Padding(
+          //                           padding: const EdgeInsets.all(8.0),
+          //                           child: Text(
+          //                               "$index ${context.read<DataProvider>().debug[index]}"),
+          //                         );
+          //                       }),
+          //                 ),
+          //               );
+          //             });
+          //       },
+          //       child:
+          //           Container(color: Colors.white, child: const Text("log"))),
+          // ),
         ],
       ),
       bottomNavigationBar: SizedBox(
