@@ -64,7 +64,7 @@ class _MyAppState extends State<MyApp> {
           Locale('en'),
           Locale('th'),
         ],
-        locale: Locale('th'), // LocaleProvider().locales,
+        locale: Locale(s), // LocaleProvider().locales,
         color: Colors.white,
         debugShowCheckedModeBanner: false,
         home: const Scaffold(body: SplashScreen()),

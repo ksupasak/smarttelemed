@@ -62,7 +62,7 @@ class _LanguageAppState extends State<LanguageApp> {
   }
 
   List language = ['en', 'th'];
-  List languageName = ['England', 'ไทย'];
+  List languageName = ['English', 'ไทย'];
   @override
   Widget build(BuildContext context) {
     DataProvider provider = context.read<DataProvider>();
