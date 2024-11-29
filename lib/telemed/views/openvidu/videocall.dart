@@ -377,23 +377,23 @@ class _VideocallWidgetState extends State<VideocallWidget> {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          _noHeroFloatingActionButton(
-            onPressed: _toggleVideo,
-            tooltip: session?.localParticipant?.isVideoActive ?? true
-                ? 'Turn on video'
-                : 'Turn off video',
-            icon: Icon(session?.localParticipant?.isVideoActive ?? true
-                ? Icons.videocam
-                : Icons.videocam_off),
-          ),
-          if (session?.localParticipant?.isVideoActive ?? true)
-            _noHeroFloatingActionButton(
-              onPressed: _switchCamera,
-              tooltip: 'Switch Camera',
-              icon: const Icon(Icons.switch_camera),
-            ),
+          // _noHeroFloatingActionButton(
+          //   onPressed: _toggleVideo,
+          //   tooltip: session?.localParticipant?.isVideoActive ?? true
+          //       ? 'Turn on video'
+          //       : 'Turn off video',
+          //   icon: Icon(session?.localParticipant?.isVideoActive ?? true
+          //       ? Icons.videocam
+          //       : Icons.videocam_off),
+          // ),
+          // if (session?.localParticipant?.isVideoActive ?? true)
+          //   _noHeroFloatingActionButton(
+          //     onPressed: _switchCamera,
+          //     tooltip: 'Switch Camera',
+          //     icon: const Icon(Icons.switch_camera),
+          //   ),
           _noHeroFloatingActionButton(
             onPressed: _hangUp,
             tooltip: 'Hang Up',
@@ -403,26 +403,26 @@ class _VideocallWidgetState extends State<VideocallWidget> {
               color: Colors.white,
             ),
           ),
-          _noHeroFloatingActionButton(
-            onPressed: _toggleMic,
-            tooltip: session?.localParticipant?.isAudioActive ?? true
-                ? 'Mute Mic'
-                : 'Unmute Mic',
-            icon: Icon(session?.localParticipant?.isAudioActive ?? true
-                ? Icons.mic
-                : Icons.mic_off),
-          ),
-          _noHeroFloatingActionButton(
-            onPressed: _showMessages,
-            tooltip: 'Messages',
-            icon: const Icon(Icons.message_sharp),
-            badge: (session?.unreadMessages ?? 0) == 0
-                ? null
-                : Text(
-                    "${session?.unreadMessages}",
-                    style: const TextStyle(color: Colors.white, fontSize: 11.0),
-                  ),
-          ),
+          // _noHeroFloatingActionButton(
+          //   onPressed: _toggleMic,
+          //   tooltip: session?.localParticipant?.isAudioActive ?? true
+          //       ? 'Mute Mic'
+          //       : 'Unmute Mic',
+          //   icon: Icon(session?.localParticipant?.isAudioActive ?? true
+          //       ? Icons.mic
+          //       : Icons.mic_off),
+          // ),
+          // _noHeroFloatingActionButton(
+          //   onPressed: _showMessages,
+          //   tooltip: 'Messages',
+          //   icon: const Icon(Icons.message_sharp),
+          //   badge: (session?.unreadMessages ?? 0) == 0
+          //       ? null
+          //       : Text(
+          //           "${session?.unreadMessages}",
+          //           style: const TextStyle(color: Colors.white, fontSize: 11.0),
+          //         ),
+          // ),
         ],
       ),
     );

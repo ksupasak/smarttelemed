@@ -101,8 +101,9 @@
     "waitting_doctor":"รอหมอ",
     "waitting_results":"รอผลตรวจ",
     "waitting_review":"ดูผลตรวจ",
-    "waitting_under_exam":"ตรวจซ้ำ",
-    "waitting_backButton":"< ย้อนกลับ"
+    "waitting_under_exam":"พบเเพทย์",
+    "waitting_backButton":"< ย้อนกลับ",
+    "waitting_waitting_doctor":"รอหมอ"
      
 
    

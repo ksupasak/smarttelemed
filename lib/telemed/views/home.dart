@@ -133,9 +133,11 @@ class _HomeTelemedState extends State<HomeTelemed> {
       if (resTojsonGateway != null) {
         if (resTojsonGateway["statuscode"] == 400 ||
             resTojsonGateway["statuscode"] == 404) {
-          provider.debugPrintV("statuscode 400||404 ไม่ข้อมีมูลในระบบ ไม่มีHN");
+          provider
+              .debugPrintV("statuscode 400||404 ไม่ข้อมีมูลในระบบ ไม่มี HN");
           setState(() {
             texthead = S.of(context)!.hn + provider.text_no_hn;
+            status = false;
           });
         }
         if (resTojsonGateway["statuscode"] == 100) {
@@ -201,6 +203,7 @@ class _HomeTelemedState extends State<HomeTelemed> {
         provider.debugPrintV("statuscode 400||404 ไม่ข้อมีมูลในระบบ ไม่มีHN");
         setState(() {
           texthead = S.of(context)!.hn + provider.text_no_hn;
+          status = false;
         });
       }
       if (resTojsonGateway["statuscode"] == 100) {
@@ -275,6 +278,7 @@ class _HomeTelemedState extends State<HomeTelemed> {
           'last_name': provider.lname,
           'tel': provider.phone,
           'hn': provider.hn,
+          'birth_date': provider.birthdate,
           'picture64': provider.imgae,
         });
         var resTojson = json.decode(res.body);
@@ -306,9 +310,6 @@ class _HomeTelemedState extends State<HomeTelemed> {
             context, MaterialPageRoute(builder: (context) => const Register()));
       }
     } else {
-      setState(() {
-        status = false;
-      });
       timerreadIDCard?.cancel();
       checkcardout?.cancel;
       provider.debugPrintV("มีข้อมูลในระบบESM");
@@ -346,6 +347,47 @@ class _HomeTelemedState extends State<HomeTelemed> {
           provider.debugPrintV("ในระบบESMไม่มี phone");
         }
       }
+      //
+      provider.debugPrintV("ตรวจสอบวันเกิด");
+      if (resTojson_esm["data"]["birth_date"] == null ||
+          resTojson_esm["data"]["birth_date"] == "") {
+        provider.debugPrintV("ไม่มีวันเกิดในESM");
+        if (provider.birthdate != "") {
+          provider.debugPrintV("มีวันเกิดในprovider");
+          try {
+            var url = Uri.parse("${provider.platfromURL}/add_patient");
+            var res = await http.post(url, body: {
+              'care_unit_id': provider.care_unit_id,
+              'public_id': provider.id,
+              'prefix_name': provider.prefixName,
+              'first_name': provider.fname,
+              'last_name': provider.lname,
+              'tel': provider.phone,
+              'hn': provider.hn,
+              'birth_date': provider.birthdate,
+              'picture64': provider.imgae,
+            });
+            var resTojson = json.decode(res.body);
+            if (res.statusCode == 200) {
+              provider.debugPrintV("StatusresTojson :${resTojson["message"]}");
+              if (resTojson['message'] == 'success') {
+                provider.debugPrintV("Update สำเร็จ");
+              }
+            }
+          } catch (e) {
+            provider.debugPrintV("Update Error: $e");
+          }
+        } else {
+          provider.debugPrintV("ไม่มีวันเกิดในprovider");
+        }
+      } else {
+        provider.debugPrintV("มีวันเกิดในESM");
+      }
+      //
+      setState(() {
+        status = false;
+      });
+
       Timer(const Duration(seconds: 1), () {
         setState(() {
           Future.delayed(const Duration(seconds: 1), () {
