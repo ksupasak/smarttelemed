@@ -92,11 +92,43 @@ class _SummaryState extends State<Summary> {
     }
   }
 
+  void sendHealthrecordGateway() async {
+    DataProvider provider = context.read<DataProvider>();
+    var body = jsonEncode({
+      "vn": provider.vn,
+      "hn": provider.hn,
+      "cid": provider.id,
+      "bmi": provider.bmiHealthrecord.text,
+      "bpd": provider.diaHealthrecord.text,
+      "bps": provider.sysHealthrecord.text,
+      "fbs": "0",
+      "rr": "0",
+      "pulse": provider.pulseHealthrecord.text,
+      "spo2": provider.spo2Healthrecord.text,
+      "temp": provider.tempHealthrecord.text,
+      "height": provider.heightHealthrecord.text,
+      "weight": provider.weightHealthrecord.text,
+      "cc": "$doctor_note:$dx"
+    });
+    try {
+      provider.debugPrintV(
+          "senvisitGatewayCC :${provider.platfromURLGateway}/api/vitalsign");
+      var url = Uri.parse('${provider.platfromURLGateway}/api/vitalsign');
+      var response = await http.post(url,
+          headers: {'Content-Type': 'application/json'}, body: body);
+      provider.debugPrintV("response Gateway$response");
+      var resTojsonGateway = json.decode(response.body);
+      provider.debugPrintV("resTojsonGateway $resTojsonGateway");
+    } catch (e) {
+      provider.debugPrintV("error Gateway $e");
+    }
+  }
+
   void printexam() async {
     String msgHead = "";
     String msgDetail = "";
     //double sizeHeader = 20;
-
+    sendHealthrecordGateway();
     pw.TextStyle font_sizeBody = pw.TextStyle(
       font: thaiFont, // Make sure thaiFont is a valid pw.Font
       fontSize: 16,
