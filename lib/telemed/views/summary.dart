@@ -97,17 +97,6 @@ class _SummaryState extends State<Summary> {
     var body = jsonEncode({
       "vn": provider.vn,
       "hn": provider.hn,
-      "cid": provider.id,
-      "bmi": provider.bmiHealthrecord.text,
-      "bpd": provider.diaHealthrecord.text,
-      "bps": provider.sysHealthrecord.text,
-      "fbs": "0",
-      "rr": "0",
-      "pulse": provider.pulseHealthrecord.text,
-      "spo2": provider.spo2Healthrecord.text,
-      "temp": provider.tempHealthrecord.text,
-      "height": provider.heightHealthrecord.text,
-      "weight": provider.weightHealthrecord.text,
       "cc": "$doctor_note:$dx"
     });
     try {
