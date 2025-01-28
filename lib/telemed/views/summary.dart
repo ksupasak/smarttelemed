@@ -26,7 +26,7 @@ class Summary extends StatefulWidget {
 
 class _SummaryState extends State<Summary> {
   String doctor_note = '--';
-  String dx = '--';
+  String cc = '--';
   Printer? selectedPrinter; // Stores the selected printer
   var resTojson2;
   late pw.Font thaiFont;
@@ -61,9 +61,9 @@ class _SummaryState extends State<Summary> {
       var resTojson = json.decode(res.body);
       debugPrint('+++++++$resTojson');
       doctor_note = resTojson['data']['doctor_note'];
-      dx = resTojson['data']['dx'];
+      cc = resTojson['data']['cc'];
       if (resTojson != null) {
-        debugPrint(dx);
+        debugPrint(cc);
         debugPrint(doctor_note);
         setState(() {});
       }
@@ -97,7 +97,7 @@ class _SummaryState extends State<Summary> {
     var body = jsonEncode({
       "vn": provider.vn,
       "hn": provider.hn,
-      "cc": "$doctor_note:$dx"
+      "cc": cc
     });
     try {
       provider.debugPrintV(
@@ -202,7 +202,7 @@ class _SummaryState extends State<Summary> {
         crossAxisAlignment: pw.CrossAxisAlignment.start,
         children: [
           pw.Text(S.of(context)!.summary_analyze, style: font_sizeBody),
-          pw.Text(dx, style: font_sizeBody),
+          pw.Text(cc, style: font_sizeBody),
           pw.Text(
             S.of(context)!.summary_dispMed,
             style: font_sizeBody,
@@ -388,7 +388,7 @@ class _SummaryState extends State<Summary> {
                               ),
                               SizedBox(
                                 width: width * 0.5,
-                                child: Text(dx,
+                                child: Text(cc,
                                     style: TextStyle(fontSize: width * 0.03)),
                               ),
                             ]),
