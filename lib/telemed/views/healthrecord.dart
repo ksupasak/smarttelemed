@@ -538,8 +538,7 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
       "spo2": provider.spo2Healthrecord.text,
       "temp": provider.tempHealthrecord.text,
       "height": provider.heightHealthrecord.text,
-      "weight": provider.weightHealthrecord.text,
-      "cc": "หมายเหตุ"
+      "weight": provider.weightHealthrecord.text 
     });
     try {
       provider.debugPrintV(
