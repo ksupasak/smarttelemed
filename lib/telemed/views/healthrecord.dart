@@ -698,6 +698,7 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
                       ],
                     ),
                   ),
+
                   Center(
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,

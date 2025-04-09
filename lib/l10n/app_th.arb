@@ -74,6 +74,7 @@
 
     "summary_printTestResults":"ปริ้นผลตรวจ",
     "summary_backButton":"< ย้อนกลับ",
+     "summary_history": "ผลการตรวจย้อนหลัง",
 
     "userinformation_OK":"ตกลง",
     "userinformation_no_treatment_rights": "ไม่มีสิทธิ์การรักษา ชำระค่ารักษาเอง",  
