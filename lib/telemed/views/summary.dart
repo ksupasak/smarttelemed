@@ -27,6 +27,7 @@ class Summary extends StatefulWidget {
 class _SummaryState extends State<Summary> {
   String doctor_note = '--';
   String cc = '--';
+  
   Printer? selectedPrinter; // Stores the selected printer
   var resTojson2;
   late pw.Font thaiFont;
@@ -95,13 +96,28 @@ class _SummaryState extends State<Summary> {
   void sendHealthrecordGateway() async {
     DataProvider provider = context.read<DataProvider>();
     var body = jsonEncode({
+      // "vn": provider.vn,
+      // "hn": provider.hn,
+      // "cid": provider.id,
+      // "cc": 
       "vn": provider.vn,
       "hn": provider.hn,
+      "cid": provider.id,
+      "bmi": "",
+      "bpd": "",
+      "bps": "",
+      "fbs": "0",
+      "rr": "0",
+      "pulse": "",
+      "spo2": "",
+      "temp": "",
+      "height": "",
+      "weight": "",
       "cc": cc
     });
     try {
       provider.debugPrintV(
-          "senvisitGatewayCC :${provider.platfromURLGateway}/api/vitalsign");
+          "senvisitGatewayCC :${provider.platfromURLGateway}/api/vitalsign - ${cc}");
       var url = Uri.parse('${provider.platfromURLGateway}/api/vitalsign');
       var response = await http.post(url,
           headers: {'Content-Type': 'application/json'}, body: body);
@@ -431,10 +447,11 @@ class _SummaryState extends State<Summary> {
                                 style: TextStyle(fontSize: width * 0.04))),
                         SizedBox(height: height * 0.01),
                         resTojson2 != null
-                            ? Row(
+                            ?resTojson2["health_records"].length !=0? Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceEvenly,
                                 children: [
+                               
                                   Text(
                                     // BMI :
                                     resTojson2["health_records"][0]["bmi"] !=
@@ -460,10 +477,10 @@ class _SummaryState extends State<Summary> {
                                     style: TextStyle(fontSize: width * 0.03),
                                   ),
                                 ],
-                              )
+                              ): const SizedBox()
                             : const SizedBox(),
                         resTojson2 != null
-                            ? Row(
+                            ?resTojson2["health_records"].length !=0? Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceEvenly,
                                 children: [
@@ -489,7 +506,7 @@ class _SummaryState extends State<Summary> {
                                     style: TextStyle(fontSize: width * 0.03),
                                   ),
                                 ],
-                              )
+                              ) : const SizedBox()
                             : const SizedBox(),
                       ]),
                     ),

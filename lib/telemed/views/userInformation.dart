@@ -295,18 +295,18 @@ class _UserinformationState extends State<Userinformation> {
                 Center(
                     child: ElevatedButton(
                         style: stylebutter(
-                            button ? Colors.blue : Colors.grey,
+                           /* button ?*/ Colors.blue /*: Colors.grey*/,
                             width * provider.buttonSized_w,
                             height * provider.buttonSized_h),
                         onPressed: () {
-                          if (button) {
-                            agreement();
-                          }
+                         /* if (button) {*/
+                                                     agreement();
+                        /*  }*/
                         },
                         child: Text(S.of(context)!.enter_exam,
                             style: TextStyle(
                                 fontSize: width * 0.06, color: Colors.white)))),
-                !button
+               /* !button
                     ? Center(
                         child: Text(
                           S.of(context)!.userinformation_pleaseCheckHealthFirst,
@@ -315,7 +315,7 @@ class _UserinformationState extends State<Userinformation> {
                               fontSize: width * 0.03),
                         ),
                       )
-                    : const Text(""),
+                    : const Text(""),*/
                 SizedBox(height: height * 0.03),
                 // Center(
                 //   child: GestureDetector(
