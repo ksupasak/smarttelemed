@@ -68,7 +68,7 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
 
   void startBP() async {
     DataProvider provider = context.read<DataProvider>();
-
+    
     try {
       for (var name in SerialPort.availablePorts) {
         provider.debugPrintV('scan bp $name');

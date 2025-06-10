@@ -119,7 +119,7 @@ class _HomeTelemedState extends State<HomeTelemed> {
         var url = Uri.parse(
             '${provider.platfromURLGateway}/api/patient?cid=${provider.id}');
         provider.debugPrintV(
-            "senvisitGateway :${provider.platfromURLGateway}/api/patient?cid=${provider.id}");
+            "senvisitGateway1 :${provider.platfromURLGateway}/api/patient?cid=${provider.id}");
         var response = await http.get(url);
         provider.debugPrintV("response $response");
         resTojsonGateway = json.decode(response.body);

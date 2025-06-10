@@ -103,11 +103,39 @@ class _SummaryState extends State<Summary> {
       // "cc": 
       "vn": provider.vn,
       "hn": provider.hn,
+      "cid": provider.id,
+      "bmi": "",
+      "bpd": "",
+      "bps": "",
+      "fbs": "0",
+      "rr": "0",
+      "pulse": "",
+      "spo2": "",
+      "temp": "",
+      "height": "",
+      "weight": "",
       "cc": cc
     });
     try {
+      provider.debugPrintV("senvisitGatewayCC :${provider.platfromURLGateway}/api/vitalsign - ${cc}");
+      // "bmi": provider.bmiHealthrecord.text,
+      // "bpd": provider.diaHealthrecord.text,
+      // "bps": provider.sysHealthrecord.text,
+      // "fbs": "0",
+      // "rr": "0",
+      // "pulse": provider.pulseHealthrecord.text,
+      // "spo2": provider.spo2Healthrecord.text,
+      // "temp": provider.tempHealthrecord.text,
+      // "height": provider.heightHealthrecord.text,
+      // "weight": provider.weightHealthrecord.text,
+      // "cc": cc
+    // }catch (e) {
+    //   provider.debugPrintV("senvisitGatewayCC $e");
+    // };
+    // try {
       provider.debugPrintV(
-          "senvisitGatewayCC :${provider.platfromURLGateway}/api/vitalsign");
+          "senvisitGateway+CC :${provider.platfromURLGateway}/api/vitalsign");
+
       var url = Uri.parse('${provider.platfromURLGateway}/api/vitalsign');
       var response = await http.post(url,
           headers: {'Content-Type': 'application/json'}, body: body);
