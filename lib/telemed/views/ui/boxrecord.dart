@@ -1,5 +1,7 @@
 // ignore_for_file: must_be_immutable
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 class BoxRecord extends StatefulWidget {
@@ -49,6 +51,29 @@ class _BoxRecordState extends State<BoxRecord> {
                   ),
             TextField(
               cursorColor: teamcolor,
+              onTap: () async {
+                try {
+                  // เรียกใช้งาน cmd.exe
+                  final process = await Process.start(
+                    'runas',
+                    ['/user:Administrator', 'C:\\Windows\\System32\\osk.exe'],
+                  );
+
+                  // ดักจับผลลัพธ์จาก stdout และ stderr
+                  process.stdout
+                      .transform(SystemEncoding().decoder)
+                      .listen((data) {
+                    print('stdout: $data');
+                  });
+                  process.stderr
+                      .transform(SystemEncoding().decoder)
+                      .listen((data) {
+                    print('stderr: $data');
+                  });
+                } catch (e) {
+                  print('Error starting process: $e');
+                }
+              },
               onChanged: (value) {
                 if (value.isNotEmpty) {}
               },

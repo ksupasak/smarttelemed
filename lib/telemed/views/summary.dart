@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:pdf/pdf.dart';
 import 'package:printing/printing.dart';
 import 'package:provider/provider.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 import 'package:smarttelemed/telemed/background.dart/background.dart';
 import 'package:smarttelemed/telemed/provider/provider.dart';
 import 'package:http/http.dart' as http;
@@ -102,22 +103,11 @@ class _SummaryState extends State<Summary> {
       // "cc": 
       "vn": provider.vn,
       "hn": provider.hn,
-      "cid": provider.id,
-      "bmi": "",
-      "bpd": "",
-      "bps": "",
-      "fbs": "0",
-      "rr": "0",
-      "pulse": "",
-      "spo2": "",
-      "temp": "",
-      "height": "",
-      "weight": "",
       "cc": cc
     });
     try {
       provider.debugPrintV(
-          "senvisitGatewayCC :${provider.platfromURLGateway}/api/vitalsign - ${cc}");
+          "senvisitGatewayCC :${provider.platfromURLGateway}/api/vitalsign");
       var url = Uri.parse('${provider.platfromURLGateway}/api/vitalsign');
       var response = await http.post(url,
           headers: {'Content-Type': 'application/json'}, body: body);
@@ -130,6 +120,7 @@ class _SummaryState extends State<Summary> {
   }
 
   void printexam() async {
+    sendHealthrecordGateway();
     String msgHead = "";
     String msgDetail = "";
     //double sizeHeader = 20;
@@ -139,7 +130,7 @@ class _SummaryState extends State<Summary> {
       fontSize: 16,
       fontWeight: pw.FontWeight.bold,
     );
-
+    DataProvider provider = context.read<DataProvider>();
     String dataBarcode = "";
     String dataQrcode = "";
     String databarcodeHN = resTojson2["personal"]["hn"];
@@ -174,9 +165,11 @@ class _SummaryState extends State<Summary> {
     msgDetail +=
         'อุณภูมิ : ${resTojson2['health_records'][0]['temp']}  | BP: ${resTojson2['health_records'][0]['bp']} \n';
     msgDetail += 'PULSE : ${resTojson2['health_records'][0]['pulse_rate']} \n';
+    msgDetail += "${S.of(context)!.summary_history} \n";
 
     dataBarcode = resTojson2["personal"]["hn"];
-    dataQrcode = resTojson2["personal"]["hn"];
+    dataQrcode =
+        "https://expert.emr-life.com/telemed/App/login?cid=${provider.id}";
 
     pw.Widget _buildLogo(Uint8List logoBytes) {
       return pw.Center(
@@ -300,8 +293,8 @@ class _SummaryState extends State<Summary> {
               pw.SizedBox(height: 5),
               _buildBarcode(databarcodeVN),
               pw.SizedBox(height: 5),
-              // _buildQRCode(dataQrcode),
-              // pw.SizedBox(height: 5),
+              _buildQRCode(dataQrcode),
+              pw.SizedBox(height: 5),
               _buildFooter(),
             ],
           );
@@ -508,6 +501,20 @@ class _SummaryState extends State<Summary> {
                                 ],
                               ) : const SizedBox()
                             : const SizedBox(),
+                        Center(
+                          child: Text(
+                            S.of(context)!.summary_history,
+                            style: TextStyle(fontSize: width * 0.03),
+                          ),
+                        ),
+                        Center(
+                          child: QrImageView(
+                            data:
+                                'https://expert.emr-life.com/telemed/App/login?cid=${provider.id}',
+                            version: QrVersions.auto,
+                            size: 200.0,
+                          ),
+                        ),
                       ]),
                     ),
                   ),
