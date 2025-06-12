@@ -653,7 +653,7 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
     startH_W();
     startBP();
     startHL7Server();
-    //startSpo2();
+    startSpo2();
   }
 
   @override
