@@ -288,7 +288,7 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
     try {
       for (var name in SerialPort.availablePorts) {
         final port = SerialPort(name);
-        provider.debugPrintV('scan W_H$name port:${port.vendorId}');
+        provider.debugPrintV('scan W_H $name port:${port.vendorId}');
         if (port.vendorId == 6790) {
           provider.debugPrintV("found W_H");
           if (!port.openReadWrite()) {
@@ -299,6 +299,9 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
           provider.debugPrintV("open W_H");
           SerialPortConfig config = port.config;
           config.baudRate = 9600;
+          config.bits = 8;
+          config.stopBits = 1;
+          config.parity = 0;
           port.config = config;
           List<int> buffer = [];
           final reader = SerialPortReader(port);
@@ -306,7 +309,7 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
           setState(() {
             statusConnectH_W = true;
           });
-
+      
           reader.stream.listen((data) {
             provider.debugPrintV("reader.stream.listen W_H:${data.toString()}");
             buffer.addAll(data);
@@ -573,7 +576,7 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
 
     startH_W();
     startBP();
-    startSpo2();
+    //startSpo2();
   }
 
   @override
