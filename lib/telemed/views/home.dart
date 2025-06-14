@@ -15,7 +15,7 @@ import 'package:smarttelemed/telemed/views/ui/numpad.dart';
 import 'package:smarttelemed/telemed/views/ui/stylebutton.dart';
 import 'package:smarttelemed/telemed/views/userInformation.dart';
 
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:smarttelemed/l10n/app_localizations.dart';
 
 class HomeTelemed extends StatefulWidget {
   const HomeTelemed({super.key});
@@ -85,8 +85,9 @@ class _HomeTelemedState extends State<HomeTelemed> {
         if (res.statusCode == 200) {
           provider.debugPrintV("บันทึกข้อมูลจาก CardลงProvider");
           provider.updateuserinformation(resTojson_getIdCard);
-          provider
-              .debugPrintV("Stop Card Reader--------------------------------=");
+          provider.debugPrintV(
+            "Stop Card Reader--------------------------------=",
+          );
           if (!provider.require_VN) {
             provider.debugPrintV("!provider.require_VN ");
             //   provider.updateuserCard(resTojson_getIdCard);
@@ -106,7 +107,8 @@ class _HomeTelemedState extends State<HomeTelemed> {
         }
       } catch (e) {
         provider.debugPrintV(
-            "Error Carde= Reader http://localhost:8189/api/smartcard/read");
+          "Error Carde= Reader http://localhost:8189/api/smartcard/read",
+        );
       }
     });
   }
@@ -117,9 +119,11 @@ class _HomeTelemedState extends State<HomeTelemed> {
     if (provider.id.length == 13) {
       try {
         var url = Uri.parse(
-            '${provider.platfromURLGateway}/api/patient?cid=${provider.id}');
+          '${provider.platfromURLGateway}/api/patient?cid=${provider.id}',
+        );
         provider.debugPrintV(
-            "senvisitGateway1 :${provider.platfromURLGateway}/api/patient?cid=${provider.id}");
+          "senvisitGateway1 :${provider.platfromURLGateway}/api/patient?cid=${provider.id}",
+        );
         var response = await http.get(url);
         provider.debugPrintV("response $response");
         resTojsonGateway = json.decode(response.body);
@@ -133,10 +137,11 @@ class _HomeTelemedState extends State<HomeTelemed> {
       if (resTojsonGateway != null) {
         if (resTojsonGateway["statuscode"] == 400 ||
             resTojsonGateway["statuscode"] == 404) {
-          provider
-              .debugPrintV("statuscode 400||404 ไม่ข้อมีมูลในระบบ ไม่มี HN");
+          provider.debugPrintV(
+            "statuscode 400||404 ไม่ข้อมีมูลในระบบ ไม่มี HN",
+          );
           setState(() {
-            texthead = S.of(context)!.hn + provider.text_no_hn;
+            texthead = AppLocalizations.of(context)!.hn + provider.text_no_hn;
             status = false;
           });
         }
@@ -151,7 +156,8 @@ class _HomeTelemedState extends State<HomeTelemed> {
               resTojsonGateway["data"]["vn"] == "") {
             setState(() {
               if (provider.require_VN) {
-                texthead = S.of(context)!.no_vn + provider.text_no_vn;
+                texthead =
+                    AppLocalizations.of(context)!.no_vn + provider.text_no_vn;
                 provider.debugPrintV("ไม่มี VN ติดต่อเจ้าหน้าที่ ");
               }
             });
@@ -178,9 +184,11 @@ class _HomeTelemedState extends State<HomeTelemed> {
 
     try {
       var url = Uri.parse(
-          '${provider.platfromURLGateway}/api/patient?hn=${provider.id}');
+        '${provider.platfromURLGateway}/api/patient?hn=${provider.id}',
+      );
       provider.debugPrintV(
-          "senvisitGateway :${provider.platfromURLGateway}/api/patient?hn=${provider.id}");
+        "senvisitGateway :${provider.platfromURLGateway}/api/patient?hn=${provider.id}",
+      );
       var response = await http.get(url);
       provider.debugPrintV("response $response");
       resTojsonGateway = json.decode(response.body);
@@ -194,7 +202,8 @@ class _HomeTelemedState extends State<HomeTelemed> {
         provider.id = "";
       });
       provider.debugPrintV(
-          "error ${provider.platfromURLGateway}/api/patient?hn=${provider.id} : $e");
+        "error ${provider.platfromURLGateway}/api/patient?hn=${provider.id} : $e",
+      );
     }
     provider.debugPrintV("resTojsonGatewayHN ${resTojsonGateway.toString()}");
     if (resTojsonGateway != null) {
@@ -202,7 +211,7 @@ class _HomeTelemedState extends State<HomeTelemed> {
           resTojsonGateway["statuscode"] == 404) {
         provider.debugPrintV("statuscode 400||404 ไม่ข้อมีมูลในระบบ ไม่มีHN");
         setState(() {
-          texthead = S.of(context)!.hn + provider.text_no_hn;
+          texthead = AppLocalizations.of(context)!.hn + provider.text_no_hn;
           status = false;
         });
       }
@@ -217,7 +226,8 @@ class _HomeTelemedState extends State<HomeTelemed> {
             resTojsonGateway["data"]["vn"] == "") {
           setState(() {
             if (provider.require_VN) {
-              texthead = S.of(context)!.no_vn + provider.text_no_vn;
+              texthead =
+                  AppLocalizations.of(context)!.no_vn + provider.text_no_vn;
               provider.debugPrintV("ไม่มี VN ติดต่อเจ้าหน้าที่ ");
             }
           });
@@ -240,20 +250,23 @@ class _HomeTelemedState extends State<HomeTelemed> {
       status = true;
     });
     provider.debugPrintV(
-        "sen get_patient ESM :${provider.platfromURL}/get_patient");
+      "sen get_patient ESM :${provider.platfromURL}/get_patient",
+    );
     try {
       var url = Uri.parse('${provider.platfromURL}/get_patient');
-      var res = await http.post(url, body: {
-        'care_unit_id': provider.care_unit_id,
-        'public_id': provider.id,
-      });
+      var res = await http.post(
+        url,
+        body: {'care_unit_id': provider.care_unit_id, 'public_id': provider.id},
+      );
       resTojson_esm = json.decode(res.body);
     } catch (e) {
       provider.debugPrintV(
-          " error sen get_patient ESM :${provider.platfromURL}/get_patient :$e");
+        " error sen get_patient ESM :${provider.platfromURL}/get_patient :$e",
+      );
     }
-    provider
-        .debugPrintV("resTojson get_patient ESM ${resTojson_esm.toString()}");
+    provider.debugPrintV(
+      "resTojson get_patient ESM ${resTojson_esm.toString()}",
+    );
     setState(() {
       status = false;
     });
@@ -270,17 +283,20 @@ class _HomeTelemedState extends State<HomeTelemed> {
         provider.debugPrintV("picture64 ${provider.imgae} ");
         provider.debugPrintV("กำลังสมัคข้อมูลในESM");
         var url = Uri.parse('${provider.platfromURL}/add_patient');
-        var res = await http.post(url, body: {
-          'care_unit_id': provider.care_unit_id,
-          'public_id': provider.id,
-          'prefix_name': provider.prefixName,
-          'first_name': provider.fname,
-          'last_name': provider.lname,
-          'tel': provider.phone,
-          'hn': provider.hn,
-          'birth_date': provider.birthdate,
-          'picture64': provider.imgae,
-        });
+        var res = await http.post(
+          url,
+          body: {
+            'care_unit_id': provider.care_unit_id,
+            'public_id': provider.id,
+            'prefix_name': provider.prefixName,
+            'first_name': provider.fname,
+            'last_name': provider.lname,
+            'tel': provider.phone,
+            'hn': provider.hn,
+            'birth_date': provider.birthdate,
+            'picture64': provider.imgae,
+          },
+        );
         var resTojson = json.decode(res.body);
         if (res.statusCode == 200) {
           provider.debugPrintV("สมัคข้อมูลในESMสำเร็จ");
@@ -294,9 +310,9 @@ class _HomeTelemedState extends State<HomeTelemed> {
           });
           Future.delayed(const Duration(seconds: 1), () {
             Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => const Userinformation()));
+              context,
+              MaterialPageRoute(builder: (context) => const Userinformation()),
+            );
           });
         }
       } else {
@@ -307,14 +323,17 @@ class _HomeTelemedState extends State<HomeTelemed> {
           checkcardout?.cancel;
         });
         Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => const Register()));
+          context,
+          MaterialPageRoute(builder: (context) => const Register()),
+        );
       }
     } else {
       timerreadIDCard?.cancel();
       checkcardout?.cancel;
       provider.debugPrintV("มีข้อมูลในระบบESM");
-      provider
-          .debugPrintV("เช็คข้อมูลในprovider เพิ่มข้อมูลในกรณีที่เป็นค่าว่าง");
+      provider.debugPrintV(
+        "เช็คข้อมูลในprovider เพิ่มข้อมูลในกรณีที่เป็นค่าว่าง",
+      );
       if (provider.fname == "") {
         if (resTojson_esm["data"]["first_name"] != null) {
           provider.fname = resTojson_esm["data"]["first_name"];
@@ -356,17 +375,20 @@ class _HomeTelemedState extends State<HomeTelemed> {
           provider.debugPrintV("มีวันเกิดในprovider");
           try {
             var url = Uri.parse("${provider.platfromURL}/add_patient");
-            var res = await http.post(url, body: {
-              'care_unit_id': provider.care_unit_id,
-              'public_id': provider.id,
-              'prefix_name': provider.prefixName,
-              'first_name': provider.fname,
-              'last_name': provider.lname,
-              'tel': provider.phone,
-              'hn': provider.hn,
-              'birth_date': provider.birthdate,
-              'picture64': provider.imgae,
-            });
+            var res = await http.post(
+              url,
+              body: {
+                'care_unit_id': provider.care_unit_id,
+                'public_id': provider.id,
+                'prefix_name': provider.prefixName,
+                'first_name': provider.fname,
+                'last_name': provider.lname,
+                'tel': provider.phone,
+                'hn': provider.hn,
+                'birth_date': provider.birthdate,
+                'picture64': provider.imgae,
+              },
+            );
             var resTojson = json.decode(res.body);
             if (res.statusCode == 200) {
               provider.debugPrintV("StatusresTojson :${resTojson["message"]}");
@@ -392,9 +414,9 @@ class _HomeTelemedState extends State<HomeTelemed> {
         setState(() {
           Future.delayed(const Duration(seconds: 1), () {
             Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => const Userinformation()));
+              context,
+              MaterialPageRoute(builder: (context) => const Userinformation()),
+            );
           });
         });
       });
@@ -439,17 +461,20 @@ class _HomeTelemedState extends State<HomeTelemed> {
                         ),
                         Center(
                           child: Text(
-                            S.of(context)!.home_promptIdOrScanHN,
+                            AppLocalizations.of(context)!.home_promptIdOrScanHN,
                             style: TextStyle(
-                                fontSize: width * 0.035,
-                                fontWeight: FontWeight.w500),
+                              fontSize: width * 0.035,
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
                         ),
                         Center(
                           child: Text(
                             texthead,
                             style: TextStyle(
-                                color: Colors.red, fontSize: width * 0.03),
+                              color: Colors.red,
+                              fontSize: width * 0.03,
+                            ),
                           ),
                         ),
                         SizedBox(height: height * 0.005),
@@ -458,18 +483,20 @@ class _HomeTelemedState extends State<HomeTelemed> {
                             width: width * 0.7,
                             height: height * 0.07,
                             decoration: BoxDecoration(
-                                color: const Color.fromARGB(255, 235, 235, 235),
-                                borderRadius: BorderRadius.circular(15)),
+                              color: const Color.fromARGB(255, 235, 235, 235),
+                              borderRadius: BorderRadius.circular(15),
+                            ),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 GestureDetector(
-                                    onTap: () {
-                                      setState(() {
-                                        shownumpad = !shownumpad;
-                                      });
-                                    },
-                                    child: const BoxID()),
+                                  onTap: () {
+                                    setState(() {
+                                      shownumpad = !shownumpad;
+                                    });
+                                  },
+                                  child: const BoxID(),
+                                ),
                               ],
                             ),
                           ),
@@ -482,29 +509,35 @@ class _HomeTelemedState extends State<HomeTelemed> {
                             status == false
                                 ? ElevatedButton(
                                     style: stylebutter(
-                                        !provider.requirel_id_card
-                                            ? Colors.green
-                                            : Colors.grey,
-                                        width * provider.buttonSized_w,
-                                        height * provider.buttonSized_h),
+                                      !provider.requirel_id_card
+                                          ? Colors.green
+                                          : Colors.grey,
+                                      width * provider.buttonSized_w,
+                                      height * provider.buttonSized_h,
+                                    ),
                                     onPressed: () {
                                       if (!provider.requirel_id_card) {
                                         sendvisitGateway();
                                       } else {
                                         provider.debugPrintV(
-                                            "การตั้งค่าปังคับใช้บัตรเปิดอยู่");
+                                          "การตั้งค่าปังคับใช้บัตรเปิดอยู่",
+                                        );
                                       }
                                     },
                                     child: Text(
-                                      S.of(context)!.confirm,
+                                      AppLocalizations.of(context)!.confirm,
                                       style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: width * 0.06),
-                                    ))
+                                        color: Colors.white,
+                                        fontSize: width * 0.06,
+                                      ),
+                                    ),
+                                  )
                                 : SizedBox(
-                                    width: MediaQuery.of(context).size.width *
+                                    width:
+                                        MediaQuery.of(context).size.width *
                                         0.05,
-                                    height: MediaQuery.of(context).size.width *
+                                    height:
+                                        MediaQuery.of(context).size.width *
                                         0.05,
                                     child: const CircularProgressIndicator(),
                                   ),
@@ -541,7 +574,7 @@ class _HomeTelemedState extends State<HomeTelemed> {
                               ),
                             ),
                           ],
-                        )
+                        ),
                       ],
                     ),
                   ),
@@ -558,28 +591,31 @@ class _HomeTelemedState extends State<HomeTelemed> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   GestureDetector(
-                      onTap: () {
-                        if (provider.password == provider.id) {
-                          timerreadIDCard?.cancel();
-                          Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const Setting()));
-                          provider.debugPrintV('Setting');
-                        }
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Container(
-                            color: Colors.white,
-                            child: const Icon(Icons.settings)
-                            // Text(
-                            //   "ตั้งค่า",
-                            //   style: TextStyle(fontSize: width * 0.03),
-                            // )
-                            ),
-                      )),
-                  const Text("")
+                    onTap: () {
+                      if (provider.password == provider.id) {
+                        timerreadIDCard?.cancel();
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const Setting(),
+                          ),
+                        );
+                        provider.debugPrintV('Setting');
+                      }
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        color: Colors.white,
+                        child: const Icon(Icons.settings),
+                        // Text(
+                        //   "ตั้งค่า",
+                        //   style: TextStyle(fontSize: width * 0.03),
+                        // )
+                      ),
+                    ),
+                  ),
+                  const Text(""),
                   // GestureDetector(
                   //     onTap: () {
                   //       showDialog(
@@ -610,7 +646,7 @@ class _HomeTelemedState extends State<HomeTelemed> {
                 ],
               ),
             ),
-          )
+          ),
         ],
       ),
     );

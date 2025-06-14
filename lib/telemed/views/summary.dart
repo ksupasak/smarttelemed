@@ -16,7 +16,7 @@ import 'package:smarttelemed/telemed/views/userInformation.dart';
 
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:pdf/widgets.dart' as pw;
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:smarttelemed/l10n/app_localizations.dart';
 
 class Summary extends StatefulWidget {
   const Summary({super.key});
@@ -28,7 +28,7 @@ class Summary extends StatefulWidget {
 class _SummaryState extends State<Summary> {
   String doctor_note = '--';
   String cc = '--';
-  
+
   Printer? selectedPrinter; // Stores the selected printer
   var resTojson2;
   late pw.Font thaiFont;
@@ -42,12 +42,16 @@ class _SummaryState extends State<Summary> {
   }
 
   Future<void> get_queue() async {
-    var url =
-        Uri.parse('${context.read<DataProvider>().platfromURL}/check_quick');
-    var res = await http.post(url, body: {
-      'care_unit_id': context.read<DataProvider>().care_unit_id,
-      'public_id': context.read<DataProvider>().id,
-    });
+    var url = Uri.parse(
+      '${context.read<DataProvider>().platfromURL}/check_quick',
+    );
+    var res = await http.post(
+      url,
+      body: {
+        'care_unit_id': context.read<DataProvider>().care_unit_id,
+        'public_id': context.read<DataProvider>().id,
+      },
+    );
 
     resTojson2 = json.decode(res.body);
     setState(() {});
@@ -55,10 +59,12 @@ class _SummaryState extends State<Summary> {
 
   Future<void> exam() async {
     var url = Uri.parse(
-        '${context.read<DataProvider>().platfromURL}/get_doctor_exam');
-    var res = await http.post(url, body: {
-      'public_id': context.read<DataProvider>().id,
-    });
+      '${context.read<DataProvider>().platfromURL}/get_doctor_exam',
+    );
+    var res = await http.post(
+      url,
+      body: {'public_id': context.read<DataProvider>().id},
+    );
     setState(() {
       var resTojson = json.decode(res.body);
       debugPrint('+++++++$resTojson');
@@ -100,7 +106,7 @@ class _SummaryState extends State<Summary> {
       // "vn": provider.vn,
       // "hn": provider.hn,
       // "cid": provider.id,
-      // "cc": 
+      // "cc":
       "vn": provider.vn,
       "hn": provider.hn,
       "cid": provider.id,
@@ -114,10 +120,12 @@ class _SummaryState extends State<Summary> {
       "temp": "",
       "height": "",
       "weight": "",
-      "cc": cc
+      "cc": cc,
     });
     try {
-      provider.debugPrintV("senvisitGatewayCC :${provider.platfromURLGateway}/api/vitalsign - ${cc}");
+      provider.debugPrintV(
+        "senvisitGatewayCC :${provider.platfromURLGateway}/api/vitalsign - ${cc}",
+      );
       // "bmi": provider.bmiHealthrecord.text,
       // "bpd": provider.diaHealthrecord.text,
       // "bps": provider.sysHealthrecord.text,
@@ -129,16 +137,20 @@ class _SummaryState extends State<Summary> {
       // "height": provider.heightHealthrecord.text,
       // "weight": provider.weightHealthrecord.text,
       // "cc": cc
-    // }catch (e) {
-    //   provider.debugPrintV("senvisitGatewayCC $e");
-    // };
-    // try {
+      // }catch (e) {
+      //   provider.debugPrintV("senvisitGatewayCC $e");
+      // };
+      // try {
       provider.debugPrintV(
-          "senvisitGateway+CC :${provider.platfromURLGateway}/api/vitalsign");
+        "senvisitGateway+CC :${provider.platfromURLGateway}/api/vitalsign",
+      );
 
       var url = Uri.parse('${provider.platfromURLGateway}/api/vitalsign');
-      var response = await http.post(url,
-          headers: {'Content-Type': 'application/json'}, body: body);
+      var response = await http.post(
+        url,
+        headers: {'Content-Type': 'application/json'},
+        body: body,
+      );
       provider.debugPrintV("response Gateway$response");
       var resTojsonGateway = json.decode(response.body);
       provider.debugPrintV("resTojsonGateway $resTojsonGateway");
@@ -193,7 +205,7 @@ class _SummaryState extends State<Summary> {
     msgDetail +=
         'อุณภูมิ : ${resTojson2['health_records'][0]['temp']}  | BP: ${resTojson2['health_records'][0]['bp']} \n';
     msgDetail += 'PULSE : ${resTojson2['health_records'][0]['pulse_rate']} \n';
-    msgDetail += "${S.of(context)!.summary_history} \n";
+    msgDetail += "${AppLocalizations.of(context)!.summary_history} \n";
 
     dataBarcode = resTojson2["personal"]["hn"];
     dataQrcode =
@@ -201,11 +213,7 @@ class _SummaryState extends State<Summary> {
 
     pw.Widget _buildLogo(Uint8List logoBytes) {
       return pw.Center(
-        child: pw.Image(
-          pw.MemoryImage(logoBytes),
-          width: 70,
-          height: 70,
-        ),
+        child: pw.Image(pw.MemoryImage(logoBytes), width: 70, height: 70),
       );
     }
 
@@ -214,13 +222,10 @@ class _SummaryState extends State<Summary> {
         crossAxisAlignment: pw.CrossAxisAlignment.start,
         children: [
           pw.Text(
-            S.of(context)!.summary_testResult, // 'ผลการตรวจ',
+            AppLocalizations.of(context)!.summary_testResult, // 'ผลการตรวจ',
             style: font_sizeBody,
           ),
-          pw.Text(
-            msgHead,
-            style: font_sizeBody,
-          ),
+          pw.Text(msgHead, style: font_sizeBody),
         ],
       );
     }
@@ -228,9 +233,7 @@ class _SummaryState extends State<Summary> {
     pw.Widget _buildText(String mText) {
       return pw.Column(
         crossAxisAlignment: pw.CrossAxisAlignment.center,
-        children: [
-          pw.Text(mText, style: font_sizeBody),
-        ],
+        children: [pw.Text(mText, style: font_sizeBody)],
       );
     }
 
@@ -238,24 +241,21 @@ class _SummaryState extends State<Summary> {
       return pw.Column(
         crossAxisAlignment: pw.CrossAxisAlignment.start,
         children: [
-          pw.Text(S.of(context)!.summary_analyze, style: font_sizeBody),
+          pw.Text(
+            AppLocalizations.of(context)!.summary_analyze,
+            style: font_sizeBody,
+          ),
           pw.Text(cc, style: font_sizeBody),
           pw.Text(
-            S.of(context)!.summary_dispMed,
+            AppLocalizations.of(context)!.summary_dispMed,
             style: font_sizeBody,
           ),
+          pw.Text(doctor_note, style: font_sizeBody),
           pw.Text(
-            doctor_note,
+            AppLocalizations.of(context)!.summary_detail,
             style: font_sizeBody,
           ),
-          pw.Text(
-            S.of(context)!.summary_detail,
-            style: font_sizeBody,
-          ),
-          pw.Text(
-            msgDetail,
-            style: font_sizeBody,
-          ),
+          pw.Text(msgDetail, style: font_sizeBody),
         ],
       );
     }
@@ -338,8 +338,10 @@ class _SummaryState extends State<Summary> {
         printer: selectedPrinter!,
         onLayout: (PdfPageFormat format) async => pdfBytes,
       );
-      Navigator.pushReplacement(context,
-          MaterialPageRoute(builder: (context) => const HomeTelemed()));
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const HomeTelemed()),
+      );
     } else {
       print("No printer selected.");
     }
@@ -372,20 +374,20 @@ class _SummaryState extends State<Summary> {
                   SizedBox(height: height * 0.13),
                   Center(
                     child: Container(
-                        width: width * 0.8,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(10),
-                          boxShadow: const [
-                            BoxShadow(
-                                blurRadius: 0.5,
-                                color: Color(0xff48B5AA),
-                                offset: Offset(0, 3)),
-                          ],
-                        ),
-                        child: const Center(
-                          child: InformationCard(),
-                        )),
+                      width: width * 0.8,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10),
+                        boxShadow: const [
+                          BoxShadow(
+                            blurRadius: 0.5,
+                            color: Color(0xff48B5AA),
+                            offset: Offset(0, 3),
+                          ),
+                        ],
+                      ),
+                      child: const Center(child: InformationCard()),
+                    ),
                   ),
                   SizedBox(height: height * 0.02),
                   Center(
@@ -397,153 +399,190 @@ class _SummaryState extends State<Summary> {
                         color: Colors.white,
                         boxShadow: const [
                           BoxShadow(
-                              blurRadius: 2,
-                              spreadRadius: 2,
-                              color: Color.fromARGB(255, 188, 188, 188),
-                              offset: Offset(0, 2)),
+                            blurRadius: 2,
+                            spreadRadius: 2,
+                            color: Color.fromARGB(255, 188, 188, 188),
+                            offset: Offset(0, 2),
+                          ),
                         ],
                       ),
-                      child: ListView(children: [
-                        SizedBox(height: height * 0.02),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(S.of(context)!.summary_testResult,
-                                style: TextStyle(fontSize: width * 0.04)),
-                          ],
-                        ),
-                        SizedBox(height: height * 0.02),
-                        Row(
+                      child: ListView(
+                        children: [
+                          SizedBox(height: height * 0.02),
+                          Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              SizedBox(
-                                width: width * 0.25,
-                                child: Text(S.of(context)!.summary_dx, // dx
-                                    style: TextStyle(
-                                        color: Colors.green,
-                                        fontSize: width * 0.03)),
+                              Text(
+                                AppLocalizations.of(
+                                  context,
+                                )!.summary_testResult,
+                                style: TextStyle(fontSize: width * 0.04),
                               ),
-                              SizedBox(
-                                width: width * 0.5,
-                                child: Text(cc,
-                                    style: TextStyle(fontSize: width * 0.03)),
-                              ),
-                            ]),
-                        SizedBox(height: height * 0.01),
-                        Row(
+                            ],
+                          ),
+                          SizedBox(height: height * 0.02),
+                          Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               SizedBox(
                                 width: width * 0.25,
                                 child: Text(
-                                    S
-                                        .of(context)!
-                                        .summary_dc_note, // doctor note
-                                    style: TextStyle(
-                                        color: Colors.green,
-                                        fontSize: width * 0.03)),
+                                  AppLocalizations.of(
+                                    context,
+                                  )!.summary_dx, // dx
+                                  style: TextStyle(
+                                    color: Colors.green,
+                                    fontSize: width * 0.03,
+                                  ),
+                                ),
                               ),
                               SizedBox(
                                 width: width * 0.5,
-                                child: Text(doctor_note,
-                                    style: TextStyle(fontSize: width * 0.03)),
+                                child: Text(
+                                  cc,
+                                  style: TextStyle(fontSize: width * 0.03),
+                                ),
                               ),
-                            ]),
-                        Center(
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Container(
-                              width: width * 0.8,
-                              height: 1,
-                              color: Colors.grey,
+                            ],
+                          ),
+                          SizedBox(height: height * 0.01),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SizedBox(
+                                width: width * 0.25,
+                                child: Text(
+                                  AppLocalizations.of(
+                                    context,
+                                  )!.summary_dc_note, // doctor note
+                                  style: TextStyle(
+                                    color: Colors.green,
+                                    fontSize: width * 0.03,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                width: width * 0.5,
+                                child: Text(
+                                  doctor_note,
+                                  style: TextStyle(fontSize: width * 0.03),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Center(
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Container(
+                                width: width * 0.8,
+                                height: 1,
+                                color: Colors.grey,
+                              ),
                             ),
                           ),
-                        ),
-                        SizedBox(height: height * 0.01),
-                        Center(
+                          SizedBox(height: height * 0.01),
+                          Center(
                             child: Text(
-                                S
-                                    .of(context)!
-                                    .summary_healthMeasurement, // วัดค่าสุขภาพ
-                                style: TextStyle(fontSize: width * 0.04))),
-                        SizedBox(height: height * 0.01),
-                        resTojson2 != null
-                            ?resTojson2["health_records"].length !=0? Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                               
-                                  Text(
-                                    // BMI :
-                                    resTojson2["health_records"][0]["bmi"] !=
-                                            null
-                                        ? "${S.of(context)!.summary_bmi} ${resTojson2["health_records"][0]["bmi"]}"
-                                        : "",
-                                    style: TextStyle(fontSize: width * 0.03),
-                                  ),
-                                  Text(
-                                    // Weight :
-                                    resTojson2["health_records"][0]["weight"] !=
-                                            null
-                                        ? "${S.of(context)!.summary_weight} ${resTojson2["health_records"][0]["weight"]}"
-                                        : "",
-                                    style: TextStyle(fontSize: width * 0.03),
-                                  ),
-                                  Text(
-                                    // Height :
-                                    resTojson2["health_records"][0]["height"] !=
-                                            null
-                                        ? "${S.of(context)!.summary_height} ${resTojson2["health_records"][0]["height"]}"
-                                        : "",
-                                    style: TextStyle(fontSize: width * 0.03),
-                                  ),
-                                ],
-                              ): const SizedBox()
-                            : const SizedBox(),
-                        resTojson2 != null
-                            ?resTojson2["health_records"].length !=0? Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Text(
-                                    resTojson2["health_records"][0]["bp"] !=
-                                            null
-                                        ? "BP :${resTojson2["health_records"][0]["bp"]}"
-                                        : "",
-                                    style: TextStyle(fontSize: width * 0.03),
-                                  ),
-                                  Text(
-                                    resTojson2["health_records"][0]["spo2"] !=
-                                            null
-                                        ? "Spo2 :${resTojson2["health_records"][0]["spo2"]}"
-                                        : "",
-                                    style: TextStyle(fontSize: width * 0.03),
-                                  ),
-                                  Text(
-                                    resTojson2["health_records"][0]["temp"] !=
-                                            null
-                                        ? "Temp :${resTojson2["health_records"][0]["temp"]}"
-                                        : "",
-                                    style: TextStyle(fontSize: width * 0.03),
-                                  ),
-                                ],
-                              ) : const SizedBox()
-                            : const SizedBox(),
-                        Center(
-                          child: Text(
-                            S.of(context)!.summary_history,
-                            style: TextStyle(fontSize: width * 0.03),
+                              AppLocalizations.of(
+                                context,
+                              )!.summary_healthMeasurement, // วัดค่าสุขภาพ
+                              style: TextStyle(fontSize: width * 0.04),
+                            ),
                           ),
-                        ),
-                        Center(
-                          child: QrImageView(
-                            data:
-                                'https://expert.emr-life.com/telemed/App/login?cid=${provider.id}',
-                            version: QrVersions.auto,
-                            size: 200.0,
+                          SizedBox(height: height * 0.01),
+                          resTojson2 != null
+                              ? resTojson2["health_records"].length != 0
+                                    ? Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceEvenly,
+                                        children: [
+                                          Text(
+                                            // BMI :
+                                            resTojson2["health_records"][0]["bmi"] !=
+                                                    null
+                                                ? "${AppLocalizations.of(context)!.summary_bmi} ${resTojson2["health_records"][0]["bmi"]}"
+                                                : "",
+                                            style: TextStyle(
+                                              fontSize: width * 0.03,
+                                            ),
+                                          ),
+                                          Text(
+                                            // Weight :
+                                            resTojson2["health_records"][0]["weight"] !=
+                                                    null
+                                                ? "${AppLocalizations.of(context)!.summary_weight} ${resTojson2["health_records"][0]["weight"]}"
+                                                : "",
+                                            style: TextStyle(
+                                              fontSize: width * 0.03,
+                                            ),
+                                          ),
+                                          Text(
+                                            // Height :
+                                            resTojson2["health_records"][0]["height"] !=
+                                                    null
+                                                ? "${AppLocalizations.of(context)!.summary_height} ${resTojson2["health_records"][0]["height"]}"
+                                                : "",
+                                            style: TextStyle(
+                                              fontSize: width * 0.03,
+                                            ),
+                                          ),
+                                        ],
+                                      )
+                                    : const SizedBox()
+                              : const SizedBox(),
+                          resTojson2 != null
+                              ? resTojson2["health_records"].length != 0
+                                    ? Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceEvenly,
+                                        children: [
+                                          Text(
+                                            resTojson2["health_records"][0]["bp"] !=
+                                                    null
+                                                ? "BP :${resTojson2["health_records"][0]["bp"]}"
+                                                : "",
+                                            style: TextStyle(
+                                              fontSize: width * 0.03,
+                                            ),
+                                          ),
+                                          Text(
+                                            resTojson2["health_records"][0]["spo2"] !=
+                                                    null
+                                                ? "Spo2 :${resTojson2["health_records"][0]["spo2"]}"
+                                                : "",
+                                            style: TextStyle(
+                                              fontSize: width * 0.03,
+                                            ),
+                                          ),
+                                          Text(
+                                            resTojson2["health_records"][0]["temp"] !=
+                                                    null
+                                                ? "Temp :${resTojson2["health_records"][0]["temp"]}"
+                                                : "",
+                                            style: TextStyle(
+                                              fontSize: width * 0.03,
+                                            ),
+                                          ),
+                                        ],
+                                      )
+                                    : const SizedBox()
+                              : const SizedBox(),
+                          Center(
+                            child: Text(
+                              AppLocalizations.of(context)!.summary_history,
+                              style: TextStyle(fontSize: width * 0.03),
+                            ),
                           ),
-                        ),
-                      ]),
+                          Center(
+                            child: QrImageView(
+                              data:
+                                  'https://expert.emr-life.com/telemed/App/login?cid=${provider.id}',
+                              version: QrVersions.auto,
+                              size: 200.0,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                   SizedBox(height: height * 0.02),
@@ -553,19 +592,23 @@ class _SummaryState extends State<Summary> {
                       child: resTojson2 != null
                           ? ElevatedButton(
                               style: stylebutter(
-                                  Colors.green,
-                                  width * provider.buttonSized_w,
-                                  height * provider.buttonSized_h),
+                                Colors.green,
+                                width * provider.buttonSized_w,
+                                height * provider.buttonSized_h,
+                              ),
                               onPressed: () {
                                 printexam();
                               },
                               child: Text(
-                                  S
-                                      .of(context)!
-                                      .summary_printTestResults, //"ปริ้นผลตรวจ",
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: width * 0.06)))
+                                AppLocalizations.of(
+                                  context,
+                                )!.summary_printTestResults, //"ปริ้นผลตรวจ",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: width * 0.06,
+                                ),
+                              ),
+                            )
                           : SizedBox(
                               width: MediaQuery.of(context).size.width * 0.05,
                               height: MediaQuery.of(context).size.width * 0.05,
@@ -587,7 +630,7 @@ class _SummaryState extends State<Summary> {
                   //             BoxDecoration(border: Border.all(color: Colors.grey)),
                   //         child: Center(
                   //           child: Text(
-                  //             S.of(context)!.leave,
+                  //             AppLocalizations.of(context)!.leave,
                   //             style: TextStyle(
                   //                 color: Colors.red, fontSize: width * 0.03),
                   //           ),
@@ -597,7 +640,7 @@ class _SummaryState extends State<Summary> {
                 ],
               ),
             ),
-          )
+          ),
         ],
       ),
       bottomNavigationBar: SizedBox(
@@ -608,25 +651,33 @@ class _SummaryState extends State<Summary> {
               child: GestureDetector(
                 onTap: () {
                   Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const Userinformation()));
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const Userinformation(),
+                    ),
+                  );
                 },
                 child: Container(
                   height: height * 0.025,
                   width: width * 0.15,
                   decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(
-                          color: const Color.fromARGB(255, 201, 201, 201),
-                          width: width * 0.002)),
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(
+                      color: const Color.fromARGB(255, 201, 201, 201),
+                      width: width * 0.002,
+                    ),
+                  ),
                   child: Center(
-                      child: Text(
-                    S.of(context)!.summary_backButton, //'< ย้อนกลับ',
-                    style: TextStyle(
+                    child: Text(
+                      AppLocalizations.of(
+                        context,
+                      )!.summary_backButton, //'< ย้อนกลับ',
+                      style: TextStyle(
                         fontSize: width * 0.03,
-                        color: const Color.fromARGB(255, 201, 201, 201)),
-                  )),
+                        color: const Color.fromARGB(255, 201, 201, 201),
+                      ),
+                    ),
+                  ),
                 ),
               ),
             ),

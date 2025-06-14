@@ -31,9 +31,9 @@ class _Splash_ScreenState extends State<Splash_Screen> {
     if (Platform.isAndroid) {
       AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
       debugPrint('Device Model: ${androidInfo.model}');
-      debugPrint('Device ID: ${androidInfo.androidId}');
+      debugPrint('Device ID: ${androidInfo.id}');
       setState(() {
-        context.read<DataProvider>().appId = androidInfo.androidId.toString();
+        context.read<DataProvider>().appId = androidInfo.id.toString();
       });
       // และข้อมูลอื่น ๆ ตามที่คุณต้องการ
     } else if (Platform.isIOS) {
@@ -41,8 +41,8 @@ class _Splash_ScreenState extends State<Splash_Screen> {
       debugPrint('Device Model: ${iosInfo.model}');
       debugPrint('Device ID: ${iosInfo.identifierForVendor}');
       setState(() {
-        context.read<DataProvider>().appId =
-            iosInfo.identifierForVendor.toString();
+        context.read<DataProvider>().appId = iosInfo.identifierForVendor
+            .toString();
       });
 
       // และข้อมูลอื่น ๆ ตามที่คุณต้องการ
@@ -60,8 +60,10 @@ class _Splash_ScreenState extends State<Splash_Screen> {
       debugPrint('ไม่มีข้อมูล');
       Future.delayed(const Duration(seconds: 1), () {
         setState(() {
-          Navigator.pushReplacement(context,
-              MaterialPageRoute(builder: (context) => const Setting()));
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const Setting()),
+          );
         });
       });
     } else {
@@ -76,15 +78,15 @@ class _Splash_ScreenState extends State<Splash_Screen> {
     initUser = await getAllDataUser();
     for (RecordSnapshot<int, Map<String, Object?>> record in init) {
       context.read<DataProvider>().app = record['myapp'].toString();
-      context.read<DataProvider>().name_hospital =
-          record['name_hospital'].toString();
-      context.read<DataProvider>().platfromURL =
-          record['platfromURL'].toString();
+      context.read<DataProvider>().name_hospital = record['name_hospital']
+          .toString();
+      context.read<DataProvider>().platfromURL = record['platfromURL']
+          .toString();
       context.read<DataProvider>().care_unit = record['care_unit'].toString();
-      context.read<DataProvider>().care_unit_id =
-          record['care_unit_id'].toString();
-      context.read<DataProvider>().password =
-          record['passwordsetting'].toString();
+      context.read<DataProvider>().care_unit_id = record['care_unit_id']
+          .toString();
+      context.read<DataProvider>().password = record['passwordsetting']
+          .toString();
       context.read<DataProvider>().care_unit = record['care_unit'].toString();
     }
     for (RecordSnapshot<int, Map<String, Object?>> record in initUser) {
@@ -133,11 +135,15 @@ class _Splash_ScreenState extends State<Splash_Screen> {
     } else if (context.read<DataProvider>().app == 'station') {
       debugPrint('เข้าสู่->Station');
       Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => const App()));
+        context,
+        MaterialPageRoute(builder: (context) => const App()),
+      );
     } else {
       debugPrint('เข้าสู่->Setting');
       Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => const Setting()));
+        context,
+        MaterialPageRoute(builder: (context) => const Setting()),
+      );
     }
   }
 
@@ -159,12 +165,12 @@ class _Splash_ScreenState extends State<Splash_Screen> {
           context.read<DataProvider>().require_VN = false;
           setState(() {});
         }
-        context.read<DataProvider>().text_no_idcard =
-            record["text_no_idcard"].toString();
-        context.read<DataProvider>().text_no_hn =
-            record["text_no_hn"].toString();
-        context.read<DataProvider>().text_no_vn =
-            record["text_no_vn"].toString();
+        context.read<DataProvider>().text_no_idcard = record["text_no_idcard"]
+            .toString();
+        context.read<DataProvider>().text_no_hn = record["text_no_hn"]
+            .toString();
+        context.read<DataProvider>().text_no_vn = record["text_no_vn"]
+            .toString();
       }
     }
   }
@@ -189,37 +195,41 @@ class _Splash_ScreenState extends State<Splash_Screen> {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return Scaffold(
-        body: SafeArea(
-      child: Stack(
-        children: [
-          Positioned(
+      body: SafeArea(
+        child: Stack(
+          children: [
+            Positioned(
               child: SizedBox(
-                  width: width,
-                  height: height,
-                  child: SvgPicture.asset(
-                    'assets/splash/backlogo.svg',
-                    fit: BoxFit.fill,
-                  ))),
-          Positioned(
-              child: SizedBox(
-            width: width,
-            height: width,
-            child: Center(
-              child: SizedBox(
-                width: width * 0.8,
-                height: width * 0.8,
-                child: SvgPicture.asset('assets/splash/logo.svg'),
+                width: width,
+                height: height,
+                child: SvgPicture.asset(
+                  'assets/splash/backlogo.svg',
+                  fit: BoxFit.fill,
+                ),
               ),
             ),
-          )),
-          const Positioned(
-            right: 0,
-            child: CircularProgressIndicator(
-              color: Color.fromARGB(255, 0, 139, 130),
+            Positioned(
+              child: SizedBox(
+                width: width,
+                height: width,
+                child: Center(
+                  child: SizedBox(
+                    width: width * 0.8,
+                    height: width * 0.8,
+                    child: SvgPicture.asset('assets/splash/logo.svg'),
+                  ),
+                ),
+              ),
             ),
-          ),
-        ],
+            const Positioned(
+              right: 0,
+              child: CircularProgressIndicator(
+                color: Color.fromARGB(255, 0, 139, 130),
+              ),
+            ),
+          ],
+        ),
       ),
-    ));
+    );
   }
 }

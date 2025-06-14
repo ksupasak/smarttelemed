@@ -7,7 +7,7 @@ list(APPEND FLUTTER_PLUGIN_LIST
   flutter_libserialport
   flutter_webrtc
   printing
-  screen_retriever
+  screen_retriever_linux
   window_manager
 )
 

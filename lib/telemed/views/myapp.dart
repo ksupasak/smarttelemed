@@ -5,7 +5,7 @@ import 'package:smarttelemed/telemed/local/local.dart';
 import 'package:smarttelemed/telemed/provider/provider.dart';
 import 'package:smarttelemed/telemed/splash_screen/splashScreen.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:smarttelemed/l10n/app_localizations.dart';
 
 // class LocaleProvider with ChangeNotifier {
 //   // Locale _locale =  Locale('en'); // ค่าเริ่มต้นเป็นภาษาอังกฤษ
@@ -54,16 +54,9 @@ class _MyAppState extends State<MyApp> {
         //  ChangeNotifierProvider(create: ((context) => LocaleProvider())),
       ],
       child: MaterialApp(
-        localizationsDelegates: const [
-          S.delegate,
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-        ],
-        supportedLocales: const [
-          Locale('en'),
-          Locale('th'),
-        ],
+        theme: ThemeData(fontFamily: 'Prompt'),
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: const [Locale('en'), Locale('th')],
         locale: Locale(s), // LocaleProvider().locales,
         color: Colors.white,
         debugShowCheckedModeBanner: false,

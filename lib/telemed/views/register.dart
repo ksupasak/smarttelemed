@@ -13,7 +13,7 @@ import 'package:smarttelemed/telemed/provider/provider.dart';
 import 'package:smarttelemed/telemed/views/home.dart';
 import 'package:smarttelemed/telemed/views/userInformation.dart';
 import 'package:virtual_keyboard_multi_language/virtual_keyboard_multi_language.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:smarttelemed/l10n/app_localizations.dart';
 
 class Register extends StatefulWidget {
   const Register({super.key});
@@ -54,7 +54,8 @@ class _RegisterState extends State<Register> {
 
   void gitimage() async {
     var url = Uri.parse(
-        'http://localhost:8189/api/smartcard/read?readImageFlag=true');
+      'http://localhost:8189/api/smartcard/read?readImageFlag=true',
+    );
     var res = await http.get(url);
     var resTojson = json.decode(res.body);
     debugPrint(resTojson.toString());
@@ -72,17 +73,21 @@ class _RegisterState extends State<Register> {
     });
     DataProvider provider = context.read<DataProvider>();
     try {
-      var url =
-          Uri.parse('${context.read<DataProvider>().platfromURL}/add_patient');
-      var res = await http.post(url, body: {
-        'care_unit_id': context.read<DataProvider>().care_unit_id,
-        'public_id': id.text,
-        'prefix_name': prefix_name.text,
-        'first_name': first_name.text,
-        'last_name': last_name.text,
-        'tle': phone.text,
-        'hn': hn.text
-      });
+      var url = Uri.parse(
+        '${context.read<DataProvider>().platfromURL}/add_patient',
+      );
+      var res = await http.post(
+        url,
+        body: {
+          'care_unit_id': context.read<DataProvider>().care_unit_id,
+          'public_id': id.text,
+          'prefix_name': prefix_name.text,
+          'first_name': first_name.text,
+          'last_name': last_name.text,
+          'tle': phone.text,
+          'hn': hn.text,
+        },
+      );
       var resTojson = json.decode(res.body);
       if (res.statusCode == 200) {
         provider.debugPrintV("สมัคข้อมูลในESMสำเร็จ");
@@ -96,13 +101,14 @@ class _RegisterState extends State<Register> {
           });
           Future.delayed(const Duration(seconds: 1), () {
             Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => const Userinformation()));
+              context,
+              MaterialPageRoute(builder: (context) => const Userinformation()),
+            );
           });
         } else {
-          provider
-              .debugPrintV("สมัครข้อมูลในESMใม่สำเร็จ error:${res.statusCode}");
+          provider.debugPrintV(
+            "สมัครข้อมูลในESMใม่สำเร็จ error:${res.statusCode}",
+          );
           setState(() {
             status = false;
           });
@@ -120,40 +126,43 @@ class _RegisterState extends State<Register> {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return Container(
-        width: width * 0.4,
-        height: height * 0.027,
-        decoration: BoxDecoration(
-            border: Border.all(color: const Color.fromARGB(255, 0, 0, 0))),
-        child: child != null
-            ? Text(child,
-                style: const TextStyle(
-                  color: Color.fromARGB(255, 0, 28, 155),
-                ))
-            : const Text('-'));
+      width: width * 0.4,
+      height: height * 0.027,
+      decoration: BoxDecoration(
+        border: Border.all(color: const Color.fromARGB(255, 0, 0, 0)),
+      ),
+      child: child != null
+          ? Text(
+              child,
+              style: const TextStyle(color: Color.fromARGB(255, 0, 28, 155)),
+            )
+          : const Text('-'),
+    );
   }
 
   Widget Boxheab({required String child}) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return Container(
-        width: width * 0.4,
-        height: height * 0.027,
-        decoration: BoxDecoration(
-            border: Border.all(color: const Color.fromARGB(255, 0, 0, 0))),
-        child: Text(child,
-            style: const TextStyle(
-              color: Color.fromARGB(255, 3, 58, 58),
-            )));
+      width: width * 0.4,
+      height: height * 0.027,
+      decoration: BoxDecoration(
+        border: Border.all(color: const Color.fromARGB(255, 0, 0, 0)),
+      ),
+      child: Text(
+        child,
+        style: const TextStyle(color: Color.fromARGB(255, 3, 58, 58)),
+      ),
+    );
   }
 
-  Widget textdatauser({
-    TextEditingController? child,
-    String? namekeyboard,
-  }) {
+  Widget textdatauser({TextEditingController? child, String? namekeyboard}) {
     double width = MediaQuery.of(context).size.width;
     //double height = MediaQuery.of(context).size.height;
-    TextStyle style2 =
-        TextStyle(fontSize: width * 0.035, color: const Color(0xff003D5C));
+    TextStyle style2 = TextStyle(
+      fontSize: width * 0.035,
+      color: const Color(0xff003D5C),
+    );
     return Row(
       children: [
         SizedBox(width: width * 0.05),
@@ -162,40 +171,49 @@ class _RegisterState extends State<Register> {
           child: Padding(
             padding: const EdgeInsets.all(5.0),
             child: TextField(
-                onChanged: (value) {
-                  if (!value.isNotEmpty) {
+              onChanged: (value) {
+                if (!value.isNotEmpty) {
+                  setState(() {});
+                }
+              },
+              onTap: () async {
+                setState(() {
+                  if (namekeyboard == "hn") {
+                    keyboardHN = true;
+                    keyboardPhone = false;
                     setState(() {});
                   }
-                },
-                onTap: () async {
-                  setState(() {
-                    if (namekeyboard == "hn") {
-                      keyboardHN = true;
-                      keyboardPhone = false;
-                      setState(() {});
-                    }
-                    if (namekeyboard == "phone") {
-                      keyboardPhone = true;
-                      keyboardHN = false;
-                      setState(() {});
-                    }
-                  });
-                },
-                onEditingComplete: () {
-                  //  FocusScope.of(context).unfocus();
-                },
-                controller: child,
-                style: style2),
+                  if (namekeyboard == "phone") {
+                    keyboardPhone = true;
+                    keyboardHN = false;
+                    setState(() {});
+                  }
+                });
+              },
+              onEditingComplete: () {
+                //  FocusScope.of(context).unfocus();
+              },
+              controller: child,
+              style: style2,
+            ),
           ),
           decoration: boxDecorate,
-        )
+        ),
       ],
     );
   }
 
-  Decoration boxDecorate = BoxDecoration(boxShadow: const [
-    BoxShadow(offset: Offset(0, 2.5), blurRadius: 3, color: Color(0xff31D6AA))
-  ], borderRadius: BorderRadius.circular(10), color: Colors.white);
+  Decoration boxDecorate = BoxDecoration(
+    boxShadow: const [
+      BoxShadow(
+        offset: Offset(0, 2.5),
+        blurRadius: 3,
+        color: Color(0xff31D6AA),
+      ),
+    ],
+    borderRadius: BorderRadius.circular(10),
+    color: Colors.white,
+  );
   _onKeyPress(VirtualKeyboardKey key) {
     if (key.keyType == VirtualKeyboardKeyType.String) {
       text = text + ((shiftEnabled ? key.capsText : key.text) ?? '');
@@ -229,10 +247,14 @@ class _RegisterState extends State<Register> {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
-    TextStyle textStyle =
-        TextStyle(fontSize: width * 0.06, color: const Color(0xff31D6AA));
-    TextStyle style2 =
-        TextStyle(fontSize: width * 0.04, color: const Color(0xff003D5C));
+    TextStyle textStyle = TextStyle(
+      fontSize: width * 0.06,
+      color: const Color(0xff31D6AA),
+    );
+    TextStyle style2 = TextStyle(
+      fontSize: width * 0.04,
+      color: const Color(0xff003D5C),
+    );
     return Scaffold(
       body: GestureDetector(
         onTap: () {
@@ -254,79 +276,99 @@ class _RegisterState extends State<Register> {
                         decoration: boxDecorate,
                         child: Column(
                           children: [
-                            Text(S.of(context)!.regis_register,
-                                style: textStyle),
+                            Text(
+                              AppLocalizations.of(context)!.regis_register,
+                              style: textStyle,
+                            ),
                             SizedBox(
                               width: width * 0.8,
                               child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                        '${S.of(context)!.regis_prefix} :${prefix_name.text}',
-                                        style: style2),
-                                    // textdatauser(child: prefix_name),
-                                    Text(
-                                        '${S.of(context)!.regis_firstname} :${first_name.text}',
-                                        style: style2),
-                                    //  textdatauser(child: first_name),
-                                    Text(
-                                        '${S.of(context)!.regis_lastname} :${last_name.text}',
-                                        style: style2),
-                                    //   textdatauser(child: last_name),
-                                    Text(
-                                        '${S.of(context)!.regis_birthday} :${birthdate.text}',
-                                        style: style2),
-                                    //   textdatauser(child: birthdate),
-                                    Text(
-                                        '${S.of(context)!.regis_IdCard} :${id.text}',
-                                        style: style2),
-                                    //   textdatauser(child: id),
-                                    Text(S.of(context)!.regis_phone,
-                                        style: style2),
-                                    textdatauser(
-                                      child: phone,
-                                      namekeyboard: "hn",
-                                    ),
-                                    phone.text == ""
-                                        ? Center(
-                                            child: Text(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    '${AppLocalizations.of(context)!.regis_prefix} :${prefix_name.text}',
+                                    style: style2,
+                                  ),
+                                  // textdatauser(child: prefix_name),
+                                  Text(
+                                    '${AppLocalizations.of(context)!.regis_firstname} :${first_name.text}',
+                                    style: style2,
+                                  ),
+                                  //  textdatauser(child: first_name),
+                                  Text(
+                                    '${AppLocalizations.of(context)!.regis_lastname} :${last_name.text}',
+                                    style: style2,
+                                  ),
+                                  //   textdatauser(child: last_name),
+                                  Text(
+                                    '${AppLocalizations.of(context)!.regis_birthday} :${birthdate.text}',
+                                    style: style2,
+                                  ),
+                                  //   textdatauser(child: birthdate),
+                                  Text(
+                                    '${AppLocalizations.of(context)!.regis_IdCard} :${id.text}',
+                                    style: style2,
+                                  ),
+                                  //   textdatauser(child: id),
+                                  Text(
+                                    AppLocalizations.of(context)!.regis_phone,
+                                    style: style2,
+                                  ),
+                                  textdatauser(
+                                    child: phone,
+                                    namekeyboard: "hn",
+                                  ),
+                                  phone.text == ""
+                                      ? Center(
+                                          child: Text(
                                             // เลขเกิน 10 หลัก
                                             phone.text.length > 10
-                                                ? S
-                                                    .of(context)!
-                                                    .regis_tenDigitNumberPrompt
-                                                : S
-                                                    .of(context)!
-                                                    .regis_enterphone,
+                                                ? AppLocalizations.of(
+                                                    context,
+                                                  )!.regis_tenDigitNumberPrompt
+                                                : AppLocalizations.of(
+                                                    context,
+                                                  )!.regis_enterphone,
                                             style: const TextStyle(
-                                                color: Colors.red),
-                                          ))
-                                        : Center(
-                                            child: Text(
+                                              color: Colors.red,
+                                            ),
+                                          ),
+                                        )
+                                      : Center(
+                                          child: Text(
                                             // เลขเกิน 10 หลัก
                                             phone.text.length > 10
-                                                ? S
-                                                    .of(context)!
-                                                    .regis_tenDigitNumberPrompt
+                                                ? AppLocalizations.of(
+                                                    context,
+                                                  )!.regis_tenDigitNumberPrompt
                                                 : "",
                                             style: const TextStyle(
-                                                color: Colors.red),
-                                          )),
-                                    Text(S.of(context)!.regis_codeHN,
-                                        style: style2),
-                                    textdatauser(
-                                      child: hn,
-                                      namekeyboard: "phone",
-                                    ),
-                                    hn.text == ""
-                                        ? Center(
-                                            child: Text(
-                                            S.of(context)!.regis_enterHN,
+                                              color: Colors.red,
+                                            ),
+                                          ),
+                                        ),
+                                  Text(
+                                    AppLocalizations.of(context)!.regis_codeHN,
+                                    style: style2,
+                                  ),
+                                  textdatauser(
+                                    child: hn,
+                                    namekeyboard: "phone",
+                                  ),
+                                  hn.text == ""
+                                      ? Center(
+                                          child: Text(
+                                            AppLocalizations.of(
+                                              context,
+                                            )!.regis_enterHN,
                                             style: const TextStyle(
-                                                color: Colors.red),
-                                          ))
-                                        : const SizedBox(),
-                                  ]),
+                                              color: Colors.red,
+                                            ),
+                                          ),
+                                        )
+                                      : const SizedBox(),
+                                ],
+                              ),
                             ),
                             SizedBox(height: height * 0.03),
                             keyboardHN
@@ -337,16 +379,17 @@ class _RegisterState extends State<Register> {
                                       child: Column(
                                         children: [
                                           VirtualKeyboard(
-                                              height: 300,
-                                              width: 500,
-                                              textColor: Colors.white,
-                                              textController: phone,
-                                              defaultLayouts: const [
-                                                VirtualKeyboardDefaultLayouts
-                                                    .English
-                                              ],
-                                              type: VirtualKeyboardType.Numeric,
-                                              postKeyPress: _onKeyPress),
+                                            height: 300,
+                                            width: 500,
+                                            textColor: Colors.white,
+                                            textController: phone,
+                                            defaultLayouts: const [
+                                              VirtualKeyboardDefaultLayouts
+                                                  .English,
+                                            ],
+                                            type: VirtualKeyboardType.Numeric,
+                                            postKeyPress: _onKeyPress,
+                                          ),
                                         ],
                                       ),
                                     ),
@@ -360,19 +403,20 @@ class _RegisterState extends State<Register> {
                                       child: Column(
                                         children: [
                                           VirtualKeyboard(
-                                              height: 300,
-                                              width: 500,
-                                              textColor: Colors.white,
-                                              textController: hn,
-                                              defaultLayouts: const [
-                                                VirtualKeyboardDefaultLayouts
-                                                    .English
-                                              ],
-                                              type: isNumericMode
-                                                  ? VirtualKeyboardType.Numeric
-                                                  : VirtualKeyboardType
+                                            height: 300,
+                                            width: 500,
+                                            textColor: Colors.white,
+                                            textController: hn,
+                                            defaultLayouts: const [
+                                              VirtualKeyboardDefaultLayouts
+                                                  .English,
+                                            ],
+                                            type: isNumericMode
+                                                ? VirtualKeyboardType.Numeric
+                                                : VirtualKeyboardType
                                                       .Alphanumeric,
-                                              postKeyPress: _onKeyPress),
+                                            postKeyPress: _onKeyPress,
+                                          ),
                                         ],
                                       ),
                                     ),
@@ -389,30 +433,38 @@ class _RegisterState extends State<Register> {
                                       width: width * 0.35,
                                       height: height * 0.06,
                                       decoration: BoxDecoration(
-                                          color: const Color(0xff31D6AA),
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          boxShadow: const [
-                                            BoxShadow(
-                                                color: Colors.grey,
-                                                offset: Offset(0, 2),
-                                                blurRadius: 2)
-                                          ]),
+                                        color: const Color(0xff31D6AA),
+                                        borderRadius: BorderRadius.circular(10),
+                                        boxShadow: const [
+                                          BoxShadow(
+                                            color: Colors.grey,
+                                            offset: Offset(0, 2),
+                                            blurRadius: 2,
+                                          ),
+                                        ],
+                                      ),
                                       child: Row(
                                         children: [
                                           Image.asset('assets/rsjyrsk.png'),
-                                          Text(S.of(context)!.regis_register,
-                                              style: TextStyle(
-                                                  fontSize: width * 0.04,
-                                                  color: Colors.white))
+                                          Text(
+                                            AppLocalizations.of(
+                                              context,
+                                            )!.regis_register,
+                                            style: TextStyle(
+                                              fontSize: width * 0.04,
+                                              color: Colors.white,
+                                            ),
+                                          ),
                                         ],
                                       ),
                                     ),
                                   )
                                 : SizedBox(
-                                    width: MediaQuery.of(context).size.width *
+                                    width:
+                                        MediaQuery.of(context).size.width *
                                         0.05,
-                                    height: MediaQuery.of(context).size.width *
+                                    height:
+                                        MediaQuery.of(context).size.width *
                                         0.05,
                                     child: const CircularProgressIndicator(),
                                   ),
@@ -436,25 +488,31 @@ class _RegisterState extends State<Register> {
               child: GestureDetector(
                 onTap: () {
                   Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const HomeTelemed()));
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const HomeTelemed(),
+                    ),
+                  );
                 },
                 child: Container(
                   height: height * 0.025,
                   width: width * 0.15,
                   decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(
-                          color: const Color.fromARGB(255, 201, 201, 201),
-                          width: width * 0.002)),
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(
+                      color: const Color.fromARGB(255, 201, 201, 201),
+                      width: width * 0.002,
+                    ),
+                  ),
                   child: Center(
-                      child: Text(
-                    S.of(context)!.regis_backButton,
-                    style: TextStyle(
+                    child: Text(
+                      AppLocalizations.of(context)!.regis_backButton,
+                      style: TextStyle(
                         fontSize: width * 0.03,
-                        color: const Color.fromARGB(255, 201, 201, 201)),
-                  )),
+                        color: const Color.fromARGB(255, 201, 201, 201),
+                      ),
+                    ),
+                  ),
                 ),
               ),
             ),

@@ -14,7 +14,7 @@ import 'package:smarttelemed/telemed/views/ui/informationCard.dart';
 import 'package:smarttelemed/telemed/views/ui/stylebutton.dart';
 import 'package:smarttelemed/telemed/views/userInformation.dart';
 
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:smarttelemed/l10n/app_localizations.dart';
 
 class WaitingApp extends StatefulWidget {
   const WaitingApp({super.key});
@@ -44,12 +44,16 @@ class _WaitingAppState extends State<WaitingApp> {
   void checkfinished() async {
     DataProvider provider = context.read<DataProvider>();
     provider.debugPrintV("เช็คการสถานะการตรวจ");
-    var url =
-        Uri.parse('${context.read<DataProvider>().platfromURL}/check_quick');
-    var res = await http.post(url, body: {
-      'care_unit_id': context.read<DataProvider>().care_unit_id,
-      'public_id': context.read<DataProvider>().id,
-    });
+    var url = Uri.parse(
+      '${context.read<DataProvider>().platfromURL}/check_quick',
+    );
+    var res = await http.post(
+      url,
+      body: {
+        'care_unit_id': context.read<DataProvider>().care_unit_id,
+        'public_id': context.read<DataProvider>().id,
+      },
+    );
 
     resToJson = json.decode(res.body);
     provider.debugPrintV("message :${resToJson["message"]}");
@@ -66,12 +70,16 @@ class _WaitingAppState extends State<WaitingApp> {
     DataProvider provider = context.read<DataProvider>();
     bool one = true;
     timerCheck = Timer.periodic(const Duration(seconds: 2), (timer) async {
-      var url =
-          Uri.parse('${context.read<DataProvider>().platfromURL}/check_quick');
-      var res = await http.post(url, body: {
-        'care_unit_id': context.read<DataProvider>().care_unit_id,
-        'public_id': context.read<DataProvider>().id,
-      });
+      var url = Uri.parse(
+        '${context.read<DataProvider>().platfromURL}/check_quick',
+      );
+      var res = await http.post(
+        url,
+        body: {
+          'care_unit_id': context.read<DataProvider>().care_unit_id,
+          'public_id': context.read<DataProvider>().id,
+        },
+      );
       resToJson = json.decode(res.body);
       setState(() {});
       if (res.statusCode == 200) {
@@ -104,8 +112,10 @@ class _WaitingAppState extends State<WaitingApp> {
             one = true;
           });
           timerCheck!.cancel();
-          Navigator.pushReplacement(context,
-              MaterialPageRoute(builder: (context) => const Summary()));
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const Summary()),
+          );
         }
       }
     });
@@ -116,11 +126,13 @@ class _WaitingAppState extends State<WaitingApp> {
     setState(() {
       bottonStatus = false;
     });
-    var url =
-        Uri.parse('${context.read<DataProvider>().platfromURL}/get_video');
-    var res = await http.post(url, body: {
-      'public_id': context.read<DataProvider>().id,
-    });
+    var url = Uri.parse(
+      '${context.read<DataProvider>().platfromURL}/get_video',
+    );
+    var res = await http.post(
+      url,
+      body: {'public_id': context.read<DataProvider>().id},
+    );
     resToJsonVideo = json.decode(res.body);
     if (res.statusCode == 200) {
       setState(() {
@@ -137,23 +149,25 @@ class _WaitingAppState extends State<WaitingApp> {
       backgroundColor: Colors.white,
       body: resToJson != null
           ? resToJson["message"] == "waiting"
-              ? splash_waiting(context)
-              : resToJson["message"] == "processing"
-                  ? prepare(context)
-                  : resToJson["message"] == "completed"
-                      ? splash_completed(context)
-                      : resToJson["message"] == "finished"
-                          ? choice(context)
-                          : const Text("message error")
+                ? splash_waiting(context)
+                : resToJson["message"] == "processing"
+                ? prepare(context)
+                : resToJson["message"] == "completed"
+                ? splash_completed(context)
+                : resToJson["message"] == "finished"
+                ? choice(context)
+                : const Text("message error")
           : SizedBox(
               height: height,
               width: width,
               child: Center(
-                  child: Text(
-                S.of(context)!.waitting_loading,
-                //"Loading...",
-                style: TextStyle(fontSize: width * 0.03),
-              ))),
+                child: Text(
+                  AppLocalizations.of(context)!.waitting_loading,
+                  //"Loading...",
+                  style: TextStyle(fontSize: width * 0.03),
+                ),
+              ),
+            ),
       bottomNavigationBar: SizedBox(
         child: Row(
           children: [
@@ -162,25 +176,33 @@ class _WaitingAppState extends State<WaitingApp> {
               child: GestureDetector(
                 onTap: () {
                   Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const Userinformation()));
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const Userinformation(),
+                    ),
+                  );
                 },
                 child: Container(
                   height: height * 0.025,
                   width: width * 0.15,
                   decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(
-                          color: const Color.fromARGB(255, 201, 201, 201),
-                          width: width * 0.002)),
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(
+                      color: const Color.fromARGB(255, 201, 201, 201),
+                      width: width * 0.002,
+                    ),
+                  ),
                   child: Center(
-                      child: Text(
-                    S.of(context)!.waitting_backButton, // '< ย้อนกลับ',
-                    style: TextStyle(
+                    child: Text(
+                      AppLocalizations.of(
+                        context,
+                      )!.waitting_backButton, // '< ย้อนกลับ',
+                      style: TextStyle(
                         fontSize: width * 0.03,
-                        color: const Color.fromARGB(255, 201, 201, 201)),
-                  )),
+                        color: const Color.fromARGB(255, 201, 201, 201),
+                      ),
+                    ),
+                  ),
                 ),
               ),
             ),
@@ -198,25 +220,28 @@ class _WaitingAppState extends State<WaitingApp> {
       child: Stack(
         children: [
           Positioned(
-              child: SizedBox(
-                  width: width,
-                  height: height,
-                  child: SvgPicture.asset(
-                    'assets/splash/backlogo.svg',
-                    fit: BoxFit.fill,
-                  ))),
-          Positioned(
-              child: SizedBox(
-            width: width,
-            height: width,
-            child: Center(
-              child: SizedBox(
-                width: width * 0.8,
-                height: width * 0.8,
-                child: SvgPicture.asset('assets/splash/logo.svg'),
+            child: SizedBox(
+              width: width,
+              height: height,
+              child: SvgPicture.asset(
+                'assets/splash/backlogo.svg',
+                fit: BoxFit.fill,
               ),
             ),
-          )),
+          ),
+          Positioned(
+            child: SizedBox(
+              width: width,
+              height: width,
+              child: Center(
+                child: SizedBox(
+                  width: width * 0.8,
+                  height: width * 0.8,
+                  child: SvgPicture.asset('assets/splash/logo.svg'),
+                ),
+              ),
+            ),
+          ),
           Positioned(
             bottom: 5,
             child: SizedBox(
@@ -224,8 +249,12 @@ class _WaitingAppState extends State<WaitingApp> {
               width: width,
               child: Column(
                 children: [
-                  Text(S.of(context)!.waitting_waitting_doctor, //'รอหมอ',
-                      style: TextStyle(fontSize: width * 0.1)),
+                  Text(
+                    AppLocalizations.of(
+                      context,
+                    )!.waitting_waitting_doctor, //'รอหมอ',
+                    style: TextStyle(fontSize: width * 0.1),
+                  ),
                   const CircularProgressIndicator(
                     color: Color.fromARGB(255, 0, 139, 130),
                   ),
@@ -246,7 +275,7 @@ class _WaitingAppState extends State<WaitingApp> {
                   //               border: Border.all(color: Colors.grey)),
                   //           child: Center(
                   //             child: Text(
-                  //               S.of(context)!.leave,
+                  //               AppLocalizations.of(context)!.leave,
                   //               style: TextStyle(
                   //                   color: Colors.red, fontSize: width * 0.03),
                   //             ),
@@ -272,25 +301,28 @@ class _WaitingAppState extends State<WaitingApp> {
             child: Stack(
               children: [
                 Positioned(
-                    child: SizedBox(
-                        width: width,
-                        height: height,
-                        child: SvgPicture.asset(
-                          'assets/splash/backlogo.svg',
-                          fit: BoxFit.fill,
-                        ))),
-                Positioned(
-                    child: SizedBox(
-                  width: width,
-                  height: width,
-                  child: Center(
-                    child: SizedBox(
-                      width: width * 0.8,
-                      height: width * 0.8,
-                      child: SvgPicture.asset('assets/splash/logo.svg'),
+                  child: SizedBox(
+                    width: width,
+                    height: height,
+                    child: SvgPicture.asset(
+                      'assets/splash/backlogo.svg',
+                      fit: BoxFit.fill,
                     ),
                   ),
-                )),
+                ),
+                Positioned(
+                  child: SizedBox(
+                    width: width,
+                    height: width,
+                    child: Center(
+                      child: SizedBox(
+                        width: width * 0.8,
+                        height: width * 0.8,
+                        child: SvgPicture.asset('assets/splash/logo.svg'),
+                      ),
+                    ),
+                  ),
+                ),
                 Positioned(
                   bottom: 5,
                   child: SizedBox(
@@ -298,8 +330,12 @@ class _WaitingAppState extends State<WaitingApp> {
                     width: width,
                     child: Column(
                       children: [
-                        Text(S.of(context)!.waitting_waitting_doctor, //'รอหมอ'
-                            style: TextStyle(fontSize: width * 0.1)),
+                        Text(
+                          AppLocalizations.of(
+                            context,
+                          )!.waitting_waitting_doctor, //'รอหมอ'
+                          style: TextStyle(fontSize: width * 0.1),
+                        ),
                         const CircularProgressIndicator(
                           color: Color.fromARGB(255, 0, 139, 130),
                         ),
@@ -311,29 +347,32 @@ class _WaitingAppState extends State<WaitingApp> {
             ),
           )
         : resToJsonVideo["data"] != null
-            ? VideocallWidget(
-                server: 'openvidu.pcm-life.com',
-                sessionId: resToJsonVideo["data"]["sessionId"],
-                token: resToJsonVideo["data"]["token"],
-                userName: "People",
-                secret: "minadadmin",
-                iceServer: "",
-              )
-            : Text(S.of(context)!.waitting_loading);
+        ? VideocallWidget(
+            server: 'openvidu.pcm-life.com',
+            sessionId: resToJsonVideo["data"]["sessionId"],
+            token: resToJsonVideo["data"]["token"],
+            userName: "People",
+            secret: "minadadmin",
+            iceServer: "",
+          )
+        : Text(AppLocalizations.of(context)!.waitting_loading);
   }
 
   void add_appoint_today() async {
     DataProvider provider = context.read<DataProvider>();
     var url = Uri.parse(
-        '${context.read<DataProvider>().platfromURL}/add_appoint_today');
-    var res = await http.post(url, body: {
-      'public_id': provider.id,
-      'care_unit_id': provider.care_unit_id,
-    });
+      '${context.read<DataProvider>().platfromURL}/add_appoint_today',
+    );
+    var res = await http.post(
+      url,
+      body: {'public_id': provider.id, 'care_unit_id': provider.care_unit_id},
+    );
     var restojson = json.decode(res.body);
     if (res.statusCode == 200 || restojson["message"] == "success") {
       Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => const WaitingApp()));
+        context,
+        MaterialPageRoute(builder: (context) => const WaitingApp()),
+      );
     }
   }
 
@@ -345,25 +384,28 @@ class _WaitingAppState extends State<WaitingApp> {
       child: Stack(
         children: [
           Positioned(
-              child: SizedBox(
-                  width: width,
-                  height: height,
-                  child: SvgPicture.asset(
-                    'assets/splash/backlogo.svg',
-                    fit: BoxFit.fill,
-                  ))),
-          Positioned(
-              child: SizedBox(
-            width: width,
-            height: width,
-            child: Center(
-              child: SizedBox(
-                width: width * 0.8,
-                height: width * 0.8,
-                child: SvgPicture.asset('assets/splash/logo.svg'),
+            child: SizedBox(
+              width: width,
+              height: height,
+              child: SvgPicture.asset(
+                'assets/splash/backlogo.svg',
+                fit: BoxFit.fill,
               ),
             ),
-          )),
+          ),
+          Positioned(
+            child: SizedBox(
+              width: width,
+              height: width,
+              child: Center(
+                child: SizedBox(
+                  width: width * 0.8,
+                  height: width * 0.8,
+                  child: SvgPicture.asset('assets/splash/logo.svg'),
+                ),
+              ),
+            ),
+          ),
           Positioned(
             bottom: 5,
             child: SizedBox(
@@ -371,8 +413,12 @@ class _WaitingAppState extends State<WaitingApp> {
               height: height * 0.4,
               child: Column(
                 children: [
-                  Text(S.of(context)!.waitting_results, //'รอผลตรวจ',
-                      style: TextStyle(fontSize: width * 0.1)),
+                  Text(
+                    AppLocalizations.of(
+                      context,
+                    )!.waitting_results, //'รอผลตรวจ',
+                    style: TextStyle(fontSize: width * 0.1),
+                  ),
                   const CircularProgressIndicator(
                     color: Color.fromARGB(255, 0, 139, 130),
                   ),
@@ -391,7 +437,7 @@ class _WaitingAppState extends State<WaitingApp> {
                   //             border: Border.all(color: Colors.grey)),
                   //         child: Center(
                   //           child: Text(
-                  //             S.of(context)!.leave,
+                  //             AppLocalizations.of(context)!.leave,
                   //             style: TextStyle(
                   //                 color: Colors.red, fontSize: width * 0.03),
                   //           ),
@@ -422,55 +468,67 @@ class _WaitingAppState extends State<WaitingApp> {
               SizedBox(height: height * 0.13),
               Center(
                 child: Container(
-                    width: width * 0.8,
-                    decoration: BoxDecoration(
+                  width: width * 0.8,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: const [
+                      BoxShadow(
+                        blurRadius: 0.5,
+                        color: Color(0xff48B5AA),
+                        offset: Offset(0, 3),
+                      ),
+                    ],
+                  ),
+                  child: const Center(child: InformationCard()),
+                ),
+              ),
+              SizedBox(height: height * 0.02),
+              Center(
+                child: ElevatedButton(
+                  style: stylebutter(
+                    Colors.blue,
+                    width * provider.buttonSized_w,
+                    height * provider.buttonSized_h,
+                  ),
+                  onPressed: () {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => const Summary()),
+                    );
+                  },
+                  child: Text(
+                    AppLocalizations.of(
+                      context,
+                    )!.waitting_review, // "ดูผลตรวจ",
+                    style: TextStyle(
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(10),
-                      boxShadow: const [
-                        BoxShadow(
-                            blurRadius: 0.5,
-                            color: Color(0xff48B5AA),
-                            offset: Offset(0, 3)),
-                      ],
+                      fontSize: width * 0.06,
                     ),
-                    child: const Center(
-                      child: InformationCard(),
-                    )),
+                  ),
+                ),
               ),
               SizedBox(height: height * 0.02),
               Center(
                 child: ElevatedButton(
-                    style: stylebutter(
-                        Colors.blue,
-                        width * provider.buttonSized_w,
-                        height * provider.buttonSized_h),
-                    onPressed: () {
-                      Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const Summary()));
-                    },
-                    child: Text(
-                      S.of(context)!.waitting_review, // "ดูผลตรวจ",
-                      style: TextStyle(
-                          color: Colors.white, fontSize: width * 0.06),
-                    )),
-              ),
-              SizedBox(height: height * 0.02),
-              Center(
-                child: ElevatedButton(
-                    style: stylebutter(
-                        Colors.green,
-                        width * provider.buttonSized_w,
-                        height * provider.buttonSized_h),
-                    onPressed: () {
-                      add_appoint_today();
-                    },
-                    child: Text(
-                      S.of(context)!.waitting_under_exam, //"ตรวจซ้ำ",
-                      style: TextStyle(
-                          color: Colors.white, fontSize: width * 0.06),
-                    )),
+                  style: stylebutter(
+                    Colors.green,
+                    width * provider.buttonSized_w,
+                    height * provider.buttonSized_h,
+                  ),
+                  onPressed: () {
+                    add_appoint_today();
+                  },
+                  child: Text(
+                    AppLocalizations.of(
+                      context,
+                    )!.waitting_under_exam, //"ตรวจซ้ำ",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: width * 0.06,
+                    ),
+                  ),
+                ),
               ),
               SizedBox(height: height * 0.02),
               // Center(
@@ -487,7 +545,7 @@ class _WaitingAppState extends State<WaitingApp> {
               //             BoxDecoration(border: Border.all(color: Colors.grey)),
               //         child: Center(
               //           child: Text(
-              //             S.of(context)!.leave,
+              //             AppLocalizations.of(context)!.leave,
               //             style: TextStyle(
               //                 color: Colors.red, fontSize: width * 0.03),
               //           ),
@@ -496,7 +554,7 @@ class _WaitingAppState extends State<WaitingApp> {
               // )
             ],
           ),
-        )
+        ),
       ],
     );
   }

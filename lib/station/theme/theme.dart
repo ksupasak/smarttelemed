@@ -14,80 +14,71 @@ class OpenViduTheme {
   final accentColor = LKColors.lkBlue;
 
   ThemeData buildThemeData(BuildContext ctx) => ThemeData(
-        appBarTheme: AppBarTheme(
-          backgroundColor: cardColor,
+    appBarTheme: AppBarTheme(backgroundColor: cardColor),
+    cardColor: cardColor,
+    scaffoldBackgroundColor: bgColor,
+    canvasColor: bgColor,
+    iconTheme: IconThemeData(color: textColor),
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ButtonStyle(
+        textStyle: MaterialStateProperty.all<TextStyle>(
+          GoogleFonts.montserrat(fontSize: 15),
         ),
-        cardColor: cardColor,
-        scaffoldBackgroundColor: bgColor,
-        canvasColor: bgColor,
-        iconTheme: IconThemeData(
-          color: textColor,
+        padding: MaterialStateProperty.all<EdgeInsets>(
+          const EdgeInsets.symmetric(vertical: 20, horizontal: 25),
         ),
-        elevatedButtonTheme: ElevatedButtonThemeData(
-          style: ButtonStyle(
-            textStyle:
-                MaterialStateProperty.all<TextStyle>(GoogleFonts.montserrat(
-              fontSize: 15,
-            )),
-            padding: MaterialStateProperty.all<EdgeInsets>(
-                const EdgeInsets.symmetric(vertical: 20, horizontal: 25)),
-            shape: MaterialStateProperty.all<OutlinedBorder>(
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))),
-            foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
-            // backgroundColor: MaterialStateProperty.all<Color>(accentColor),
-            backgroundColor: MaterialStateProperty.resolveWith((states) {
-              if (states.contains(MaterialState.disabled)) {
-                return accentColor.withOpacity(0.5);
-              }
-              return accentColor;
-            }),
-          ),
+        shape: MaterialStateProperty.all<OutlinedBorder>(
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         ),
-        checkboxTheme: CheckboxThemeData(
-          checkColor: MaterialStateProperty.all(Colors.white),
-          fillColor: MaterialStateProperty.all(accentColor),
-        ),
-        switchTheme: SwitchThemeData(
-          trackColor: MaterialStateProperty.resolveWith((states) {
-            if (states.contains(MaterialState.selected)) {
-              return accentColor;
-            }
-            return accentColor.withOpacity(0.3);
-          }),
-          thumbColor: MaterialStateProperty.resolveWith((states) {
-            if (states.contains(MaterialState.selected)) {
-              return Colors.white;
-            }
-            return Colors.white.withOpacity(0.3);
-          }),
-        ),
-        dialogTheme: DialogTheme(
-          backgroundColor: cardColor,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
-        ),
-        textTheme: GoogleFonts.montserratTextTheme(
-          Theme.of(ctx).textTheme,
-        ).apply(
-          displayColor: textColor,
-          bodyColor: textColor,
-          decorationColor: textColor,
-        ),
-        hintColor: Colors.red,
-        inputDecorationTheme: InputDecorationTheme(
-          labelStyle: const TextStyle(
-            color: LKColors.lkBlue,
-          ),
-          hintStyle: TextStyle(
-            color: LKColors.lkBlue.withOpacity(.5),
-          ),
-          enabledBorder: InputBorder.none,
-          focusedBorder: InputBorder.none,
-        ),
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.white,
-          background: bgColor,
-        ),
-      );
+        foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+        // backgroundColor: MaterialStateProperty.all<Color>(accentColor),
+        backgroundColor: MaterialStateProperty.resolveWith((states) {
+          if (states.contains(MaterialState.disabled)) {
+            return accentColor.withOpacity(0.5);
+          }
+          return accentColor;
+        }),
+      ),
+    ),
+    checkboxTheme: CheckboxThemeData(
+      checkColor: MaterialStateProperty.all(Colors.white),
+      fillColor: MaterialStateProperty.all(accentColor),
+    ),
+    switchTheme: SwitchThemeData(
+      trackColor: MaterialStateProperty.resolveWith((states) {
+        if (states.contains(MaterialState.selected)) {
+          return accentColor;
+        }
+        return accentColor.withOpacity(0.3);
+      }),
+      thumbColor: MaterialStateProperty.resolveWith((states) {
+        if (states.contains(MaterialState.selected)) {
+          return Colors.white;
+        }
+        return Colors.white.withOpacity(0.3);
+      }),
+    ),
+    // dialogTheme: DialogTheme(
+    //   backgroundColor: cardColor,
+    //   shape: RoundedRectangleBorder(
+    //     borderRadius: BorderRadius.circular(8),
+    //   ),
+    // ),
+    textTheme: GoogleFonts.montserratTextTheme(Theme.of(ctx).textTheme).apply(
+      displayColor: textColor,
+      bodyColor: textColor,
+      decorationColor: textColor,
+    ),
+    hintColor: Colors.red,
+    inputDecorationTheme: InputDecorationTheme(
+      labelStyle: const TextStyle(color: LKColors.lkBlue),
+      hintStyle: TextStyle(color: LKColors.lkBlue.withOpacity(.5)),
+      enabledBorder: InputBorder.none,
+      focusedBorder: InputBorder.none,
+    ),
+    colorScheme: ColorScheme.fromSeed(
+      seedColor: Colors.white,
+      background: bgColor,
+    ),
+  );
 }

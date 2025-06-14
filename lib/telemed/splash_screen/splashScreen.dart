@@ -28,11 +28,11 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void fullscreen() async {
-    if (Platform.isWindows) {
-      await windowManager.ensureInitialized();
-      windowManager.setFullScreen(
-          context.read<DataProvider>().windowManagersetFullScreen);
-    }
+    // if (Platform.isWindows) {
+    //   await windowManager.ensureInitialized();
+    //   windowManager.setFullScreen(
+    //       context.read<DataProvider>().windowManagersetFullScreen);
+    // }
   }
 
   void setdata() async {

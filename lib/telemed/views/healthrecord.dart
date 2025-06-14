@@ -15,7 +15,7 @@ import 'package:smarttelemed/telemed/views/ui/popup.dart';
 import 'package:smarttelemed/telemed/views/ui/stylebutton.dart';
 import 'package:smarttelemed/telemed/views/userInformation.dart';
 
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:smarttelemed/l10n/app_localizations.dart';
 
 class SumHealthrecord extends StatefulWidget {
   const SumHealthrecord({super.key});
@@ -31,17 +31,17 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
   SerialPort? currentportspo2;
   SerialPort? currentportHW;
   bool buttonsend = true;
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   String warnTemp = '';
   String warnSpo2 = '';
   String warnbmi = '';
   String warnSys = '';
   String warnDia = '';
-///////////////////////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////////////////////
   bool statusConnectH_W = false;
   bool statusConnectSPO2 = false;
   bool statusConnectBP = false;
-///////////////////////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////////////////////
 
   final player = AudioPlayer();
   void playAudio() async {
@@ -60,8 +60,9 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
 
   String intArrayToString(List<int> intArray) {
     // Filter out values greater than 127
-    List<int> filteredIntArray =
-        intArray.where((value) => value <= 127).toList();
+    List<int> filteredIntArray = intArray
+        .where((value) => value <= 127)
+        .toList();
 
     return String.fromCharCodes(filteredIntArray);
   }
@@ -102,8 +103,8 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
             List<String> labels = tags[3].split("^");
             if (labels[0] == "150344" && double.parse(tags[5]) > 0) {
               double temp = double.parse(tags[5]) / 10;
-              context.read<DataProvider>().tempHealthrecord.text =
-                  temp.toStringAsFixed(1);
+              context.read<DataProvider>().tempHealthrecord.text = temp
+                  .toStringAsFixed(1);
             }
 
             if (labels[0] == "150031" && int.parse(tags[5]) > 0) {
@@ -123,17 +124,17 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
           }
         }
 
-// MSH|^~\&|northern|patient monitor^|||20250612090838||ORU^R01^ORU_R01|1362|P|2.6|
-// PID|||0001||expert^vs||00000000|M|
-// PV1||I|^^
-// OBR|1||||||20250612090838|
-// OBX|1|NM|150456^MDC_PULS_OXIM_SAT_O2^MDC|1.3.1.150456|-100|262688^MDC_DIM_PERCENT^MDC|||||F||||
-// OBX|2|NM|149530^MDC_PULS_OXIM_PULS_RATE^MDC|1.3.1.149530|-100|264864^MDC_DIM_BEAT_PER_MIN^MDC|||||F||||
-// OBX|3|NM|150344^MDC_TEMP^MDC|1.2.1.150344|38.5|268192^MDC_DIM_DEGC^MDC|||||F||||
-// OBX|4|NM|150344^MDC_TEMP^MDC|1.2.2.150344|384.5|268192^MDC_DIM_DEGC^MDC|||||F||||
-// OBX|3|NM|150031^MDC_PRESS_CUFF_SYS^MDC|1.1.9.150301|142|266016^MDC_DIM_MMHG^MDC|||||F||APERIODIC|20250612093319|
-// OBX|4|NM|150303^MDC_PRESS_CUFF_MEAN^MDC|1.1.9.150303|114|266016^MDC_DIM_MMHG^MDC|||||F||APERIODIC|20250612093319|
-// OBX|5|NM|150302^MDC_PRESS_CUFF_DIA^MDC|1.1.9.150302|100|266016^MDC_DIM_MMHG^MDC|||||F||APERIODIC|20250612093319|
+        // MSH|^~\&|northern|patient monitor^|||20250612090838||ORU^R01^ORU_R01|1362|P|2.6|
+        // PID|||0001||expert^vs||00000000|M|
+        // PV1||I|^^
+        // OBR|1||||||20250612090838|
+        // OBX|1|NM|150456^MDC_PULS_OXIM_SAT_O2^MDC|1.3.1.150456|-100|262688^MDC_DIM_PERCENT^MDC|||||F||||
+        // OBX|2|NM|149530^MDC_PULS_OXIM_PULS_RATE^MDC|1.3.1.149530|-100|264864^MDC_DIM_BEAT_PER_MIN^MDC|||||F||||
+        // OBX|3|NM|150344^MDC_TEMP^MDC|1.2.1.150344|38.5|268192^MDC_DIM_DEGC^MDC|||||F||||
+        // OBX|4|NM|150344^MDC_TEMP^MDC|1.2.2.150344|384.5|268192^MDC_DIM_DEGC^MDC|||||F||||
+        // OBX|3|NM|150031^MDC_PRESS_CUFF_SYS^MDC|1.1.9.150301|142|266016^MDC_DIM_MMHG^MDC|||||F||APERIODIC|20250612093319|
+        // OBX|4|NM|150303^MDC_PRESS_CUFF_MEAN^MDC|1.1.9.150303|114|266016^MDC_DIM_MMHG^MDC|||||F||APERIODIC|20250612093319|
+        // OBX|5|NM|150302^MDC_PRESS_CUFF_DIA^MDC|1.1.9.150302|100|266016^MDC_DIM_MMHG^MDC|||||F||APERIODIC|20250612093319|
         // Process the HL7 message here
 
         // You can write response back if needed
@@ -198,12 +199,15 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
 
                 if (context.read<DataProvider>().datamin_max['minsys'] != '') {
                   if (sys <
-                      double.parse(context
-                          .read<DataProvider>()
-                          .datamin_max['minsys']
-                          .toString())) {
-                    warnSys =
-                        S.of(context)!.health_sys_too_low; //"SYS ต่ำเกินไป";
+                      double.parse(
+                        context
+                            .read<DataProvider>()
+                            .datamin_max['minsys']
+                            .toString(),
+                      )) {
+                    warnSys = AppLocalizations.of(
+                      context,
+                    )!.health_sys_too_low; //"SYS ต่ำเกินไป";
                     setState(() {
                       playAudio();
                     });
@@ -211,12 +215,15 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
                 }
                 if (context.read<DataProvider>().datamin_max['maxsys'] != '') {
                   if (sys >
-                      double.parse(context
-                          .read<DataProvider>()
-                          .datamin_max['maxsys']
-                          .toString())) {
-                    warnSys =
-                        S.of(context)!.health_sys_too_high; //"SYS สูงเกินไป";
+                      double.parse(
+                        context
+                            .read<DataProvider>()
+                            .datamin_max['maxsys']
+                            .toString(),
+                      )) {
+                    warnSys = AppLocalizations.of(
+                      context,
+                    )!.health_sys_too_high; //"SYS สูงเกินไป";
                     setState(() {
                       playAudio();
                     });
@@ -225,12 +232,15 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
 
                 if (context.read<DataProvider>().datamin_max['mindia'] != '') {
                   if (dia <
-                      double.parse(context
-                          .read<DataProvider>()
-                          .datamin_max['mindia']
-                          .toString())) {
-                    warnDia =
-                        S.of(context)!.health_dia_too_low; //"DIA ต่ำเกินไป";
+                      double.parse(
+                        context
+                            .read<DataProvider>()
+                            .datamin_max['mindia']
+                            .toString(),
+                      )) {
+                    warnDia = AppLocalizations.of(
+                      context,
+                    )!.health_dia_too_low; //"DIA ต่ำเกินไป";
                     setState(() {
                       playAudio();
                     });
@@ -238,25 +248,28 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
                 }
                 if (context.read<DataProvider>().datamin_max['maxdia'] != '') {
                   if (dia >
-                      double.parse(context
-                          .read<DataProvider>()
-                          .datamin_max['maxdia']
-                          .toString())) {
-                    warnDia =
-                        S.of(context)!.health_dia_too_high; //"DIA สูงเกินไป";
+                      double.parse(
+                        context
+                            .read<DataProvider>()
+                            .datamin_max['maxdia']
+                            .toString(),
+                      )) {
+                    warnDia = AppLocalizations.of(
+                      context,
+                    )!.health_dia_too_high; //"DIA สูงเกินไป";
                     setState(() {
                       playAudio();
                     });
                   }
                 }
-                context.read<DataProvider>().sysHealthrecord.text =
-                    sys.toString();
+                context.read<DataProvider>().sysHealthrecord.text = sys
+                    .toString();
 
-                context.read<DataProvider>().diaHealthrecord.text =
-                    dia.toString();
+                context.read<DataProvider>().diaHealthrecord.text = dia
+                    .toString();
 
-                context.read<DataProvider>().pulseHealthrecord.text =
-                    pr.toString();
+                context.read<DataProvider>().pulseHealthrecord.text = pr
+                    .toString();
 
                 buffer = [];
 
@@ -274,7 +287,7 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
     }
   }
 
-//////////////////////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////////////////////////
   void startSpo2() async {
     DataProvider provider = context.read<DataProvider>();
 
@@ -323,20 +336,22 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
                     if (context.read<DataProvider>().datamin_max['minspo2'] !=
                         '') {
                       if (spo2 <
-                          double.parse(context
-                              .read<DataProvider>()
-                              .datamin_max['minspo2']
-                              .toString())) {
-                        warnSpo2 = S
-                            .of(context)!
-                            .health_spo2_too_low; //"Spo2 ต่ำเกินไป";
+                          double.parse(
+                            context
+                                .read<DataProvider>()
+                                .datamin_max['minspo2']
+                                .toString(),
+                          )) {
+                        warnSpo2 = AppLocalizations.of(
+                          context,
+                        )!.health_spo2_too_low; //"Spo2 ต่ำเกินไป";
                         setState(() {
                           playAudio();
                         });
                       }
                     }
-                    context.read<DataProvider>().spo2Healthrecord.text =
-                        spo2.toString();
+                    context.read<DataProvider>().spo2Healthrecord.text = spo2
+                        .toString();
                   }
                 }
 
@@ -356,7 +371,7 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
     }
   }
 
-/////////////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////
 
   void startH_W() async {
     DataProvider provider = context.read<DataProvider>();
@@ -369,7 +384,8 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
           provider.debugPrintV("found W_H");
           if (!port.openReadWrite()) {
             provider.debugPrintV(
-                "SerialPort.lastError :${SerialPort.lastError.toString()}");
+              "SerialPort.lastError :${SerialPort.lastError.toString()}",
+            );
           }
           currentportHW = port;
           provider.debugPrintV("open W_H");
@@ -398,18 +414,20 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
               if (splitList.length == 1) {
                 double temp = double.parse(splitList[0].split(":")[1]);
 
-                context.read<DataProvider>().tempHealthrecord.text =
-                    temp.toString();
+                context.read<DataProvider>().tempHealthrecord.text = temp
+                    .toString();
 
                 if (context.read<DataProvider>().datamin_max['mintemp'] != '') {
                   if (temp <
-                      double.parse(context
-                          .read<DataProvider>()
-                          .datamin_max['mintemp']
-                          .toString())) {
-                    warnTemp = S
-                        .of(context)!
-                        .health_temp_too_low; //อุณหภูมิ ต่ำเกินไป";
+                      double.parse(
+                        context
+                            .read<DataProvider>()
+                            .datamin_max['mintemp']
+                            .toString(),
+                      )) {
+                    warnTemp = AppLocalizations.of(
+                      context,
+                    )!.health_temp_too_low; //อุณหภูมิ ต่ำเกินไป";
                     setState(() {
                       playAudio();
                     });
@@ -417,13 +435,15 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
                 }
                 if (context.read<DataProvider>().datamin_max['maxtemp'] != '') {
                   if (temp >
-                      double.parse(context
-                          .read<DataProvider>()
-                          .datamin_max['maxtemp']
-                          .toString())) {
-                    warnTemp = S
-                        .of(context)!
-                        .health_temp_too_high; //"อุณหภูมิ สูงเกินไป";
+                      double.parse(
+                        context
+                            .read<DataProvider>()
+                            .datamin_max['maxtemp']
+                            .toString(),
+                      )) {
+                    warnTemp = AppLocalizations.of(
+                      context,
+                    )!.health_temp_too_high; //"อุณหภูมิ สูงเกินไป";
                     setState(() {
                       playAudio();
                     });
@@ -431,28 +451,31 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
                 }
               } else {
                 double weight = double.parse(splitList[0].split(":")[1]);
-                context.read<DataProvider>().weightHealthrecord.text =
-                    weight.toString();
+                context.read<DataProvider>().weightHealthrecord.text = weight
+                    .toString();
                 double height = double.parse(splitList[1].split(":")[1]);
-                context.read<DataProvider>().heightHealthrecord.text =
-                    height.toString();
+                context.read<DataProvider>().heightHealthrecord.text = height
+                    .toString();
 
                 if (height > 0 && weight > 0) {
                   final double bmi = weight / ((height / 100) * (height / 100));
                   setState(() {
-                    context.read<DataProvider>().bmiHealthrecord.text =
-                        bmi.toStringAsFixed(2);
+                    context.read<DataProvider>().bmiHealthrecord.text = bmi
+                        .toStringAsFixed(2);
                   });
 
                   if (context.read<DataProvider>().datamin_max['minbmi'] !=
                       '') {
                     if (bmi <
-                        double.parse(context
-                            .read<DataProvider>()
-                            .datamin_max['minbmi']
-                            .toString())) {
-                      warnbmi =
-                          S.of(context)!.health_bmi_too_low; //"BMI ต่ำเกินไป";
+                        double.parse(
+                          context
+                              .read<DataProvider>()
+                              .datamin_max['minbmi']
+                              .toString(),
+                        )) {
+                      warnbmi = AppLocalizations.of(
+                        context,
+                      )!.health_bmi_too_low; //"BMI ต่ำเกินไป";
                       setState(() {
                         playAudio();
                       });
@@ -461,12 +484,15 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
                   if (context.read<DataProvider>().datamin_max['maxbmi'] !=
                       '') {
                     if (bmi >
-                        double.parse(context
-                            .read<DataProvider>()
-                            .datamin_max['maxbmi']
-                            .toString())) {
-                      warnbmi =
-                          S.of(context)!.health_bmi_too_high; //"BMI สูงเกินไป";
+                        double.parse(
+                          context
+                              .read<DataProvider>()
+                              .datamin_max['maxbmi']
+                              .toString(),
+                        )) {
+                      warnbmi = AppLocalizations.of(
+                        context,
+                      )!.health_bmi_too_high; //"BMI สูงเกินไป";
                       setState(() {
                         playAudio();
                       });
@@ -489,33 +515,39 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
     }
   }
 
-////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////
 
   void getClaimCode() async {
     DataProvider provider = context.read<DataProvider>();
 
     provider.debugPrintV("getClaimCode");
     provider.debugPrintV("pid : ${context.read<DataProvider>().id}");
-    provider
-        .debugPrintV("claimType : ${context.read<DataProvider>().claimType}");
+    provider.debugPrintV(
+      "claimType : ${context.read<DataProvider>().claimType}",
+    );
     provider.debugPrintV("mobile : ${context.read<DataProvider>().phone}");
     provider.debugPrintV(
-        "correlationId : ${context.read<DataProvider>().correlationId}");
+      "correlationId : ${context.read<DataProvider>().correlationId}",
+    );
     provider.debugPrintV("hn : ${context.read<DataProvider>().hn}");
     if (context.read<DataProvider>().claimType != "") {
-      var url =
-          Uri.parse('http://localhost:8189/api/nhso-service/confirm-save');
+      var url = Uri.parse(
+        'http://localhost:8189/api/nhso-service/confirm-save',
+      );
 
       var body = jsonEncode({
         "pid": context.read<DataProvider>().id,
         "claimType": context.read<DataProvider>().claimType,
         "mobile": context.read<DataProvider>().phone,
         "correlationId": context.read<DataProvider>().correlationId,
-        "hn": context.read<DataProvider>().hn
+        "hn": context.read<DataProvider>().hn,
       });
 
-      var res = await http.post(url,
-          headers: {'Content-Type': 'application/json'}, body: body);
+      var res = await http.post(
+        url,
+        headers: {'Content-Type': 'application/json'},
+        body: body,
+      );
       var resTojson = json.decode(res.body);
       provider.debugPrintV("statusCode getClaimCode ${res.statusCode}");
       if (res.statusCode == 200) {
@@ -525,7 +557,8 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
         sendDataHealthrecord();
       } else if (res.statusCode == 400) {
         var url = Uri.parse(
-            'http://localhost:8189/api/nhso-service/latest-authen-code/${context.read<DataProvider>().id}');
+          'http://localhost:8189/api/nhso-service/latest-authen-code/${context.read<DataProvider>().id}',
+        );
         var res = await http.get(url);
         var resTojsonClaimCod = json.decode(res.body);
         context.read<DataProvider>().updateclaimCode(resTojsonClaimCod);
@@ -559,7 +592,7 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
       //                 sendDataHealthrecord();
       //               },
       //               child: Text(
-      //                 S.of(context)!.confirm,
+      //                 AppLocalizations.of(context)!.confirm,
       //                 style: TextStyle(fontSize: width * 0.03),
       //               )),
       //         ],
@@ -567,36 +600,42 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
       //     });
     }
   }
-////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////
 
   void sendDataHealthrecord() async {
     DataProvider provider = context.read<DataProvider>();
 
     provider.debugPrintV(
-        "ส่งค่าHealthrecord ${context.read<DataProvider>().platfromURL}/add_visit");
-    var url =
-        Uri.parse('${context.read<DataProvider>().platfromURL}/add_visit');
-    var res = await http.post(url, body: {
-      "public_id": context.read<DataProvider>().id,
-      "care_unit_id": context.read<DataProvider>().care_unit_id,
-      "temp": context.read<DataProvider>().tempHealthrecord.text,
-      "weight": context.read<DataProvider>().weightHealthrecord.text,
-      "bp_sys": context.read<DataProvider>().sysHealthrecord.text,
-      "bp_dia": context.read<DataProvider>().diaHealthrecord.text,
-      "pulse_rate": context.read<DataProvider>().pulseHealthrecord.text,
-      "spo2": context.read<DataProvider>().spo2Healthrecord.text,
-      "height": context.read<DataProvider>().heightHealthrecord.text,
-      "bmi": context.read<DataProvider>().bmiHealthrecord.text,
-      "bp":
-          "${context.read<DataProvider>().sysHealthrecord.text}/${context.read<DataProvider>().diaHealthrecord.text}",
-      "claim_code": context.read<DataProvider>().claimCode.toString(),
-    });
+      "ส่งค่าHealthrecord ${context.read<DataProvider>().platfromURL}/add_visit",
+    );
+    var url = Uri.parse(
+      '${context.read<DataProvider>().platfromURL}/add_visit',
+    );
+    var res = await http.post(
+      url,
+      body: {
+        "public_id": context.read<DataProvider>().id,
+        "care_unit_id": context.read<DataProvider>().care_unit_id,
+        "temp": context.read<DataProvider>().tempHealthrecord.text,
+        "weight": context.read<DataProvider>().weightHealthrecord.text,
+        "bp_sys": context.read<DataProvider>().sysHealthrecord.text,
+        "bp_dia": context.read<DataProvider>().diaHealthrecord.text,
+        "pulse_rate": context.read<DataProvider>().pulseHealthrecord.text,
+        "spo2": context.read<DataProvider>().spo2Healthrecord.text,
+        "height": context.read<DataProvider>().heightHealthrecord.text,
+        "bmi": context.read<DataProvider>().bmiHealthrecord.text,
+        "bp":
+            "${context.read<DataProvider>().sysHealthrecord.text}/${context.read<DataProvider>().diaHealthrecord.text}",
+        "claim_code": context.read<DataProvider>().claimCode.toString(),
+      },
+    );
 
     if (res.statusCode == 200) {
       var resTojson = json.decode(res.body);
       provider.debugPrintV("ส่งค่าHealthrecord สำเร็จ");
       provider.debugPrintV(
-          "resTojson sendDataHealthrecord ${resTojson.toString()}");
+        "resTojson sendDataHealthrecord ${resTojson.toString()}",
+      );
       sendHealthrecordGateway();
     }
   }
@@ -617,23 +656,31 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
       "spo2": provider.spo2Healthrecord.text,
       "temp": provider.tempHealthrecord.text,
       "height": provider.heightHealthrecord.text,
-      "weight": provider.weightHealthrecord.text
+      "weight": provider.weightHealthrecord.text,
     });
     try {
       provider.debugPrintV(
-          "senvisitGateway :${provider.platfromURLGateway}/api/vitalsign");
+        "senvisitGateway :${provider.platfromURLGateway}/api/vitalsign",
+      );
       var url = Uri.parse('${provider.platfromURLGateway}/api/vitalsign');
-      var response = await http.post(url,
-          headers: {'Content-Type': 'application/json'}, body: body);
+      var response = await http.post(
+        url,
+        headers: {'Content-Type': 'application/json'},
+        body: body,
+      );
       provider.debugPrintV("response Gateway$response");
       var resTojsonGateway = json.decode(response.body);
       provider.debugPrintV("resTojsonGateway $resTojsonGateway");
-      Navigator.pushReplacement(context,
-          MaterialPageRoute(builder: (context) => const Userinformation()));
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const Userinformation()),
+      );
     } catch (e) {
       provider.debugPrintV("error Gateway $e");
-      Navigator.pushReplacement(context,
-          MaterialPageRoute(builder: (context) => const Userinformation()));
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const Userinformation()),
+      );
     }
   }
 
@@ -688,77 +735,83 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
           const Background(),
           Positioned(
             child: SizedBox(
-                height: height,
-                width: width,
-                child: ListView(children: [
+              height: height,
+              width: width,
+              child: ListView(
+                children: [
                   SizedBox(height: height * 0.13),
                   Center(
                     child: Container(
-                        width: width * 0.8,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(10),
-                          boxShadow: const [
-                            BoxShadow(
-                                blurRadius: 0.5,
-                                color: Color(0xff48B5AA),
-                                offset: Offset(0, 3)),
-                          ],
-                        ),
-                        child: const Center(
-                          child: InformationCard(),
-                        )),
+                      width: width * 0.8,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10),
+                        boxShadow: const [
+                          BoxShadow(
+                            blurRadius: 0.5,
+                            color: Color(0xff48B5AA),
+                            offset: Offset(0, 3),
+                          ),
+                        ],
+                      ),
+                      child: const Center(child: InformationCard()),
+                    ),
                   ),
                   SizedBox(height: height * 0.01),
                   CarouselSlider.builder(
                     itemCount: 3,
                     options: CarouselOptions(
-                        autoPlay: true,
-                        enlargeCenterPage: true,
-                        viewportFraction: 0.9,
-                        aspectRatio: 2.0,
-                        initialPage: 2,
-                        autoPlayInterval: const Duration(seconds: 10)),
+                      autoPlay: true,
+                      enlargeCenterPage: true,
+                      viewportFraction: 0.9,
+                      aspectRatio: 2.0,
+                      initialPage: 2,
+                      autoPlayInterval: const Duration(seconds: 10),
+                    ),
                     itemBuilder: (context, index, pageViewIndex) => Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Image.asset(imggeCarouselSlider[index]),
                     ),
                   ),
                   Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        warnTemp != ""
-                            ? Text(warnTemp, style: textStyle)
-                            : const SizedBox(),
-                        warnSys != ""
-                            ? Text(warnSys, style: textStyle)
-                            : const SizedBox(),
-                        warnDia != ""
-                            ? Text(warnDia, style: textStyle)
-                            : const SizedBox(),
-                        warnSpo2 != ""
-                            ? Text(warnSpo2, style: textStyle)
-                            : const SizedBox(),
-                        warnbmi != ""
-                            ? Text(warnbmi, style: textStyle)
-                            : const SizedBox(),
-                      ]),
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      warnTemp != ""
+                          ? Text(warnTemp, style: textStyle)
+                          : const SizedBox(),
+                      warnSys != ""
+                          ? Text(warnSys, style: textStyle)
+                          : const SizedBox(),
+                      warnDia != ""
+                          ? Text(warnDia, style: textStyle)
+                          : const SizedBox(),
+                      warnSpo2 != ""
+                          ? Text(warnSpo2, style: textStyle)
+                          : const SizedBox(),
+                      warnbmi != ""
+                          ? Text(warnbmi, style: textStyle)
+                          : const SizedBox(),
+                    ],
+                  ),
                   Center(
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         BoxRecord(
-                            image: 'assets/jhv.png',
-                            texthead: 'SYS',
-                            keyvavlue: provider.sysHealthrecord),
+                          image: 'assets/jhv.png',
+                          texthead: 'SYS',
+                          keyvavlue: provider.sysHealthrecord,
+                        ),
                         BoxRecord(
-                            image: 'assets/jhvkb.png',
-                            texthead: 'DIA',
-                            keyvavlue: provider.diaHealthrecord),
+                          image: 'assets/jhvkb.png',
+                          texthead: 'DIA',
+                          keyvavlue: provider.diaHealthrecord,
+                        ),
                         BoxRecord(
-                            image: 'assets/jhbjk;.png',
-                            texthead: 'PULSE',
-                            keyvavlue: provider.pulseHealthrecord)
+                          image: 'assets/jhbjk;.png',
+                          texthead: 'PULSE',
+                          keyvavlue: provider.pulseHealthrecord,
+                        ),
                       ],
                     ),
                   ),
@@ -767,13 +820,15 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         BoxRecord(
-                            image: 'assets/kauo.png',
-                            texthead: 'SPO2',
-                            keyvavlue: provider.spo2Healthrecord),
+                          image: 'assets/kauo.png',
+                          texthead: 'SPO2',
+                          keyvavlue: provider.spo2Healthrecord,
+                        ),
                         BoxRecord(
-                            image: 'assets/jhgh.png',
-                            texthead: 'TEMP',
-                            keyvavlue: provider.tempHealthrecord),
+                          image: 'assets/jhgh.png',
+                          texthead: 'TEMP',
+                          keyvavlue: provider.tempHealthrecord,
+                        ),
                       ],
                     ),
                   ),
@@ -783,17 +838,20 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         BoxRecord(
-                            image: 'assets/shr.png',
-                            texthead: 'HEIGHT',
-                            keyvavlue: provider.heightHealthrecord),
+                          image: 'assets/shr.png',
+                          texthead: 'HEIGHT',
+                          keyvavlue: provider.heightHealthrecord,
+                        ),
                         BoxRecord(
-                            image: 'assets/srhnate.png',
-                            texthead: 'WEIGHT',
-                            keyvavlue: provider.weightHealthrecord),
+                          image: 'assets/srhnate.png',
+                          texthead: 'WEIGHT',
+                          keyvavlue: provider.weightHealthrecord,
+                        ),
                         BoxRecord(
-                            image: 'assets/srhnate.png',
-                            texthead: 'BMI',
-                            keyvavlue: provider.bmiHealthrecord),
+                          image: 'assets/srhnate.png',
+                          texthead: 'BMI',
+                          keyvavlue: provider.bmiHealthrecord,
+                        ),
                       ],
                     ),
                   ),
@@ -802,19 +860,24 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
                     child: buttonsend
                         ? ElevatedButton(
                             style: stylebutter(
-                                Colors.green,
-                                width * provider.buttonSized_w,
-                                height * provider.buttonSized_h),
+                              Colors.green,
+                              width * provider.buttonSized_w,
+                              height * provider.buttonSized_h,
+                            ),
                             onPressed: () {
                               setState(() {
                                 buttonsend = false;
                               });
                               getClaimCode();
                             },
-                            child: Text(S.of(context)!.health_send,
-                                style: TextStyle(
-                                    fontSize: width * 0.06,
-                                    color: Colors.white)))
+                            child: Text(
+                              AppLocalizations.of(context)!.health_send,
+                              style: TextStyle(
+                                fontSize: width * 0.06,
+                                color: Colors.white,
+                              ),
+                            ),
+                          )
                         : const SizedBox(child: CircularProgressIndicator()),
                   ),
                   SizedBox(height: height * 0.03),
@@ -833,7 +896,7 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
                   //             border: Border.all(color: Colors.grey)),
                   //         child: Center(
                   //           child: Text(
-                  //             S.of(context)!.leave,
+                  //             AppLocalizations.of(context)!.leave,
                   //             style: TextStyle(
                   //                 color: Colors.red, fontSize: width * 0.03),
                   //           ),
@@ -843,32 +906,42 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
                   Row(
                     children: [
                       ElevatedButton.icon(
-                          onPressed: () {
-                            showModalBottomSheet(
-                              backgroundColor:
-                                  const Color.fromARGB(0, 255, 255, 255),
-                              isScrollControlled: true,
-                              shape: const RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.vertical(
-                                      top: Radius.circular(10))),
-                              context: context,
-                              builder: (context) => Container(
-                                height: height * 0.3,
-                                decoration: const BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.only(
-                                        topLeft: Radius.circular(20),
-                                        topRight: Radius.circular(20))),
-                                child: Column(children: [
+                        onPressed: () {
+                          showModalBottomSheet(
+                            backgroundColor: const Color.fromARGB(
+                              0,
+                              255,
+                              255,
+                              255,
+                            ),
+                            isScrollControlled: true,
+                            shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.vertical(
+                                top: Radius.circular(10),
+                              ),
+                            ),
+                            context: context,
+                            builder: (context) => Container(
+                              height: height * 0.3,
+                              decoration: const BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(20),
+                                  topRight: Radius.circular(20),
+                                ),
+                              ),
+                              child: Column(
+                                children: [
                                   Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: Container(
-                                        height: height * 0.01,
-                                        width: width * 0.4,
-                                        decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(50),
-                                            color: Colors.grey)),
+                                      height: height * 0.01,
+                                      width: width * 0.4,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(50),
+                                        color: Colors.grey,
+                                      ),
+                                    ),
                                   ),
                                   SizedBox(
                                     width: width,
@@ -885,12 +958,12 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
                                               height: 20,
                                               width: 20,
                                               decoration: BoxDecoration(
-                                                  color: statusConnectH_W
-                                                      ? Colors.green
-                                                      : Colors.red,
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          50)),
+                                                color: statusConnectH_W
+                                                    ? Colors.green
+                                                    : Colors.red,
+                                                borderRadius:
+                                                    BorderRadius.circular(50),
+                                              ),
                                             ),
                                           ],
                                         ),
@@ -905,12 +978,12 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
                                               height: 20,
                                               width: 20,
                                               decoration: BoxDecoration(
-                                                  color: statusConnectBP
-                                                      ? Colors.green
-                                                      : Colors.red,
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          50)),
+                                                color: statusConnectBP
+                                                    ? Colors.green
+                                                    : Colors.red,
+                                                borderRadius:
+                                                    BorderRadius.circular(50),
+                                              ),
                                             ),
                                           ],
                                         ),
@@ -925,26 +998,30 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
                                               height: 20,
                                               width: 20,
                                               decoration: BoxDecoration(
-                                                  color: statusConnectSPO2
-                                                      ? Colors.green
-                                                      : Colors.red,
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          50)),
+                                                color: statusConnectSPO2
+                                                    ? Colors.green
+                                                    : Colors.red,
+                                                borderRadius:
+                                                    BorderRadius.circular(50),
+                                              ),
                                             ),
                                           ],
                                         ),
                                       ],
                                     ),
-                                  )
-                                ]),
+                                  ),
+                                ],
                               ),
-                            );
-                          },
-                          label: const Icon(Icons.settings)),
+                            ),
+                          );
+                        },
+                        label: const Icon(Icons.settings),
+                      ),
                     ],
-                  )
-                ])),
+                  ),
+                ],
+              ),
+            ),
           ),
           // Positioned(
           //   bottom: 5,
@@ -985,25 +1062,33 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
               child: GestureDetector(
                 onTap: () {
                   Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const Userinformation()));
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const Userinformation(),
+                    ),
+                  );
                 },
                 child: Container(
                   height: height * 0.025,
                   width: width * 0.15,
                   decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(
-                          color: const Color.fromARGB(255, 201, 201, 201),
-                          width: width * 0.002)),
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(
+                      color: const Color.fromARGB(255, 201, 201, 201),
+                      width: width * 0.002,
+                    ),
+                  ),
                   child: Center(
-                      child: Text(
-                    S.of(context)!.health_backButton, // '< ย้อนกลับ'
-                    style: TextStyle(
+                    child: Text(
+                      AppLocalizations.of(
+                        context,
+                      )!.health_backButton, // '< ย้อนกลับ'
+                      style: TextStyle(
                         fontSize: width * 0.03,
-                        color: const Color.fromARGB(255, 201, 201, 201)),
-                  )),
+                        color: const Color.fromARGB(255, 201, 201, 201),
+                      ),
+                    ),
+                  ),
                 ),
               ),
             ),
