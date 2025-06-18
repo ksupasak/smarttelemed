@@ -16,6 +16,7 @@ import 'package:smarttelemed/telemed/views/ui/stylebutton.dart';
 import 'package:smarttelemed/telemed/views/userInformation.dart';
 
 import 'package:smarttelemed/l10n/app_localizations.dart';
+import 'package:smarttelemed/telemed/devices/device_manager.dart';
 
 class SumHealthrecord extends StatefulWidget {
   const SumHealthrecord({super.key});
@@ -26,6 +27,8 @@ class SumHealthrecord extends StatefulWidget {
 
 class _SumHealthrecordState extends State<SumHealthrecord> {
   List availablePorts = [];
+
+  DeviceManager _deviceManager = DeviceManager();
 
   SerialPort? currentportBP;
   SerialPort? currentportspo2;
@@ -684,6 +687,18 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
     }
   }
 
+  void onValueChanged(Map<String, dynamic> params) {
+    print('onValueChanged $params');
+    if (params['type'] == 'spo2') {
+      setState(() {
+        context.read<DataProvider>().spo2Healthrecord.text = params['spo2']
+            .toString();
+        context.read<DataProvider>().pulseHealthrecord.text = params['pr']
+            .toString();
+      });
+    }
+  }
+
   @override
   void initState() {
     context.read<DataProvider>().bmiHealthrecord = TextEditingController();
@@ -696,6 +711,11 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
     context.read<DataProvider>().tempHealthrecord = TextEditingController();
 
     super.initState();
+
+    _deviceManager.load().then((_) {
+      _deviceManager.setOnValueChanged(onValueChanged);
+      _deviceManager.start();
+    });
 
     startH_W();
     startBP();

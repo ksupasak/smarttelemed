@@ -4,8 +4,8 @@ import 'dart:typed_data';
 import 'dart:convert';
 import 'dart:async';
 
-class Spo2BleDevice extends TelemedBleDevice {
-  Spo2BleDevice({
+class YuwellTempBleDevice extends TelemedBleDevice {
+  YuwellTempBleDevice({
     required String name,
     required String id,
     required String status,
@@ -19,8 +19,8 @@ class Spo2BleDevice extends TelemedBleDevice {
          autoStart: autoStart,
        );
 
-  factory Spo2BleDevice.fromJson(Map<String, dynamic> json) {
-    return Spo2BleDevice(
+  factory YuwellTempBleDevice.fromJson(Map<String, dynamic> json) {
+    return YuwellTempBleDevice(
       name: json['name'],
       id: json['id'],
       status: json['status'],
@@ -33,10 +33,10 @@ class Spo2BleDevice extends TelemedBleDevice {
 
   @override
   Future<void> onConnect() async {
-    print('Spo2Device is connected');
+    print('YuwellTempDevice is connected');
 
-    String serviceId = 'cdeacb80-5235-4c07-8846-93a37ee6b86d';
-    String notify_uuid = 'cdeacb81-5235-4c07-8846-93a37ee6b86d';
+    String serviceId = '00001809-0000-1000-8000-00805f9b34fb';
+    String notify_uuid = '00002a1c-0000-1000-8000-00805f9b34fb';
 
     // Subscribe to a characteristic
     UniversalBle.setNotifiable(
@@ -55,28 +55,28 @@ class Spo2BleDevice extends TelemedBleDevice {
           String hexValue = toHex(value);
           // parse the value
 
-          if (hexValue.substring(0, 2) == '81' &&
-              hexValue.substring(4, 6) != '7f') {
-            int heartRate = int.parse(hexValue.substring(2, 4), radix: 16);
-            int spo2 = int.parse(hexValue.substring(4, 6), radix: 16);
-            print('Spo2: $spo2, HeartRate: $heartRate');
-            onValueChanged?.call({
-              'deviceId': this.id,
-              'name': this.name,
-              'type': 'spo2',
-              'spo2': spo2,
-              'pr': heartRate,
-            });
-          }
+          // if (hexValue.substring(0, 2) == '81' &&
+          //     hexValue.substring(4, 6) != '7f') {
+          //   int heartRate = int.parse(hexValue.substring(2, 4), radix: 16);
+          //   int spo2 = int.parse(hexValue.substring(4, 6), radix: 16);
+          //   print('Spo2: $spo2, HeartRate: $heartRate');
+          //   onValueChanged?.call({
+          //     'deviceId': this.id,
+          //     'name': this.name,
+          //     'type': 'spo2',
+          //     'spo2': spo2,
+          //     'pr': heartRate,
+          //   });
+          // }
         });
   }
 
   @override
   Future<void> onDisconnect() async {
-    print('Spo2Device is disconnected');
+    print('YuwellTempDevice is disconnected');
     if (_bleSubscription != null) {
       _bleSubscription!.cancel();
-      print('Spo2Device cancel subscription');
+      print('YuwellTempDevice cancel subscription');
     }
   }
 }

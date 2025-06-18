@@ -43,11 +43,12 @@ dependencies:
   http: ^1.4.0
   sembast: ^3.2.0+1
   flutter_blue_plus: ^1.4.0
-  universal_ble: ^0.19.0
+  universal_ble:
+    path: "vendors/universal_ble"
   pdf: ^3.10.1
   collection: ^1.17.0
   google_fonts: ^6.2.1
-  shared_preferences: ^2.0.18
+  shared_preferences: ^2.5.3
   flutter_spinkit: ^5.1.0
   eva_icons_flutter: ^3.1.0
   logger: ^2.5.0
@@ -74,6 +75,7 @@ dependencies:
  
   openvidu_flutter:
      path: "vendors/openvidu-flutter"   
+  flutter_html: ^3.0.0
   
 dev_dependencies:
   flutter_test:

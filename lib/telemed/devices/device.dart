@@ -14,6 +14,7 @@ abstract class Device {
   });
 
   void connect();
+  void disconnect();
 
   Map<String, dynamic> toJson();
 }
