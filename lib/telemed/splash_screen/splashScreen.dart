@@ -28,11 +28,12 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void fullscreen() async {
-    // if (Platform.isWindows) {
-    //   await windowManager.ensureInitialized();
-    //   windowManager.setFullScreen(
-    //       context.read<DataProvider>().windowManagersetFullScreen);
-    // }
+    if (Platform.isWindows) {
+      await windowManager.ensureInitialized();
+      windowManager.setFullScreen(
+        context.read<DataProvider>().windowManagersetFullScreen,
+      );
+    }
   }
 
   void setdata() async {
@@ -42,8 +43,10 @@ class _SplashScreenState extends State<SplashScreen> {
       debugPrint('ไม่มีข้อมูล');
       Future.delayed(const Duration(seconds: 1), () {
         setState(() {
-          Navigator.pushReplacement(context,
-              MaterialPageRoute(builder: (context) => const Setting()));
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const Setting()),
+          );
         });
       });
     } else {
@@ -64,8 +67,9 @@ class _SplashScreenState extends State<SplashScreen> {
       provider.debugPrintV("App :${provider.app}");
       provider.debugPrintV("Name Hospital :${provider.name_hospital}");
       provider.debugPrintV("PlatfromURL :${provider.platfromURL}");
-      provider
-          .debugPrintV("platfromURLGateway :${provider.platfromURLGateway}");
+      provider.debugPrintV(
+        "platfromURLGateway :${provider.platfromURLGateway}",
+      );
       provider.debugPrintV("Care Unit :${provider.care_unit}");
       provider.debugPrintV("Care Unit Id :${provider.care_unit_id}");
       provider.debugPrintV("Password Setting :${provider.password}");
@@ -144,8 +148,10 @@ class _SplashScreenState extends State<SplashScreen> {
     }
     setState(() {
       Future.delayed(const Duration(seconds: 1), () {
-        Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (context) => const HomeTelemed()));
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const HomeTelemed()),
+        );
       });
     });
   }
@@ -155,40 +161,44 @@ class _SplashScreenState extends State<SplashScreen> {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return Scaffold(
-        body: SafeArea(
-      child: Stack(
-        children: [
-          Positioned(
+      body: SafeArea(
+        child: Stack(
+          children: [
+            Positioned(
               child: SizedBox(
-                  width: width,
-                  height: height,
-                  child: SvgPicture.asset(
-                    'assets/splash/backlogo.svg',
-                    fit: BoxFit.fill,
-                  ))),
-          Positioned(
-              child: SizedBox(
-            width: width,
-            height: width,
-            child: Center(
-              child: SizedBox(
-                width: width * 0.8,
-                height: width * 0.8,
-                child: SvgPicture.asset('assets/splash/logo.svg'),
+                width: width,
+                height: height,
+                child: SvgPicture.asset(
+                  'assets/splash/backlogo.svg',
+                  fit: BoxFit.fill,
+                ),
               ),
             ),
-          )),
-          const Positioned(
-            right: 0,
-            child: Padding(
-              padding: EdgeInsets.all(8.0),
-              child: CircularProgressIndicator(
-                color: Color.fromARGB(255, 0, 139, 130),
+            Positioned(
+              child: SizedBox(
+                width: width,
+                height: width,
+                child: Center(
+                  child: SizedBox(
+                    width: width * 0.8,
+                    height: width * 0.8,
+                    child: SvgPicture.asset('assets/splash/logo.svg'),
+                  ),
+                ),
               ),
             ),
-          ),
-        ],
+            const Positioned(
+              right: 0,
+              child: Padding(
+                padding: EdgeInsets.all(8.0),
+                child: CircularProgressIndicator(
+                  color: Color.fromARGB(255, 0, 139, 130),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
-    ));
+    );
   }
 }
