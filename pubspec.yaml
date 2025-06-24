@@ -74,7 +74,7 @@ dependencies:
   process: ^5.0.4
  
   openvidu_flutter:
-     path: "vendors/openvidu-flutter"   
+     path: vendors/openvidu-flutter 
   flutter_html: ^3.0.0
   video_player: ^2.7.2
   flutter_vlc_player: ^7.0.0

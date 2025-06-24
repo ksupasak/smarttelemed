@@ -28,11 +28,12 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void fullscreen() async {
-    // if (Platform.isWindows) {
-    //   await windowManager.ensureInitialized();
-    //   windowManager.setFullScreen(
-    //       context.read<DataProvider>().windowManagersetFullScreen);
-    // }
+    if (Platform.isWindows) {
+      await windowManager.ensureInitialized();
+      windowManager.setFullScreen(
+        context.read<DataProvider>().windowManagersetFullScreen,
+      );
+    }
   }
 
   void setdata() async {
@@ -147,11 +148,6 @@ class _SplashScreenState extends State<SplashScreen> {
     }
     setState(() {
       Future.delayed(const Duration(seconds: 1), () {
-        // Navigator.pushReplacement(
-        //   context,
-        //   MaterialPageRoute(builder: (context) => const HomeTelemed()),
-        // );
-
         context.read<DataProvider>().setPage(Stage.HOME_SCREEN);
       });
     });
