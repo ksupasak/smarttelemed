@@ -39,7 +39,7 @@ dependencies:
   cupertino_icons: ^1.0.8
   provider: ^6.0.3 
   get: ^4.6.5
-  just_audio: ^0.9.31
+  just_audio: ^0.10.4
   http: ^1.4.0
   sembast: ^3.2.0+1
   flutter_blue_plus: ^1.4.0
@@ -76,6 +76,13 @@ dependencies:
   openvidu_flutter:
      path: "vendors/openvidu-flutter"   
   flutter_html: ^3.0.0
+  webview_flutter: ^4.13.0
+  webview_windows: ^0.4.0
+  video_player: ^2.7.2
+  flutter_vlc_player: ^7.0.0
+  media_kit: ^1.1.11 # Primary package.
+  media_kit_video: ^1.2.5 # For video rendering.
+  media_kit_libs_video: ^1.0.5 # Native video dependencies.
   
 dev_dependencies:
   flutter_test:

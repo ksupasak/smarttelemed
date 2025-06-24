@@ -6,8 +6,8 @@ import 'package:provider/provider.dart';
 import 'package:smarttelemed/openvidu_flutter/app/models/connection.dart';
 import 'package:smarttelemed/openvidu_flutter/app/utils/logger.dart';
 import 'package:smarttelemed/openvidu_flutter/app/widgets/media_stream_view.dart';
-import 'package:smarttelemed/station/provider/provider.dart';
-import 'package:smarttelemed/station/views/ui/widgetdew.dart/widgetdew.dart';
+import 'package:smarttelemed/apps/station/provider/provider.dart';
+import 'package:smarttelemed/apps/station/views/ui/widgetdew.dart/widgetdew.dart';
 
 class VideoCall extends StatefulWidget {
   const VideoCall({super.key});
@@ -29,8 +29,10 @@ class _VideoCallState extends State<VideoCall> {
 
   Future<void> initOpenVidu() async {
     _openvidu = OpenViduClient('https://openvidu.pcm-life.com');
-    localParticipant =
-        await _openvidu.startLocalPreview(context, StreamMode.frontCamera);
+    localParticipant = await _openvidu.startLocalPreview(
+      context,
+      StreamMode.frontCamera,
+    );
     setState(() {});
     listenSessionEvents();
   }
@@ -43,8 +45,11 @@ class _VideoCallState extends State<VideoCall> {
     _openvidu.on(OpenViduEvent.userPublished, (params) {
       logger.e("userPublished");
 
-      _openvidu.subscribeRemoteStream(params["id"],
-          video: params["videoActive"], audio: params["audioActive"]);
+      _openvidu.subscribeRemoteStream(
+        params["id"],
+        video: params["videoActive"],
+        audio: params["audioActive"],
+      );
     });
 
     _openvidu.on(OpenViduEvent.addStream, (params) {
@@ -90,7 +95,9 @@ class _VideoCallState extends State<VideoCall> {
       final connection = Connection.fromJson(connectstring);
       logger.i(connection.token!);
       localParticipant = await _openvidu.publishLocalStream(
-          token: connection.token!, userName: "userName");
+        token: connection.token!,
+        userName: "userName",
+      );
       setState(() {
         isInside = true;
       });
@@ -110,62 +117,70 @@ class _VideoCallState extends State<VideoCall> {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return Scaffold(
-        body: Stack(
-      children: [
-        const backgrund(),
-        Positioned(
-          child: !isInside
-              ? Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    BoxTime(),
-                    BoxDecorate(
+      body: Stack(
+        children: [
+          const backgrund(),
+          Positioned(
+            child: !isInside
+                ? Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      BoxTime(),
+                      BoxDecorate(
                         child: InformationCard(
-                            dataidcard:
-                                context.read<DataProvider>().dataidcard)),
-                    SizedBox(
-                      height: height * 0.06,
-                      width: width,
-                      child: Center(
-                        child: Text(
-                          'เตรียมความพร้อม',
-                          style: TextStyle(
-                              fontSize: width * 0.05,
-                              fontWeight: FontWeight.w500,
-                              color: const Color(0xff48B5AA)),
+                          dataidcard: context.read<DataProvider>().dataidcard,
                         ),
                       ),
-                    ),
-                    localParticipant != null
-                        ? SizedBox(
-                            width: width * 0.9,
-                            child: ConfigView(
+                      SizedBox(
+                        height: height * 0.06,
+                        width: width,
+                        child: Center(
+                          child: Text(
+                            'เตรียมความพร้อม',
+                            style: TextStyle(
+                              fontSize: width * 0.05,
+                              fontWeight: FontWeight.w500,
+                              color: const Color(0xff48B5AA),
+                            ),
+                          ),
+                        ),
+                      ),
+                      localParticipant != null
+                          ? SizedBox(
+                              width: width * 0.9,
+                              child: ConfigView(
                                 participant: localParticipant!,
-                                onConnect: onConnect))
-                        : const SizedBox(),
-                    ElevatedButton(
+                                onConnect: onConnect,
+                              ),
+                            )
+                          : const SizedBox(),
+                      ElevatedButton(
                         onPressed: () {
                           localParticipant!.close();
                           _openvidu.disconnect();
                           setState(() {});
                           Get.offNamed('user_information');
                         },
-                        child: const Text("ออก")),
-                  ],
-                )
-              : SizedBox(
-                  child: Stack(
-                    children: [
-                      ListView.builder(
+                        child: const Text("ออก"),
+                      ),
+                    ],
+                  )
+                : SizedBox(
+                    child: Stack(
+                      children: [
+                        ListView.builder(
                           itemCount: math.max(0, remoteParticipants.length),
                           itemBuilder: (BuildContext context, int index) {
-                            final remote =
-                                remoteParticipants.values.elementAt(index);
+                            final remote = remoteParticipants.values.elementAt(
+                              index,
+                            );
                             return SizedBox(
-                              width: width /
+                              width:
+                                  width /
                                   math.max(1, remoteParticipants.length),
-                              height: height /
+                              height:
+                                  height /
                                   math.max(1, remoteParticipants.length),
                               child: Expanded(
                                 child: MediaStreamView(
@@ -174,33 +189,36 @@ class _VideoCallState extends State<VideoCall> {
                                 ),
                               ),
                             );
-                          }),
-                      Positioned(
+                          },
+                        ),
+                        Positioned(
                           child: ElevatedButton(
-                        onPressed: () {
-                          _openvidu.disconnect();
-                          setState(() {});
-                          Get.offNamed('user_information');
-                        },
-                        child: const Text("ออก"),
-                      )),
-                      Positioned(
-                        bottom: 5,
-                        left: 5,
-                        child: SizedBox(
-                          height: height * 0.25,
-                          width: width * 0.3,
-                          child: MediaStreamView(
-                            borderRadius: BorderRadius.circular(5),
-                            participant: localParticipant!,
+                            onPressed: () {
+                              _openvidu.disconnect();
+                              setState(() {});
+                              Get.offNamed('user_information');
+                            },
+                            child: const Text("ออก"),
                           ),
                         ),
-                      ),
-                    ],
+                        Positioned(
+                          bottom: 5,
+                          left: 5,
+                          child: SizedBox(
+                            height: height * 0.25,
+                            width: width * 0.3,
+                            child: MediaStreamView(
+                              borderRadius: BorderRadius.circular(5),
+                              participant: localParticipant!,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-        ),
-      ],
-    ));
+          ),
+        ],
+      ),
+    );
   }
 }

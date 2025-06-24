@@ -12,9 +12,9 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:logging/logging.dart';
 import 'package:smarttelemed/openvidu_flutter/screens/videocall.dart';
-import 'package:smarttelemed/station/main_app/app.dart';
-import 'package:smarttelemed/station/provider/provider.dart';
-import 'package:smarttelemed/station/views/ui/widgetdew.dart/widgetdew.dart';
+import 'package:smarttelemed/apps/station/main_app/app.dart';
+import 'package:smarttelemed/apps/station/provider/provider.dart';
+import 'package:smarttelemed/apps/station/views/ui/widgetdew.dart/widgetdew.dart';
 
 class PrepareVideocall extends StatefulWidget {
   const PrepareVideocall({super.key});
@@ -39,14 +39,17 @@ class _PrepareVideocallState extends State<PrepareVideocall> {
     super.initState();
 
     _textSessionController = TextEditingController(
-        text: 'session-flutter-${Random().nextInt(1000)}');
-    _textUserNameController =
-        TextEditingController(text: 'FlutterUser${Random().nextInt(1000)}');
+      text: 'session-flutter-${Random().nextInt(1000)}',
+    );
+    _textUserNameController = TextEditingController(
+      text: 'FlutterUser${Random().nextInt(1000)}',
+    );
     _textUrlController = TextEditingController(text: 'demos.openvidu.io');
     _textSecretController = TextEditingController(text: 'MY_SECRET');
     _textPortController = TextEditingController(text: '443');
-    _textIceServersController =
-        TextEditingController(text: 'stun.l.google.com:19302');
+    _textIceServersController = TextEditingController(
+      text: 'stun.l.google.com:19302',
+    );
 
     _loadSharedPref();
     _liveConn();
@@ -54,26 +57,34 @@ class _PrepareVideocallState extends State<PrepareVideocall> {
   }
 
   Future<void> getvideocalldata() async {
-    var url =
-        Uri.parse('${context.read<DataProvider>().platfromURL}/get_video');
-    var res = await http.post(url, body: {
-      'public_id': context.read<DataProvider>().id,
-    });
+    var url = Uri.parse(
+      '${context.read<DataProvider>().platfromURL}/get_video',
+    );
+    var res = await http.post(
+      url,
+      body: {'public_id': context.read<DataProvider>().id},
+    );
     resToJsonVideo = json.decode(res.body);
     setState(() {});
     debugPrint(
-        "id :${context.read<DataProvider>().id} /get video :${resToJsonVideo.toString()} ");
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
-      _saveSharedPref();
-      return VideocallWidget(
-        server: 'openvidu.pcm-life.com',
-        sessionId: resToJsonVideo["data"]["sessionId"],
-        token: resToJsonVideo["data"]["token"],
-        userName: "People",
-        secret: "minadadmin",
-        iceServer: "",
-      );
-    }));
+      "id :${context.read<DataProvider>().id} /get video :${resToJsonVideo.toString()} ",
+    );
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) {
+          _saveSharedPref();
+          return VideocallWidget(
+            server: 'openvidu.pcm-life.com',
+            sessionId: resToJsonVideo["data"]["sessionId"],
+            token: resToJsonVideo["data"]["token"],
+            userName: "People",
+            secret: "minadadmin",
+            iceServer: "",
+          );
+        },
+      ),
+    );
   }
 
   Future<void> _loadSharedPref() async {
@@ -185,7 +196,7 @@ class _PrepareVideocallState extends State<PrepareVideocall> {
                 ),
               ),
             ),
-          )
+          ),
         ],
       ),
     );

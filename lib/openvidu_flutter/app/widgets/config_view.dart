@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:openvidu_flutter/participant/local_participant.dart';
 import 'package:provider/provider.dart';
-import 'package:smarttelemed/myapp/provider/provider.dart';
+import 'package:smarttelemed/apps/myapp/provider/provider.dart';
 
 import 'drop_down.dart';
 import 'media_stream_view.dart';

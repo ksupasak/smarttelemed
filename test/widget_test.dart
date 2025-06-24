@@ -7,8 +7,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
- 
-import 'package:smarttelemed/myapp/myapp.dart';
+
+import 'package:smarttelemed/apps/myapp/myapp.dart';
 
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {

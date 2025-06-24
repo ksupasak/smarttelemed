@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
-import 'package:smarttelemed/station/provider/provider.dart'; 
+import 'package:smarttelemed/apps/station/provider/provider.dart';
 
 class PreparationVideoCall extends StatefulWidget {
   const PreparationVideoCall({super.key});
@@ -17,10 +17,13 @@ class PreparationVideoCall extends StatefulWidget {
 
 class _PreparationVideoCallState extends State<PreparationVideoCall> {
   Future<void> getPathVideo() async {
-    var url =
-        Uri.parse('${context.read<DataProvider>().platfromURL}/get_video');
-    var res = await http
-        .post(url, body: {'public_id': context.read<DataProvider>().id});
+    var url = Uri.parse(
+      '${context.read<DataProvider>().platfromURL}/get_video',
+    );
+    var res = await http.post(
+      url,
+      body: {'public_id': context.read<DataProvider>().id},
+    );
     var resTojson = json.decode(res.body);
     context.read<DataProvider>().dataVideoCall = resTojson['data'];
     context.read<DataProvider>().notifyListeners();
@@ -43,10 +46,12 @@ class _PreparationVideoCallState extends State<PreparationVideoCall> {
             body: Stack(
               children: [
                 Positioned(
-                    child: SizedBox(
-                        height: height,
-                        width: width,
-                        child: const Text("Login"))),
+                  child: SizedBox(
+                    height: height,
+                    width: width,
+                    child: const Text("Login"),
+                  ),
+                ),
                 Positioned(
                   child: SizedBox(
                     height: height,
@@ -75,10 +80,10 @@ class _PreparationVideoCallState extends State<PreparationVideoCall> {
                       ),
                     ),
                   ),
-                )
+                ),
               ],
             ),
           )
-        : const  Text("หน้า video call");//VideoCall();
+        : const Text("หน้า video call"); //VideoCall();
   }
 }

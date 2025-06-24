@@ -1,0 +1,439 @@
+// ignore_for_file: non_constant_identifier_names, use_build_context_synchronously, sort_child_properties_last
+
+import 'dart:convert';
+import 'dart:typed_data';
+
+import 'package:flutter/material.dart';
+
+import 'package:get/get.dart';
+import 'package:provider/provider.dart';
+import 'package:sembast/sembast.dart';
+import 'package:smarttelemed/apps/myapp/setting/local.dart';
+import 'package:smarttelemed/apps/station/provider/provider.dart';
+import 'package:smarttelemed/apps/station/views/ui/widgetdew.dart/popup.dart';
+import 'package:smarttelemed/apps/station/views/ui/widgetdew.dart/widgetdew.dart';
+import 'package:http/http.dart' as http;
+
+class Regter extends StatefulWidget {
+  const Regter({super.key});
+
+  @override
+  State<Regter> createState() => _RegterState();
+}
+
+class _RegterState extends State<Regter> {
+  Uint8List? resTojsonImage;
+  TextEditingController prefix_name = TextEditingController();
+  TextEditingController first_name = TextEditingController();
+  TextEditingController last_name = TextEditingController();
+  TextEditingController id = TextEditingController();
+
+  TextEditingController hn = TextEditingController();
+  TextEditingController phone = TextEditingController();
+  String text_no_hn = "";
+  List<RecordSnapshot<int, Map<String, Object?>>>? dataconfig;
+  @override
+  void initState() {
+    gitimage();
+    getconfig();
+    super.initState();
+  }
+
+  void getconfig() async {
+    dataconfig = await getInOutHospital();
+    debugPrint("dataconfig INHospital $dataconfig");
+    if (dataconfig?.length != 0) {
+      for (RecordSnapshot<int, Map<String, Object?>> record in dataconfig!) {
+        // text_no_idcard  = record["text_no_idcard"].toString();
+        text_no_hn = record["text_no_hn"].toString();
+        debugPrint(text_no_hn);
+        // text_no_vn  = record["text_no_vn"].toString();
+      }
+    }
+  }
+  // Future<void> getImage() async {
+  //   var url = Uri.parse('http://localhost:8189/api/smartcard/read-cead-only');
+  //   var res = await http.post(url);
+  //   var resTojson2 = json.decode(res.body);
+  // }
+
+  void gitimage() async {
+    var url = Uri.parse(
+      'http://localhost:8189/api/smartcard/read?readImageFlag=true',
+    );
+    var res = await http.get(url);
+    var resTojson = json.decode(res.body);
+    debugPrint(resTojson.toString());
+    debugPrint("Imgge: ${resTojson["image"]}");
+    id.text = resTojson["pid"];
+    first_name.text = resTojson["fname"];
+    last_name.text = resTojson["lname"];
+    prefix_name.text = getprefix_name(resTojson["titleName"].toString());
+    gitHN();
+    //  resTojsonImage = base64Decode(resTojson["image"]);
+    setState(() {});
+  }
+
+  String getprefix_name(String titleName) {
+    if (titleName == "001") {
+      return "เด็กชาย";
+    } else if (titleName == "002") {
+      return "เด็กหญิง";
+    } else if (titleName == "003") {
+      return "นาย";
+    }
+    if (titleName == "004") {
+      return "นางสาว";
+    }
+    if (titleName == "005") {
+      return "นาง";
+    } else {
+      return "--";
+    }
+  }
+
+  void gitHN() async {
+    var url = Uri.parse('http://localhost:5000/api/patient?cid=${id.text}');
+    var res = await http.get(url);
+    var resTojson = json.decode(res.body);
+    if (resTojson['statuscode'] == 400) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Popup(
+            texthead: 'เลขบัตรประชาชนไม่ถูกต้อง',
+            pathicon: 'assets/warning.png',
+            buttonbar: [
+              GestureDetector(
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: BoxWidetdew(
+                  color: Colors.red,
+                  height: 0.05,
+                  width: 0.2,
+                  radius: 0.0,
+                  text: 'ออก',
+                  textcolor: Colors.white,
+                ),
+              ),
+            ],
+          );
+        },
+      );
+    } else {
+      hn.text = resTojson["vitalsign"]["hn"];
+      debugPrint(resTojson.toString());
+    }
+    if (hn.text == "") {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Popup(
+            texthead: 'ไม่พบHNในระบบ',
+            textbody: text_no_hn,
+            pathicon: 'assets/warning.png',
+            buttonbar: [
+              GestureDetector(
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: BoxWidetdew(
+                  color: Colors.red,
+                  height: 0.05,
+                  width: 0.2,
+                  radius: 0.0,
+                  text: 'ออก',
+                  textcolor: Colors.white,
+                ),
+              ),
+            ],
+          );
+        },
+      );
+    }
+
+    setState(() {});
+  }
+
+  // void setvalue() {
+  //   debugPrint(context.read<DataProvider>().dataUserIDCard.toString());
+  //   if (context.read<DataProvider>().dataUserIDCard != null) {
+  //     setState(() {
+  //       id.text = context.read<DataProvider>().dataUserIDCard["pid"];
+  //       prefix_name.text =
+  //           context.read<DataProvider>().dataUserIDCard["titleName"];
+  //       first_name.text = context.read<DataProvider>().dataUserIDCard["fname"];
+  //       last_name.text = context.read<DataProvider>().dataUserIDCard["lname"];
+  //     });
+  //   } else {
+  //     setState(() {
+  //       id.text = '--';
+  //       prefix_name.text = '--';
+  //       first_name.text = '--';
+  //       last_name.text = '--';
+  //     });
+  //   }
+  // }
+
+  void regter() async {
+    var url = Uri.parse(
+      '${context.read<DataProvider>().platfromURL}/add_patient',
+    );
+    var res = await http.post(
+      url,
+      body: {
+        'care_unit_id': context.read<DataProvider>().care_unit_id,
+        'public_id': id.text,
+        'prefix_name': "",
+        'first_name': first_name.text,
+        'last_name': last_name.text,
+        'tle': phone.text,
+        'hn': hn.text,
+      },
+    );
+
+    var resTojson2 = json.decode(res.body);
+    debugPrint(resTojson2.toString());
+    if (res.statusCode == 200) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Container(
+            width: MediaQuery.of(context).size.width,
+            child: Center(
+              child: Text(
+                'ส่งข้อมูลสำเร็จ',
+                style: TextStyle(
+                  fontFamily: context.read<DataProvider>().fontFamily,
+                  fontSize: MediaQuery.of(context).size.width * 0.03,
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+      Get.offNamed('home');
+    }
+  }
+
+  Widget BoxData({String? child}) {
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
+    return Container(
+      width: width * 0.4,
+      height: height * 0.027,
+      decoration: BoxDecoration(
+        border: Border.all(color: const Color.fromARGB(255, 0, 0, 0)),
+      ),
+      child: child != null
+          ? Text(
+              child,
+              style: TextStyle(
+                color: const Color.fromARGB(255, 0, 28, 155),
+                fontFamily: context.read<DataProvider>().fontFamily,
+              ),
+            )
+          : const Text('-'),
+    );
+  }
+
+  Widget Boxheab({required String child}) {
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
+    return Container(
+      width: width * 0.4,
+      height: height * 0.027,
+      decoration: BoxDecoration(
+        border: Border.all(color: const Color.fromARGB(255, 0, 0, 0)),
+      ),
+      child: Text(
+        child,
+        style: TextStyle(
+          color: const Color.fromARGB(255, 3, 58, 58),
+          fontFamily: context.read<DataProvider>().fontFamily,
+        ),
+      ),
+    );
+  }
+
+  Widget textdatauser({TextEditingController? child}) {
+    double _width = MediaQuery.of(context).size.width;
+    double _height = MediaQuery.of(context).size.height;
+    TextStyle style2 = TextStyle(
+      fontFamily: context.read<DataProvider>().fontFamily,
+      fontSize: _width * 0.04,
+      color: Color(0xff003D5C),
+    );
+    return Container(
+      child: Row(
+        children: [
+          SizedBox(width: _width * 0.05),
+          Container(
+            width: _width * 0.65,
+            height: _height * 0.04,
+            child: Padding(
+              padding: const EdgeInsets.all(5.0),
+              child: TextField(controller: child, style: style2),
+            ),
+            decoration: boxDecorate,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Decoration boxDecorate = BoxDecoration(
+    boxShadow: [
+      BoxShadow(
+        offset: Offset(0, 2.5),
+        blurRadius: 3,
+        color: Color(0xff31D6AA),
+      ),
+    ],
+    borderRadius: BorderRadius.circular(10),
+    color: Colors.white,
+  );
+
+  @override
+  Widget build(BuildContext context) {
+    double _width = MediaQuery.of(context).size.width;
+    double _height = MediaQuery.of(context).size.height;
+    TextStyle textStyle = TextStyle(
+      fontFamily: context.read<DataProvider>().fontFamily,
+      fontSize: _width * 0.06,
+      color: Color(0xff31D6AA),
+    );
+    TextStyle style2 = TextStyle(
+      fontFamily: context.read<DataProvider>().fontFamily,
+      fontSize: _width * 0.04,
+      color: Color(0xff003D5C),
+    );
+    return Scaffold(
+      body: Stack(
+        children: [
+          backgrund(),
+          Positioned(
+            child: Center(
+              child: ListView(
+                children: [
+                  BoxTime(),
+                  Container(
+                    child: Center(
+                      child: Container(
+                        width: _width * 0.85,
+                        decoration: boxDecorate,
+                        child: Column(
+                          children: [
+                            Text('ลงทะเบียน', style: textStyle),
+                            Container(
+                              width: _width * 0.8,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  // Center(
+                                  //     child: resTojsonImage != null
+                                  //         ? SizedBox(
+                                  //             width: _width * 0.2,
+                                  //             height: _height * 0.2,
+                                  //             child: Image.memory(
+                                  //                 resTojsonImage!))
+                                  //         : const CircularProgressIndicator(color: Color.fromARGB(255, 54, 110, 56),) ),
+                                  Text('คำนำหน้าชื่อ', style: style2),
+                                  textdatauser(child: prefix_name),
+                                  Text('ชื่อ', style: style2),
+                                  textdatauser(child: first_name),
+                                  Text('นามสกุล', style: style2),
+                                  textdatauser(child: last_name),
+                                  Text('เลขประจำตัวประชาชน', style: style2),
+                                  textdatauser(child: id),
+                                  Text('เบอร์โทร', style: style2),
+                                  textdatauser(child: phone),
+                                  Text('รหัส HN', style: style2),
+                                  textdatauser(child: hn),
+                                ],
+                              ),
+                            ),
+                            SizedBox(height: _height * 0.01),
+                            GestureDetector(
+                              onTap: regter,
+                              child: Container(
+                                width: _width * 0.35,
+                                height: _height * 0.06,
+                                decoration: BoxDecoration(
+                                  color: const Color(0xff31D6AA),
+                                  borderRadius: BorderRadius.circular(10),
+                                  boxShadow: const [
+                                    BoxShadow(
+                                      color: Colors.grey,
+                                      offset: Offset(0, 2),
+                                      blurRadius: 2,
+                                    ),
+                                  ],
+                                ),
+                                child: Row(
+                                  children: [
+                                    Image.asset('assets/rsjyrsk.png'),
+                                    Text(
+                                      'ลงทะเบียน',
+                                      style: TextStyle(
+                                        fontFamily: context
+                                            .read<DataProvider>()
+                                            .fontFamily,
+                                        fontSize: _width * 0.04,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+      bottomNavigationBar: Container(
+        height: _height * 0.03,
+        child: Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(4.0),
+              child: GestureDetector(
+                onTap: () {
+                  Get.offNamed('home');
+                },
+                child: Container(
+                  height: _height * 0.025,
+                  width: _width * 0.15,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(
+                      color: Color.fromARGB(255, 201, 201, 201),
+                      width: _width * 0.002,
+                    ),
+                  ),
+                  child: Center(
+                    child: Text(
+                      '< ย้อนกลับ',
+                      style: TextStyle(
+                        fontFamily: context.read<DataProvider>().fontFamily,
+                        fontSize: _width * 0.03,
+                        color: Color.fromARGB(255, 201, 201, 201),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
