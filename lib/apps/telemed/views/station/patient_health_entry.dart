@@ -681,14 +681,11 @@ class _PatientHealthEntryState extends State<PatientHealthEntry> {
       //   context,
       //   MaterialPageRoute(builder: (context) => const PatientHome()),
       // );
-      context.read<DataProvider>().setPage(Stage.PATIENT_HOME_SCREEN);
+      context.read<DataProvider>().setPage(Stage.PATIENT_HEALTH_RECORD_SCREEN);
     } catch (e) {
       provider.debugPrintV("error Gateway $e");
-      // Navigator.pushReplacement(
-      //   context,
-      //   MaterialPageRoute(builder: (context) => const PatientHome()),
-      // );
-      context.read<DataProvider>().setPage(Stage.PATIENT_HOME_SCREEN);
+
+      context.read<DataProvider>().setPage(Stage.PATIENT_HEALTH_RECORD_SCREEN);
     }
   }
 
@@ -730,6 +727,24 @@ class _PatientHealthEntryState extends State<PatientHealthEntry> {
     startBP();
     // startHL7Server();
     startSpo2();
+
+    context.read<DataProvider>().heightHealthrecord.addListener(() {
+      calculateBMI();
+    });
+    context.read<DataProvider>().weightHealthrecord.addListener(() {
+      calculateBMI();
+    });
+  }
+
+  void calculateBMI() {
+    double height = double.parse(
+      context.read<DataProvider>().heightHealthrecord.text,
+    );
+    double weight = double.parse(
+      context.read<DataProvider>().weightHealthrecord.text,
+    );
+    double bmi = weight / ((height / 100) * (height / 100));
+    context.read<DataProvider>().bmiHealthrecord.text = bmi.toStringAsFixed(2);
   }
 
   @override

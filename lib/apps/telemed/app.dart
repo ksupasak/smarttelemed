@@ -16,6 +16,7 @@ import 'package:smarttelemed/apps/telemed/views/station/session_waiting.dart';
 import 'package:smarttelemed/apps/telemed/views/station/session_summary.dart';
 import 'package:smarttelemed/apps/telemed/views/setting/setting.dart';
 import 'package:smarttelemed/shared/med_devices/device_manager.dart';
+import 'package:smarttelemed/apps/telemed/views/station/stage.dart';
 
 class TelemedStationApp extends StatefulWidget {
   const TelemedStationApp({super.key});
@@ -77,23 +78,23 @@ class _TelemedStationAppState extends State<TelemedStationApp> {
   Widget getPage(int index) {
     if (index == 0) {
       return const SplashScreen();
-    } else if (index == 1) {
+    } else if (index == Stage.HOME_SCREEN) {
       return const HomeTelemed();
-    } else if (index == 2) {
+    } else if (index == Stage.PATIENT_REGISTER_SCREEN) {
       return const PatientRegister();
-    } else if (index == 3) {
+    } else if (index == Stage.PATIENT_HOME_SCREEN) {
       return const PatientHome();
-    } else if (index == 4) {
+    } else if (index == Stage.PATIENT_HEALTH_RECORD_SCREEN) {
       return const PatientHealthRecord();
-    } else if (index == 5) {
+    } else if (index == Stage.PATIENT_HEALTH_ENTRY_SCREEN) {
       return const PatientHealthEntry();
-    } else if (index == 6) {
+    } else if (index == Stage.PATIENT_APPOINTMENT_SCREEN) {
       return const PatientAppointment();
-    } else if (index == 7) {
+    } else if (index == Stage.SESSION_WAITING_SCREEN) {
       return const SessionWaiting();
-    } else if (index == 8) {
+    } else if (index == Stage.SESSION_SUMMARY_SCREEN) {
       return const SessionSummary();
-    } else if (index == 9) {
+    } else if (index == Stage.SETTING_SCREEN) {
       return const Setting();
     }
     return const Placeholder();

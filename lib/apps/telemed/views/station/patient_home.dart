@@ -98,7 +98,7 @@ class _PatientHomeState extends State<PatientHome> {
                 ),
               ),
               onPressed: () {
-                // Navigator.pop(context);
+                Navigator.pop(context);
                 // Navigator.pushReplacement(
                 //   context,
                 //   MaterialPageRoute(
@@ -367,12 +367,6 @@ class _PatientHomeState extends State<PatientHome> {
                       height * provider.buttonSized_h,
                     ),
                     onPressed: () {
-                      // Navigator.pushReplacement(
-                      //   context,
-                      //   MaterialPageRoute(
-                      //     builder: (context) => const SumHealthrecord(),
-                      //   ),
-                      // );
                       context.read<DataProvider>().setPage(
                         Stage.PATIENT_APPOINTMENT_SCREEN,
                       );

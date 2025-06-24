@@ -4,6 +4,7 @@ import 'dart:typed_data';
 
 abstract class TelemedBleDevice extends Device {
   BleDevice? _bleDevice;
+
   List<BleService> discoveredServices = [];
 
   TelemedBleDevice({
@@ -39,6 +40,10 @@ abstract class TelemedBleDevice extends Device {
     print(services);
 
     return services;
+  }
+
+  bool isConnected() {
+    return _isConnected;
   }
 
   @override
@@ -85,17 +90,18 @@ abstract class TelemedBleDevice extends Device {
       print('OnConnectionChange $this.id, $isConnected');
       _isConnected = isConnected;
       if (_isConnected) {
-        bool? res = await UniversalBle.isPaired(this.id);
-        print('Pair result: $res');
-        if (res == false) {
-          await UniversalBle.pair(this.id);
-        }
-        res = await UniversalBle.isPaired(this.id);
-        print('Pair result: $res');
+        // bool? res = await UniversalBle.isPaired(this.id);
+        // print('Pair result: $res');
+        // if (res == false) {
+        //   await UniversalBle.pair(this.id);
+        // }
+        // res = await UniversalBle.isPaired(this.id);
+        // print('Pair result: $res');
 
         discoveredServices = await discoverServices();
         print('Services discovered');
         print(discoveredServices);
+        await Future.delayed(Duration(seconds: 2));
         await onConnect();
       } else {
         discoveredServices.clear();
@@ -108,13 +114,13 @@ abstract class TelemedBleDevice extends Device {
       try {
         if (_isConnected == false) {
           await UniversalBle.connect(this.id); // Your existing connect method
-          bool? res = await UniversalBle.isPaired(this.id);
-          print('Pair result: $res');
-          if (res == false) {
-            await UniversalBle.pair(this.id);
-          }
-          res = await UniversalBle.isPaired(this.id);
-          print('Pair result: $res');
+          // bool? res = await UniversalBle.isPaired(this.id);
+          // print('Pair result: $res');
+          // if (res == false) {
+          //   await UniversalBle.pair(this.id);
+          // }
+          // res = await UniversalBle.isPaired(this.id);
+          // print('Pair result: $res');
         } else {
           print('Device is already connected');
           await Future.delayed(Duration(seconds: 2));

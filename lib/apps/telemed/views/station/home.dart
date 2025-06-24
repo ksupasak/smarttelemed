@@ -250,7 +250,7 @@ class _HomeTelemedState extends State<HomeTelemed> {
       status = true;
     });
     provider.debugPrintV(
-      "sen get_patient ESM :${provider.platfromURL}/get_patient",
+      "send get_patient ESM :${provider.platfromURL}/get_patient",
     );
     try {
       var url = Uri.parse('${provider.platfromURL}/get_patient');
@@ -259,9 +259,16 @@ class _HomeTelemedState extends State<HomeTelemed> {
         body: {'care_unit_id': provider.care_unit_id, 'public_id': provider.id},
       );
       resTojson_esm = json.decode(res.body);
+      print(resTojson_esm);
+      if (resTojson_esm['calendar_url'] != null) {
+        provider.calendar_url = resTojson_esm['calendar_url'];
+      }
+      if (resTojson_esm['health_url'] != null) {
+        provider.health_url = resTojson_esm['health_url'];
+      }
     } catch (e) {
       provider.debugPrintV(
-        " error sen get_patient ESM :${provider.platfromURL}/get_patient :$e",
+        " error send get_patient ESM :${provider.platfromURL}/get_patient :$e",
       );
     }
     provider.debugPrintV(
@@ -408,6 +415,13 @@ class _HomeTelemedState extends State<HomeTelemed> {
       } else {
         provider.debugPrintV("มีวันเกิดในESM");
       }
+
+      if (provider.calendar_url == '') {
+        provider.debugPrintV("ไม่มีข้อมูลปฏิทิน");
+      } else {
+        provider.debugPrintV("มีข้อมูลปฏิทิน");
+      }
+
       //
       setState(() {
         status = false;

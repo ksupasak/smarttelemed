@@ -62,11 +62,11 @@ class _DeviceSettingState extends State<DeviceSetting> {
                     title: Text(device.name ?? 'Unknown'),
                     subtitle: Text(device.deviceId),
                     onTap: () {
-                      setDeviceSetting(
-                        () => _devices.add(
+                      setDeviceSetting(() {
+                        _deviceManager.addDevice(
                           DeviceFactory.createBleDevice(device) as Device,
-                        ),
-                      );
+                        );
+                      });
                       Navigator.of(ctx).pop();
                       UniversalBle.stopScan();
                     },

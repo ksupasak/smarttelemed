@@ -65,6 +65,9 @@ class DataProvider with ChangeNotifier {
   String birthdate = '';
   String age = '';
 
+  String calendar_url = '';
+  String health_url = '';
+
   void updateuserinformation(Map data) {
     debugPrintV("พบข้อมูล ID Card :$data");
     dataUserIDCard = data;
@@ -80,6 +83,10 @@ class DataProvider with ChangeNotifier {
     databirthDate = data['birthDate'];
     birthdate =
         "${databirthDate[0]}${databirthDate[1]}${databirthDate[2]}${databirthDate[3]}-${databirthDate[4]}${databirthDate[5]}-${databirthDate[6]}${databirthDate[7]}";
+
+    calendar_url = data['calendar_url'];
+    health_url = data['health_url'];
+
     notifyListeners();
   }
 
