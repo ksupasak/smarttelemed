@@ -7,71 +7,125 @@ import 'package:universal_ble/universal_ble.dart';
 import 'package:flutter/material.dart';
 
 class DeviceManager {
-  static final DeviceManager _instance = DeviceManager._internal();
-  factory DeviceManager() => _instance;
-
+  // Private constructor
   DeviceManager._internal();
 
-  List<Device> devices = [];
+  // Singleton instance
+  static final DeviceManager _instance = DeviceManager._internal();
 
+  // Public getter for the singleton instance
+  static DeviceManager get instance => _instance;
+
+  // Private fields
+  final List<Device> _devices = [];
+  bool _isStarted = false;
+  void Function(Map<String, dynamic>)? _onValueChanged;
+
+  // Constants
+  static const String _key = 'saved_devices';
+
+  // Getters
+  List<Device> get devices => List.unmodifiable(_devices);
+  bool get isStarted => _isStarted;
+  bool get hasDevices => _devices.isNotEmpty;
+
+  // Device management methods
   void addDevice(Device device) {
-    print('Adding device: ${device.id}');
-    devices.add(device);
+    if (!_devices.any((d) => d.id == device.id)) {
+      print('Adding device: ${device.id}');
+      _devices.add(device);
+      _saveDevices();
+    } else {
+      print('Device ${device.id} already exists');
+    }
   }
 
   void removeDevice(Device device) {
     print('Removing device: ${device.id}');
-    devices.remove(device);
+    _devices.removeWhere((d) => d.id == device.id);
+    _saveDevices();
   }
 
-  List<Device> getDevices() {
-    return devices;
+  void removeDeviceById(String deviceId) {
+    print('Removing device by ID: $deviceId');
+    _devices.removeWhere((d) => d.id == deviceId);
+    _saveDevices();
   }
 
+  Device? getDeviceById(String deviceId) {
+    try {
+      return _devices.firstWhere((d) => d.id == deviceId);
+    } catch (e) {
+      return null;
+    }
+  }
+
+  List<Device> getDevicesByType(String type) {
+    return _devices.where((d) => d.type == type).toList();
+  }
+
+  // Persistence methods
   Future<void> load() async {
-    List<Device?> loadedDevices = await loadDevices();
-    devices = loadedDevices
-        .where((device) => device != null)
-        .cast<Device>()
-        .toList();
+    stop();
+    List<Device?> loadedDevices = await _loadDevices();
+    _devices.clear();
+    _devices.addAll(
+      loadedDevices.where((device) => device != null).cast<Device>(),
+    );
+    print('Loaded ${_devices.length} devices');
   }
 
-  void save() async {
-    await saveDevices(devices);
+  Future<void> save() async {
+    await _saveDevices();
   }
 
-  static const String key = 'saved_devices';
+  Future<void> _saveDevices() async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      List<String> jsonList = _devices
+          .map((device) => jsonEncode(device.toJson()))
+          .toList();
 
-  Future<void> saveDevices(List<Device> devices) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    List<String> jsonList = devices
-        .map((device) => jsonEncode(device.toJson()))
-        .toList();
-
-    print('Saved ${jsonList.length} devices');
-
-    await prefs.setStringList(key, jsonList);
+      print('Saving ${jsonList.length} devices');
+      await prefs.setStringList(_key, jsonList);
+    } catch (e) {
+      print('Error saving devices: $e');
+    }
   }
 
-  Future<List<Device?>> loadDevices() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    List<String>? jsonList = prefs.getStringList(key);
-    if (jsonList == null) return [];
+  Future<List<Device?>> _loadDevices() async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      List<String>? jsonList = prefs.getStringList(_key);
+      if (jsonList == null) return [];
 
-    print('Loaded ${jsonList.length} devices');
+      print('Loading ${jsonList.length} devices');
 
-    return jsonList.map((str) {
-      final json = jsonDecode(str);
-      Device? device = DeviceFactory.createDevice(json);
-      print('Loaded device: ${device?.name} ${device?.id} ${device?.type}');
-      return device;
-    }).toList();
+      return jsonList.map((str) {
+        try {
+          final json = jsonDecode(str);
+          Device? device = DeviceFactory.createDevice(json);
+          print('Loaded device: ${device?.name} ${device?.id} ${device?.type}');
+          return device;
+        } catch (e) {
+          print('Error loading device from JSON: $e');
+          return null;
+        }
+      }).toList();
+    } catch (e) {
+      print('Error loading devices: $e');
+      return [];
+    }
   }
 
-  bool _isStarted = false;
-
+  // Connection management
   void start() {
-    if (_isStarted) return;
+    if (_isStarted) {
+      print('DeviceManager already started');
+      return;
+    }
+
+    print('Starting DeviceManager');
     _isStarted = true;
 
     UniversalBle.onConnectionChange =
@@ -81,27 +135,77 @@ class DeviceManager {
           );
         };
 
-    for (Device device in devices) {
+    for (Device device in _devices) {
       if (device is TelemedBleDevice) {
-        device.setOnValueChanged(onValueChanged);
+        device.setOnValueChanged(_onValueChanged);
         device.connect();
       }
     }
   }
 
   void stop() {
+    if (!_isStarted) {
+      print('DeviceManager already stopped');
+      return;
+    }
+
+    print('****Stopping DeviceManager');
     _isStarted = false;
 
-    for (Device device in devices) {
+    for (Device device in _devices) {
       if (device is TelemedBleDevice) {
         device.disconnect();
       }
     }
   }
 
-  void Function(Map<String, dynamic>)? onValueChanged;
+  void restart() {
+    print('Restarting DeviceManager');
+    stop();
+    start();
+  }
 
+  // Callback management
   void setOnValueChanged(void Function(Map<String, dynamic>)? callback) {
-    onValueChanged = callback;
+    _onValueChanged = callback;
+
+    // Update existing devices with new callback
+    for (Device device in _devices) {
+      if (device is TelemedBleDevice) {
+        device.setOnValueChanged(_onValueChanged);
+      }
+    }
+  }
+
+  // Utility methods
+  void clearAllDevices() {
+    print('Clearing all devices');
+    stop();
+    _devices.clear();
+    _saveDevices();
+  }
+
+  bool hasConnectedDevices() {
+    return _devices.isNotEmpty;
+  }
+
+  List<Device> getConnectedDevices() {
+    return _devices.where((device) => device is TelemedBleDevice).toList();
+  }
+
+  // Debug methods
+  void printDeviceStatus() {
+    print('DeviceManager Status:');
+    print('  Started: $_isStarted');
+    print('  Total devices: ${_devices.length}');
+    print('  BLE devices: ${getConnectedDevices().length}');
+
+    for (Device device in _devices) {
+      if (device is TelemedBleDevice) {
+        print('  - ${device.name} (${device.id}): BLE Device');
+      } else {
+        print('  - ${device.name} (${device.id}): ${device.type}');
+      }
+    }
   }
 }

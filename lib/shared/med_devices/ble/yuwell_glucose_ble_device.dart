@@ -30,10 +30,12 @@ class YuwellGlucoseBleDevice extends TelemedBleDevice {
   }
 
   StreamSubscription<Uint8List>? _bleSubscription = null;
-
+  bool found = false;
   @override
   Future<void> onConnect() async {
     print('YuwellGlucoseBleDevice is connected');
+
+    found = false;
 
     String serviceId = '00001808-0000-1000-8000-00805f9b34fb';
     String notify_uuid = '00002a18-0000-1000-8000-00805f9b34fb';
@@ -45,7 +47,7 @@ class YuwellGlucoseBleDevice extends TelemedBleDevice {
       notify_uuid,
       BleInputProperty.notification,
     );
-
+    // 060900e60701080c0f3534c011
     // 104  68
     // 06 06 00 e6 07 01 06 0b 12 27 3a c0 11
     //                YY MM DD
@@ -63,19 +65,20 @@ class YuwellGlucoseBleDevice extends TelemedBleDevice {
           String hexValue = toHex(value);
           // parse the value
 
-          // if (hexValue.substring(0, 2) == '81' &&
-          //     hexValue.substring(4, 6) != '7f') {
-          //   int heartRate = int.parse(hexValue.substring(2, 4), radix: 16);
-          //   int spo2 = int.parse(hexValue.substring(4, 6), radix: 16);
-          //   print('Spo2: $spo2, HeartRate: $heartRate');
-          //   onValueChanged?.call({
-          //     'deviceId': this.id,
-          //     'name': this.name,
-          //     'type': 'spo2',
-          //     'spo2': spo2,
-          //     'pr': heartRate,
-          //   });
-          // }
+          if (found == false) {
+            int dtx =
+                (int.parse(hexValue.substring(10 * 2, 22), radix: 16) * 1.8)
+                    .toInt();
+            print('Dtx: $dtx');
+            found = true;
+            onValueChanged?.call({
+              'deviceId': this.id,
+              'name': this.name,
+              'type': 'dtx',
+              'dtx': dtx,
+            });
+            UniversalBle.disconnect(this.id);
+          }
         });
     print('YuwellGlucoseBleDevice Subscribed');
   }
@@ -88,5 +91,47 @@ class YuwellGlucoseBleDevice extends TelemedBleDevice {
       _bleSubscription = null;
       print('YuwellGlucoseBleDevice cancel subscription');
     }
+  }
+
+  @override
+  Future<void> onTick() async {
+    String serviceId = '00001808-0000-1000-8000-00805f9b34fb';
+
+    List<BleService> services = await UniversalBle.discoverServices(this.id);
+
+    BleService service = services.firstWhere(
+      (service) => service.uuid == serviceId,
+    );
+
+    BleCharacteristic characteristic = service.characteristics.firstWhere(
+      (characteristic) =>
+          characteristic.uuid == "00002a52-0000-1000-8000-00805f9b34fb",
+    );
+
+    print(characteristic.uuid);
+
+    await UniversalBle.writeValue(
+      this.id,
+      serviceId,
+      "00002a52-0000-1000-8000-00805f9b34fb",
+      Uint8List.fromList([0x01, 0x01]),
+      BleOutputProperty.withResponse,
+    );
+    print('AccuchekBleDevice is ticking');
+
+    // BleCharacteristic characteristic = await service.getCharacteristic('2a56');
+    // print('AccuchekBleDevice is ticking');
+
+    // characteristic.write(
+    //   Uint8List.fromList([0x01, 0x01]),
+    //   BleOutputProperty.withResponse,
+    // );
+    // UniversalBle.writeValue(
+    //   this.id,
+    //   serviceId,
+    //   "00002a52-0000-1000-8000-00805f9b34fb",
+    //   Uint8List.fromList([0x01, 0x01]),
+    //   BleOutputProperty.withResponse,
+    // );
   }
 }

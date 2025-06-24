@@ -7,7 +7,7 @@ import 'package:sembast/sembast.dart';
 import 'package:smarttelemed/apps/telemed/data/models/station/local.dart';
 import 'package:smarttelemed/apps/telemed/data/models/station/provider.dart';
 import 'package:smarttelemed/apps/telemed/views/setting/setting.dart';
-import 'package:smarttelemed/apps/telemed/views/station/home.dart';
+import 'package:smarttelemed/apps/telemed/views/station/stage.dart';
 import 'package:window_manager/window_manager.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -147,10 +147,12 @@ class _SplashScreenState extends State<SplashScreen> {
     }
     setState(() {
       Future.delayed(const Duration(seconds: 1), () {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const HomeTelemed()),
-        );
+        // Navigator.pushReplacement(
+        //   context,
+        //   MaterialPageRoute(builder: (context) => const HomeTelemed()),
+        // );
+
+        context.read<DataProvider>().setPage(Stage.HOME_SCREEN);
       });
     });
   }

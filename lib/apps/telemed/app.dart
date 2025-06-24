@@ -6,6 +6,16 @@ import 'package:smarttelemed/apps/telemed/data/models/station/provider.dart';
 import 'package:smarttelemed/apps/telemed/views/splash_screen/splashScreen.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:smarttelemed/l10n/app_localizations.dart';
+import 'package:smarttelemed/apps/telemed/views/station/home.dart';
+import 'package:smarttelemed/apps/telemed/views/station/patient_register.dart';
+import 'package:smarttelemed/apps/telemed/views/station/patient_home.dart';
+import 'package:smarttelemed/apps/telemed/views/station/patient_health_record.dart';
+import 'package:smarttelemed/apps/telemed/views/station/patient_health_entry.dart';
+import 'package:smarttelemed/apps/telemed/views/station/patient_appointment.dart';
+import 'package:smarttelemed/apps/telemed/views/station/session_waiting.dart';
+import 'package:smarttelemed/apps/telemed/views/station/session_summary.dart';
+import 'package:smarttelemed/apps/telemed/views/setting/setting.dart';
+import 'package:smarttelemed/shared/med_devices/device_manager.dart';
 
 class TelemedStationApp extends StatefulWidget {
   const TelemedStationApp({super.key});
@@ -16,6 +26,31 @@ class TelemedStationApp extends StatefulWidget {
 
 class _TelemedStationAppState extends State<TelemedStationApp> {
   String s = "th";
+
+  DeviceManager _deviceManager = DeviceManager.instance;
+  //  static const int SPLASH_SCREEN = 0;
+  //   static const int HOME_SCREEN = 1; // read id card home page
+  //   static const int PATIENT_REGISTER_SCREEN = 2; // patient register page
+  //   static const int PATIENT_HOME_SCREEN = 3; // patient home page
+  //   static const int PATIENT_HEALTH_RECORD_SCREEN =
+  //       4; // patient health record page
+  //   static const int PATIENT_HEALTH_ENTRY_SCREEN = 5; // patient health entry page
+  //   static const int PATIENT_APPOINTMENT_SCREEN = 6;
+  //   static const int SESSION_WAITING_SCREEN = 7;
+  //   static const int SESSION_SUMMARY_SCREEN = 9;
+
+  // final List<Widget> _pages = [
+  //   const SplashScreen(),
+  //   const HomeTelemed(),
+  //   const PatientRegister(),
+  //   const PatientHome(),
+  //   const PatientHealthRecord(),
+  //   const PatientHealthEntry(),
+  //   const PatientAppointment(),
+  //   const SessionWaiting(),
+  //   const SessionSummary(),
+  //   const Setting(),
+  // ];
 
   void getS() async {
     List<RecordSnapshot<int, Map<String, Object?>>>? language =
@@ -32,23 +67,59 @@ class _TelemedStationAppState extends State<TelemedStationApp> {
   void initState() {
     getS();
     super.initState();
+
+    _deviceManager.load().then((_) {
+      // _deviceManager.setOnValueChanged(onValueChanged);
+      _deviceManager.start();
+    });
+  }
+
+  Widget getPage(int index) {
+    if (index == 0) {
+      return const SplashScreen();
+    } else if (index == 1) {
+      return const HomeTelemed();
+    } else if (index == 2) {
+      return const PatientRegister();
+    } else if (index == 3) {
+      return const PatientHome();
+    } else if (index == 4) {
+      return const PatientHealthRecord();
+    } else if (index == 5) {
+      return const PatientHealthEntry();
+    } else if (index == 6) {
+      return const PatientAppointment();
+    } else if (index == 7) {
+      return const SessionWaiting();
+    } else if (index == 8) {
+      return const SessionSummary();
+    } else if (index == 9) {
+      return const Setting();
+    }
+    return const Placeholder();
   }
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: ((context) => DataProvider())),
-        //  ChangeNotifierProvider(create: ((context) => LocaleProvider())),
-      ],
-      child: MaterialApp(
-        theme: ThemeData(fontFamily: 'Prompt'),
-        localizationsDelegates: AppLocalizations.localizationsDelegates,
-        supportedLocales: const [Locale('en'), Locale('th')],
-        locale: Locale(s), // LocaleProvider().locales,
-        color: Colors.white,
-        debugShowCheckedModeBanner: false,
-        home: const Scaffold(body: SplashScreen()),
+    final currentPage = context.watch<DataProvider>().currentPage;
+    // if (currentPage != 0) {
+    //   Widget page = getPage(currentPage);
+    //   Navigator.pushReplacement(
+    //     context,
+    //     MaterialPageRoute(builder: (context) => page),
+    //   );
+    // }
+
+    return MaterialApp(
+      theme: ThemeData(fontFamily: 'Prompt'),
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: const [Locale('en'), Locale('th')],
+      locale: Locale(s), // LocaleProvider().locales,
+      color: Colors.white,
+      debugShowCheckedModeBanner: false,
+      home: Consumer<DataProvider>(
+        builder: (context, dataProvider, _) =>
+            getPage(dataProvider.currentPage),
       ),
     );
   }

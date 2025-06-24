@@ -258,4 +258,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get waitting_backButton => '< BACK';
+
+  @override
+  String get patient_appointment => 'Apppointment';
 }

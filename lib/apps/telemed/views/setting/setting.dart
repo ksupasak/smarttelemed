@@ -14,7 +14,7 @@ import 'package:smarttelemed/apps/telemed/views/setting/shutdownWindows.dart';
 import 'package:smarttelemed/apps/telemed/views/setting/talamed_setting.dart';
 import 'package:smarttelemed/apps/telemed/views/setting/ui/boxSetting.dart';
 import 'package:smarttelemed/apps/telemed/views/station/home.dart';
-
+import 'package:smarttelemed/apps/telemed/views/station/stage.dart';
 import 'package:smarttelemed/shared/med_devices/device_setting.dart';
 
 class Setting extends StatefulWidget {
@@ -118,12 +118,15 @@ class _SettingState extends State<Setting> {
                       ),
                       GestureDetector(
                         onTap: () {
-                          //  Navigator.pop(context);
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const HomeTelemed(),
-                            ),
+                          // Navigator.pop(context);
+                          // Navigator.pushReplacement(
+                          //   context,
+                          //   MaterialPageRoute(
+                          //     builder: (context) => const HomeTelemed(),
+                          //   ),
+                          // );
+                          context.read<DataProvider>().setPage(
+                            Stage.HOME_SCREEN,
                           );
                         },
 
@@ -133,7 +136,7 @@ class _SettingState extends State<Setting> {
                       GestureDetector(
                         onTap: () {
                           //  Navigator.pop(context);
-                          Navigator.pushReplacement(
+                          Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (context) => DeviceSetting(),

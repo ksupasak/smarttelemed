@@ -107,9 +107,9 @@
     "waitting_results":"Waiting test results.",
     "waitting_review":"Reviewing test results.",
     "waitting_under_exam":"Undergoing a re-examination.",
-    "waitting_backButton":"< BACK"
+    "waitting_backButton":"< BACK",
   
     
-    
+    "patient_appointment":"Apppointment"
     
 }

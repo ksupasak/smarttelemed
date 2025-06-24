@@ -8,6 +8,7 @@ list(APPEND FLUTTER_PLUGIN_LIST
   flutter_webrtc
   media_kit_libs_windows_video
   media_kit_video
+  permission_handler_windows
   printing
   screen_retriever_windows
   universal_ble

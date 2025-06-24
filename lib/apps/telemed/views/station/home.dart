@@ -9,12 +9,12 @@ import 'package:provider/provider.dart';
 import 'package:smarttelemed/apps/telemed/core/services/background.dart/background.dart';
 import 'package:smarttelemed/apps/telemed/data/models/station/provider.dart';
 import 'package:smarttelemed/apps/telemed/views/setting/setting.dart';
-import 'package:smarttelemed/apps/telemed/views/station/register.dart';
+import 'package:smarttelemed/apps/telemed/views/station/patient_register.dart';
 import 'package:smarttelemed/apps/telemed/views/ui/numpad.dart';
 
 import 'package:smarttelemed/apps/telemed/views/ui/stylebutton.dart';
-import 'package:smarttelemed/apps/telemed/views/station/userInformation.dart';
-
+import 'package:smarttelemed/apps/telemed/views/station/patient_home.dart';
+import 'package:smarttelemed/apps/telemed/views/station/stage.dart';
 import 'package:smarttelemed/l10n/app_localizations.dart';
 
 class HomeTelemed extends StatefulWidget {
@@ -309,10 +309,11 @@ class _HomeTelemedState extends State<HomeTelemed> {
             status = false;
           });
           Future.delayed(const Duration(seconds: 1), () {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => const Userinformation()),
-            );
+            // Navigator.pushReplacement(
+            //   context,
+            //   MaterialPageRoute(builder: (context) => const PatientHome()),
+            // );
+            context.read<DataProvider>().setPage(Stage.PATIENT_HOME_SCREEN);
           });
         }
       } else {
@@ -322,10 +323,12 @@ class _HomeTelemedState extends State<HomeTelemed> {
           timerreadIDCard?.cancel();
           checkcardout?.cancel;
         });
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const Register()),
-        );
+        context.read<DataProvider>().setPage(Stage.PATIENT_REGISTER_SCREEN);
+
+        // Navigator.pushReplacement(
+        //   context,
+        //   MaterialPageRoute(builder: (context) => const PatientRegister()),
+        // );
       }
     } else {
       timerreadIDCard?.cancel();
@@ -413,10 +416,11 @@ class _HomeTelemedState extends State<HomeTelemed> {
       Timer(const Duration(seconds: 1), () {
         setState(() {
           Future.delayed(const Duration(seconds: 1), () {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => const Userinformation()),
-            );
+            // Navigator.pushReplacement(
+            //   context,
+            //   MaterialPageRoute(builder: (context) => const PatientHome()),
+            // );
+            context.read<DataProvider>().setPage(Stage.PATIENT_HOME_SCREEN);
           });
         });
       });
@@ -600,6 +604,9 @@ class _HomeTelemedState extends State<HomeTelemed> {
                             builder: (context) => const Setting(),
                           ),
                         );
+                        // context.read<DataProvider>().setPage(
+                        //   Stage.SETTING_SCREEN,
+                        // );
                         provider.debugPrintV('Setting');
                       }
                     },

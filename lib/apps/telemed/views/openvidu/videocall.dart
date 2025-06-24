@@ -17,7 +17,7 @@ import 'package:provider/provider.dart';
 import 'package:smarttelemed/openvidu_flutter/api/api_service.dart';
 import 'package:http/http.dart' as http;
 import 'package:smarttelemed/apps/station/provider/provider.dart';
-import 'package:smarttelemed/apps/telemed/views/station/userInformation.dart';
+import 'package:smarttelemed/apps/telemed/views/station/patient_home.dart';
 
 class VideocallWidget extends StatefulWidget {
   const VideocallWidget({
@@ -59,7 +59,7 @@ class _VideocallWidgetState extends State<VideocallWidget> {
   void _hangUp() {
     if (session != null) {
       Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => const Userinformation()),
+        MaterialPageRoute(builder: (context) => const PatientHome()),
       );
     }
   }

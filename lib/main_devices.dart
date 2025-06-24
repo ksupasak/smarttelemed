@@ -17,7 +17,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final DeviceManager _deviceManager = DeviceManager();
+  final DeviceManager _deviceManager = DeviceManager.instance;
 
   @override
   void initState() {

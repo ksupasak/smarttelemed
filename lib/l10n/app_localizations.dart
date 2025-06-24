@@ -583,6 +583,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'< BACK'**
   String get waitting_backButton;
+
+  /// No description provided for @patient_appointment.
+  ///
+  /// In en, this message translates to:
+  /// **'Apppointment'**
+  String get patient_appointment;
 }
 
 class _AppLocalizationsDelegate

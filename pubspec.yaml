@@ -76,14 +76,23 @@ dependencies:
   openvidu_flutter:
      path: "vendors/openvidu-flutter"   
   flutter_html: ^3.0.0
-  webview_flutter: ^4.13.0
-  webview_windows: ^0.4.0
   video_player: ^2.7.2
   flutter_vlc_player: ^7.0.0
   media_kit: ^1.1.11 # Primary package.
   media_kit_video: ^1.2.5 # For video rendering.
   media_kit_libs_video: ^1.0.5 # Native video dependencies.
+  media_kit_libs_windows_video: ^1.0.2 # For Windows
   
+
+  webview_flutter: ^4.2.2
+  webview_flutter_platform_interface: ^2.13.1
+  webview_windows: ^0.4.0
+  flutter_sound:
+  flutter_sound_platform_interface: any
+  permission_handler: ^11.3.1  # If accessing mic or storage
+  # flutter_tts: ^3.8.5  # Check for latest version
+  # flutter_tts: ^4.2.3
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -127,6 +136,8 @@ flutter:
     - assets/fonts/Prompt-Bold.ttf
     - assets/logo.png
     - assets/certificate.pem
+    - assets/video/
+    - assets/video/sample.mp4
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

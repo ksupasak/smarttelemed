@@ -7,10 +7,21 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:webview_flutter/webview_flutter.dart';
+import 'package:webview_flutter_platform_interface/webview_flutter_platform_interface.dart';
+import 'dart:io';
 
 import 'package:smarttelemed/apps/myapp/myapp.dart';
 
+// Import the platform-specific WebView for desktop
+import 'package:webview_flutter_windows/webview_flutter_windows.dart';
+
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  if ("windows" == Platform.operatingSystem) {
+    WebViewPlatform.instance = WebViewWindows();
+  }
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
     await tester.pumpWidget(const MyApp());

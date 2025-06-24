@@ -5,6 +5,15 @@ class DataProvider with ChangeNotifier {
   double buttonSized_w = 0.45;
   double buttonSized_h = 0.08;
 
+  int currentIndex = 0;
+
+  int get currentPage => currentIndex;
+
+  void setPage(int index) {
+    currentIndex = index;
+    notifyListeners();
+  }
+
   List<String> debug = [];
   void debugPrintV(String data) {
     if (data.length >= 1000) {

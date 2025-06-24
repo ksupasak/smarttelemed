@@ -3,6 +3,7 @@ import 'package:universal_ble/universal_ble.dart';
 import 'package:smarttelemed/shared/med_devices/device_manager.dart';
 import 'package:smarttelemed/shared/med_devices/device.dart';
 import 'package:smarttelemed/shared/med_devices/device_factory.dart';
+import 'package:smarttelemed/apps/telemed/views/station/home.dart';
 
 class DeviceSetting extends StatefulWidget {
   const DeviceSetting({super.key});
@@ -14,7 +15,7 @@ class DeviceSetting extends StatefulWidget {
 class _DeviceSettingState extends State<DeviceSetting> {
   late List<Device> _devices; // Saved devices
   final List<BleDevice> _scannedDevices = []; // Temporary scanned devices
-  final DeviceManager _deviceManager = DeviceManager();
+  final DeviceManager _deviceManager = DeviceManager.instance;
   late StateSetter setDeviceSetting;
 
   @override
@@ -22,8 +23,9 @@ class _DeviceSettingState extends State<DeviceSetting> {
     super.initState();
     _deviceManager.load().then((_) {
       setState(() {
-        _devices = _deviceManager.getDevices();
+        _devices = _deviceManager.devices;
       });
+      _deviceManager.setOnValueChanged(valueChanged);
     });
   }
 
@@ -93,6 +95,13 @@ class _DeviceSettingState extends State<DeviceSetting> {
     super.dispose();
   }
 
+  TextEditingController monitorController = TextEditingController();
+
+  void valueChanged(Map<String, dynamic> params) {
+    print("valueChanged: $params");
+    monitorController.text = params.toString();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -110,37 +119,70 @@ class _DeviceSettingState extends State<DeviceSetting> {
                 ),
                 IconButton(
                   icon: const Icon(Icons.save),
-                  onPressed: () => _deviceManager.saveDevices(_devices),
+                  onPressed: () => _deviceManager.save(),
                 ),
                 IconButton(
                   icon: const Icon(Icons.bluetooth),
                   onPressed: () => _deviceManager.start(),
                 ),
+                IconButton(
+                  icon: const Icon(Icons.back_hand),
+                  onPressed: () => {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const HomeTelemed(),
+                      ),
+                    ),
+                  },
+                ),
               ],
             ),
-            body: _devices.isEmpty
-                ? const Center(child: Text('No devices added.'))
-                : ListView.builder(
-                    itemCount: _devices.length,
-                    itemBuilder: (context, index) {
-                      final device = _devices[index];
-                      return Dismissible(
-                        key: Key(device.id),
-                        onDismissed: (direction) {
-                          _deviceManager.removeDevice(device);
-                          setState(() {
-                            _devices.remove(device);
-                          });
-                        },
-                        child: ListTile(
-                          title: Text(
-                            device.name + " " + device.type ?? 'Unknown',
-                          ),
-                          subtitle: Text(device.id ?? 'Unknown'),
-                        ),
-                      );
-                    },
+            body: Column(
+              children: [
+                SizedBox(height: 10),
+                SizedBox(
+                  width: double.maxFinite,
+                  height: 100,
+                  child: TextField(
+                    controller: monitorController,
+                    maxLines: 10,
+                    decoration: InputDecoration(
+                      hintText: "monitor",
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
                   ),
+                ),
+                Text("${_devices.length} devices"),
+                Expanded(
+                  child: _devices.isEmpty
+                      ? const Center(child: Text('No devices added.'))
+                      : ListView.builder(
+                          itemCount: _devices.length,
+                          itemBuilder: (context, index) {
+                            final device = _devices[index];
+                            return Dismissible(
+                              key: Key(device.id),
+                              onDismissed: (direction) {
+                                _deviceManager.removeDevice(device);
+                                setState(() {
+                                  _devices.remove(device);
+                                });
+                              },
+                              child: ListTile(
+                                title: Text(
+                                  device.name + " " + device.type ?? 'Unknown',
+                                ),
+                                subtitle: Text(device.id ?? 'Unknown'),
+                              ),
+                            );
+                          },
+                        ),
+                ),
+              ],
+            ),
           );
         },
       ),

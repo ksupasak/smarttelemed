@@ -37,6 +37,7 @@ abstract class TelemedBleDevice extends Device {
     var services = await UniversalBle.discoverServices(this.id);
     print('${services.length} services discovered');
     print(services);
+
     return services;
   }
 
@@ -54,6 +55,10 @@ abstract class TelemedBleDevice extends Device {
 
   Future<void> onConnect() async {
     print('Device is connected');
+  }
+
+  Future<void> onTick() async {
+    print('Device is ticking');
   }
 
   Future<void> onDisconnect() async {
@@ -80,6 +85,14 @@ abstract class TelemedBleDevice extends Device {
       print('OnConnectionChange $this.id, $isConnected');
       _isConnected = isConnected;
       if (_isConnected) {
+        bool? res = await UniversalBle.isPaired(this.id);
+        print('Pair result: $res');
+        if (res == false) {
+          await UniversalBle.pair(this.id);
+        }
+        res = await UniversalBle.isPaired(this.id);
+        print('Pair result: $res');
+
         discoveredServices = await discoverServices();
         print('Services discovered');
         print(discoveredServices);
@@ -95,9 +108,17 @@ abstract class TelemedBleDevice extends Device {
       try {
         if (_isConnected == false) {
           await UniversalBle.connect(this.id); // Your existing connect method
+          bool? res = await UniversalBle.isPaired(this.id);
+          print('Pair result: $res');
+          if (res == false) {
+            await UniversalBle.pair(this.id);
+          }
+          res = await UniversalBle.isPaired(this.id);
+          print('Pair result: $res');
         } else {
           print('Device is already connected');
-          await Future.delayed(Duration(seconds: 3));
+          await Future.delayed(Duration(seconds: 2));
+          await onTick();
         }
       } catch (e) {
         print('Retrying connection in 2 seconds: $e');
