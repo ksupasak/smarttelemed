@@ -76,10 +76,19 @@ class YuwellGlucoseBleDevice extends TelemedBleDevice {
               'type': 'dtx',
               'dtx': dtx,
             });
+            cancelSubscription();
             UniversalBle.disconnect(this.id);
           }
         });
     print('YuwellGlucoseBleDevice Subscribed');
+  }
+
+  Future<void> cancelSubscription() async {
+    if (_bleSubscription != null) {
+      _bleSubscription!.cancel();
+      _bleSubscription = null;
+      print('YuwellGlucoseBleDevice cancel subscription');
+    }
   }
 
   @override
