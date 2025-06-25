@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'package:smarttelemed/openvidu_flutter/screens/prepare_videocall.dart';
 import 'package:smarttelemed/apps/station/views/pages/checkqueue.dart';
 
-import 'package:smarttelemed/apps/station/views/pages/health_record.dart';
 import 'package:smarttelemed/apps/station/views/pages/healthrecord/healthRecord2.dart';
 import 'package:smarttelemed/apps/station/views/pages/home.dart';
 import 'package:smarttelemed/apps/station/views/pages/menu.dart';

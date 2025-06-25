@@ -607,8 +607,8 @@ class _UserInformation2State extends State<UserInformation2> {
     List<RecordSnapshot<int, Map<String, Object?>>>? dataconfig;
     dataconfig = await getInOutHospital();
     debugPrint("dataconfig INHospital $dataconfig");
-    if (dataconfig?.length != 0) {
-      for (RecordSnapshot<int, Map<String, Object?>> record in dataconfig!) {
+    if (dataconfig.length != 0) {
+      for (RecordSnapshot<int, Map<String, Object?>> record in dataconfig) {
         text_no_vn = record["text_no_vn"].toString();
       }
     }

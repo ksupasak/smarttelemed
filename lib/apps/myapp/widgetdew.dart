@@ -3,8 +3,6 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 // import 'package:flutter_pos_printer_platform/esc_pos_utils_platform/src/capability_profile.dart';
 // import 'package:flutter_pos_printer_platform/esc_pos_utils_platform/src/enums.dart';
 // import 'package:flutter_pos_printer_platform/esc_pos_utils_platform/src/generator.dart';
@@ -14,7 +12,6 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
-import 'package:just_audio/just_audio.dart';
 import 'package:provider/provider.dart';
 
 import 'package:http/http.dart' as http;

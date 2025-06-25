@@ -4,14 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smarttelemed/apps/telemed/core/services/background.dart/background.dart';
 import 'package:smarttelemed/apps/telemed/data/models/station/provider.dart';
-import 'package:smarttelemed/apps/telemed/views/station/patient_health_entry.dart';
-import 'package:smarttelemed/apps/telemed/views/station/home.dart';
 import 'package:smarttelemed/apps/telemed/views/ui/informationCard.dart';
 import 'package:smarttelemed/apps/telemed/views/ui/popup.dart';
 import 'package:smarttelemed/apps/telemed/views/ui/stylebutton.dart';
 import 'package:http/http.dart' as http;
 import 'package:smarttelemed/l10n/app_localizations.dart';
-import 'package:smarttelemed/apps/telemed/views/station/session_waiting.dart';
 import 'package:smarttelemed/apps/telemed/views/station/stage.dart';
 
 class PatientHome extends StatefulWidget {

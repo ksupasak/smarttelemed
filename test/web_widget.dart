@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:webview_windows/webview_windows.dart';
-import 'dart:io';
 
 class WebWidget extends StatefulWidget {
   final String initialUrl;

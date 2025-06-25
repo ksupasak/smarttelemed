@@ -15,7 +15,6 @@ import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:smarttelemed/apps/station/provider/provider.dart';
 import 'package:smarttelemed/apps/station/provider/provider_function.dart';
-import 'package:smarttelemed/apps/station/views/pages/videocall.dart';
 import 'package:smarttelemed/apps/station/views/ui/widgetdew.dart/popup.dart';
 import 'package:http/http.dart' as http;
 

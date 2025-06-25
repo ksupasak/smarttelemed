@@ -3,11 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:sembast/sembast.dart';
 import 'package:smarttelemed/apps/telemed/data/models/station/local.dart';
 import 'package:smarttelemed/apps/telemed/data/models/station/provider.dart';
-import 'package:smarttelemed/l10n/app_localizations.dart';
-import 'package:smarttelemed/apps/telemed/app.dart';
-import 'package:smarttelemed/apps/telemed/views/ui/stylebutton.dart';
 import 'dart:io';
-import 'package:process/process.dart';
 
 class LanguageApp extends StatefulWidget {
   const LanguageApp({super.key});

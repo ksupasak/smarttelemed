@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
-import 'package:provider/provider.dart';
 import 'package:smarttelemed/apps/station/background/color/style_color.dart';
-import 'package:smarttelemed/apps/station/provider/provider.dart';
 import 'package:smarttelemed/apps/station/views/ui/widgetdew.dart/widgetdew.dart';
 
 class scanble extends StatefulWidget {

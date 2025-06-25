@@ -89,8 +89,8 @@ class _Splash_ScreenState extends State<Splash_Screen> {
     List<RecordSnapshot<int, Map<String, Object?>>>? dataconfig;
     dataconfig = await getInOutHospital();
     debugPrint("dataconfig INHospital $dataconfig");
-    if (dataconfig?.length != 0) {
-      for (RecordSnapshot<int, Map<String, Object?>> record in dataconfig!) {
+    if (dataconfig.length != 0) {
+      for (RecordSnapshot<int, Map<String, Object?>> record in dataconfig) {
         if (record["in_hospital"] != "true") {
           context.read<DataProvider>().in_hospital = false;
           setState(() {});

@@ -2,15 +2,12 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:provider/provider.dart';
 import 'package:sembast/sembast.dart';
 
 import 'package:http/http.dart' as http;
 import 'package:smarttelemed/apps/myapp/action/playsound.dart';
 import 'package:smarttelemed/apps/myapp/setting/device/requestLocationPermission.dart';
-import 'package:smarttelemed/apps/myapp/splash_screen/splash_screen.dart';
 import 'package:smarttelemed/apps/myapp/provider/provider.dart';
 import 'package:smarttelemed/apps/myapp/setting/local.dart';
 

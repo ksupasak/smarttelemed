@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:sembast/sembast.dart';
 
 class DataProvider with ChangeNotifier {
   bool windowManagersetFullScreen = true;
@@ -54,7 +53,7 @@ class DataProvider with ChangeNotifier {
     'HC-08',
     'MIBFS',
     'HJ-Narigmed',
-    'A&D_UA-651BLE_D57B3F'
+    'A&D_UA-651BLE_D57B3F',
   ];
 
   // Map<String, BluetoothDevice> j = {}; //context.read<DataProvider>().
@@ -154,7 +153,7 @@ class DataProvider with ChangeNotifier {
     super.dispose();
   }
 
-//  var idtest = '1710501456572';
+  //  var idtest = '1710501456572';
 
   var status_getqueue; //false
 

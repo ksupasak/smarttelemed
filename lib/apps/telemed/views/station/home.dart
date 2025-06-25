@@ -2,18 +2,15 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:smarttelemed/apps/telemed/core/services/background.dart/background.dart';
 import 'package:smarttelemed/apps/telemed/data/models/station/provider.dart';
 import 'package:smarttelemed/apps/telemed/views/setting/setting.dart';
-import 'package:smarttelemed/apps/telemed/views/station/patient_register.dart';
 import 'package:smarttelemed/apps/telemed/views/ui/numpad.dart';
 
 import 'package:smarttelemed/apps/telemed/views/ui/stylebutton.dart';
-import 'package:smarttelemed/apps/telemed/views/station/patient_home.dart';
 import 'package:smarttelemed/apps/telemed/views/station/stage.dart';
 import 'package:smarttelemed/l10n/app_localizations.dart';
 

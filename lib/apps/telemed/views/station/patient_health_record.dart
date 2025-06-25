@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:media_kit/media_kit.dart';
 import 'package:media_kit_video/media_kit_video.dart';
-import 'package:media_kit_libs_video/media_kit_libs_video.dart';
 import 'package:webview_windows/webview_windows.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:provider/provider.dart';
@@ -9,7 +8,6 @@ import 'package:smarttelemed/apps/telemed/data/models/station/provider.dart';
 import 'package:smarttelemed/apps/telemed/views/ui/informationCard.dart';
 import 'package:smarttelemed/apps/telemed/core/services/background.dart/background.dart';
 import 'package:smarttelemed/apps/telemed/views/station/stage.dart';
-import 'package:smarttelemed/apps/telemed/views/ui/popup.dart';
 import 'package:smarttelemed/apps/telemed/views/ui/stylebutton.dart';
 import 'package:smarttelemed/l10n/app_localizations.dart';
 

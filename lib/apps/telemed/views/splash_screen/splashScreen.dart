@@ -21,18 +21,17 @@ class _SplashScreenState extends State<SplashScreen> {
   late List<RecordSnapshot<int, Map<String, Object?>>> init;
   @override
   void initState() {
-    setdata();
-
-    // fullscreen();
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      fullscreen();
+    });
+    setdata();
   }
 
   void fullscreen() async {
     if (Platform.isWindows) {
       await windowManager.ensureInitialized();
-      windowManager.setFullScreen(
-        context.read<DataProvider>().windowManagersetFullScreen,
-      );
+      await windowManager.setFullScreen(true);
     }
   }
 

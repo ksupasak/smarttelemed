@@ -1,17 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:smarttelemed/apps/myapp/action/playsound.dart';
 import 'package:smarttelemed/apps/myapp/provider/provider.dart';
-import 'package:smarttelemed/apps/myapp/setting/device.dart';
 import 'package:smarttelemed/apps/myapp/setting/device/requestLocationPermission.dart';
 import 'package:smarttelemed/apps/myapp/setting/init_setting.dart';
 import 'package:smarttelemed/apps/myapp/setting/listprinter.dart';
 import 'package:smarttelemed/apps/myapp/setting/min_max.dart';
 import 'package:smarttelemed/apps/myapp/setting/talamed_setting.dart';
-import 'package:smarttelemed/apps/myapp/setting/update_license.dart';
 import 'package:smarttelemed/apps/myapp/widgetdew.dart';
 
 class Setting extends StatefulWidget {

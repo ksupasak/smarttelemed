@@ -9,10 +9,8 @@ import 'package:http/http.dart' as http;
 import 'package:smarttelemed/apps/telemed/core/services/background.dart/background.dart';
 import 'package:smarttelemed/apps/telemed/data/models/station/provider.dart';
 import 'package:smarttelemed/apps/telemed/views/openvidu/videocall.dart';
-import 'package:smarttelemed/apps/telemed/views/station/session_summary.dart';
 import 'package:smarttelemed/apps/telemed/views/ui/informationCard.dart';
 import 'package:smarttelemed/apps/telemed/views/ui/stylebutton.dart';
-import 'package:smarttelemed/apps/telemed/views/station/patient_home.dart';
 
 import 'package:smarttelemed/l10n/app_localizations.dart';
 import 'package:smarttelemed/apps/telemed/views/station/stage.dart';

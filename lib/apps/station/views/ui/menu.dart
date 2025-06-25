@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
-import 'package:provider/provider.dart';
 import 'package:smarttelemed/apps/station/background/background.dart';
 import 'package:smarttelemed/apps/station/background/color/style_color.dart';
 import 'package:smarttelemed/apps/station/views/ui/widgetdew.dart/widgetdew.dart';

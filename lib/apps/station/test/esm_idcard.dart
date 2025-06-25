@@ -2,9 +2,6 @@
 import 'dart:async';
 import 'package:flutter/services.dart';
 import 'data-service.dart';
-import 'dart:async';
-import 'dart:developer';
-import 'palette.dart';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:io' as IO;
@@ -82,14 +79,14 @@ class ESMIDCard {
 
   StreamController<String> entry = StreamController<String>();
 
-//  _currentEntries.listen((listOfStrings) {
-//     // From this point you can use listOfStrings as List<String> object
-//     // and do all other business logic you want
+  //  _currentEntries.listen((listOfStrings) {
+  //     // From this point you can use listOfStrings as List<String> object
+  //     // and do all other business logic you want
 
-//     for (String myString in listOfStrings) {
-//       print(myString);
-//     }
-//  });
+  //     for (String myString in listOfStrings) {
+  //       print(myString);
+  //     }
+  //  });
 
   Future<void> methodHandler(MethodCall call) async {
     final String idea = call.arguments;
@@ -98,7 +95,8 @@ class ESMIDCard {
       case "showNewIdea": // this method name needs to be the same from invokeMethod in Android
         print("call init reader ${idea}");
         DataService.instance.addIdea(
-            idea); // you can handle the data here. In this example, we will simply update the view via a data service
+          idea,
+        ); // you can handle the data here. In this example, we will simply update the view via a data service
         break;
       default:
         print('no method handler for method ${call.method}');
@@ -164,9 +162,11 @@ class ESMIDCard {
   //////////////////////////////// Get File Directory ////////////////////////////////
   Future<void> getFilesDirDF() async {
     try {
-      String sFilesDirectory = await platform
-          .invokeMethod('getFilesDirMC'); // Call native method getFilesDirMC
-      rootFolder = sFilesDirectory +
+      String sFilesDirectory = await platform.invokeMethod(
+        'getFilesDirMC',
+      ); // Call native method getFilesDirMC
+      rootFolder =
+          sFilesDirectory +
           folder; // you can change path of license files at here
       sLicFile = rootFolder + sLICFileName;
       parameterOpenLib = sLicFile;
@@ -182,9 +182,12 @@ class ESMIDCard {
   Future<void> setAppLogo() async {
     try {
       ByteData data = await rootBundle.load(
-          'assets/flutter_logo.png'); // you can set assets path at pubspec.yaml
-      bytesAppPhoto =
-          data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+        'assets/flutter_logo.png',
+      ); // you can set assets path at pubspec.yaml
+      bytesAppPhoto = data.buffer.asUint8List(
+        data.offsetInBytes,
+        data.lengthInBytes,
+      );
 
       // setState(() {
       bytesPhoto = bytesAppPhoto;
@@ -203,8 +206,9 @@ class ESMIDCard {
   //////////////////////////////// Set Listener ////////////////////////////////
   Future<bool> setListenerDF() async {
     try {
-      int returnCode = await platform
-          .invokeMethod('setListenerMC'); // Call native method setListenerMC
+      int returnCode = await platform.invokeMethod(
+        'setListenerMC',
+      ); // Call native method setListenerMC
       if (returnCode == NA_SUCCESS) {
         return true;
       } else {
@@ -249,7 +253,9 @@ class ESMIDCard {
     String text = "";
     try {
       int returnCode = await platform.invokeMethod(
-          'writeLicFileMC', sLicFile); // Call native method writeLicFileMC
+        'writeLicFileMC',
+        sLicFile,
+      ); // Call native method writeLicFileMC
 
       if (returnCode == 1) {
         text = "License file is already has been.";
@@ -281,7 +287,9 @@ class ESMIDCard {
     try {
       int pms = 1;
       int returnCode = await platform.invokeMethod(
-          'setPermissionsMC', pms); // Call native method setPermissionsMC
+        'setPermissionsMC',
+        pms,
+      ); // Call native method setPermissionsMC
       if (returnCode < 0) {
         // setState(() {
         textResult = checkException(returnCode);
@@ -303,7 +311,9 @@ class ESMIDCard {
     String text = "";
     try {
       int returnCode = await platform.invokeMethod(
-          'openLibMC', parameterOpenLib); // Call native method openLibMC
+        'openLibMC',
+        parameterOpenLib,
+      ); // Call native method openLibMC
       if (returnCode == 0) {
         text = text + "\n" + "Opened the library successfully.";
         // setState(() {
@@ -335,7 +345,8 @@ class ESMIDCard {
 
     try {
       if (IO.Platform.isAndroid) {
-        int listOption = NA_FIRST +
+        int listOption =
+            NA_FIRST +
             NA_SCAN +
             NA_BLE1 +
             NA_BLE0 +
@@ -377,11 +388,14 @@ class ESMIDCard {
           }
         }
 
-        result = await platform.invokeMethod('getReaderListMC',
-            listOption); // Call native method getReaderListMC
+        result = await platform.invokeMethod(
+          'getReaderListMC',
+          listOption,
+        ); // Call native method getReaderListMC
       } else if (IO.Platform.isIOS) {
         result = await platform.invokeMethod(
-            'getReaderListMC'); // Call native method getReaderListMC
+          'getReaderListMC',
+        ); // Call native method getReaderListMC
       }
       var parts = result.split(';');
       return parts;
@@ -399,8 +413,10 @@ class ESMIDCard {
   //////////////////////////////// Select Reader ////////////////////////////////
   Future<bool> selectReaderDF(String textReaderName) async {
     try {
-      int returnCode = await platform.invokeMethod('selectReaderMC',
-          textReaderName); // Call native method selectReaderMC
+      int returnCode = await platform.invokeMethod(
+        'selectReaderMC',
+        textReaderName,
+      ); // Call native method selectReaderMC
 
       if (returnCode != NA_SUCCESS) {
         // setState(() {
@@ -452,7 +468,8 @@ class ESMIDCard {
     }
     try {
       var result = await platform.invokeMethod(
-          'getReaderInfoMC'); // Call native method getReaderInfoMC
+        'getReaderInfoMC',
+      ); // Call native method getReaderInfoMC
       var parts = result.split(';');
       int returnCode = int.parse(parts[0].trim());
       if (returnCode == NA_SUCCESS) {
@@ -475,8 +492,9 @@ class ESMIDCard {
   //////////////////////////////// Connect Card ////////////////////////////////
   Future<int> connectCardDF() async {
     try {
-      int returnCode = await platform
-          .invokeMethod('connectCardMC'); // Call native method connectCardMC
+      int returnCode = await platform.invokeMethod(
+        'connectCardMC',
+      ); // Call native method connectCardMC
       return returnCode;
     } on PlatformException {
       return NA_CONNECTION_ERROR;
@@ -486,8 +504,9 @@ class ESMIDCard {
   //////////////////////////////// Get NID Number ////////////////////////////////
   Future<dynamic> getNIDNumberDF() async {
     try {
-      String result = await platform
-          .invokeMethod('getNIDNumberMC'); // Call native method getNIDNumberMC
+      String result = await platform.invokeMethod(
+        'getNIDNumberMC',
+      ); // Call native method getNIDNumberMC
       var parts = result.split(';');
       return parts;
     } on PlatformException {
@@ -498,8 +517,9 @@ class ESMIDCard {
   //////////////////////////////// Get Text ////////////////////////////////
   Future<dynamic> getTextDF() async {
     try {
-      String result = await platform
-          .invokeMethod('getTextMC'); // Call native method getTextMC
+      String result = await platform.invokeMethod(
+        'getTextMC',
+      ); // Call native method getTextMC
       var parts = result.split(';');
       return parts;
     } on PlatformException {
@@ -510,8 +530,9 @@ class ESMIDCard {
   //////////////////////////////// Get Photo ////////////////////////////////
   Future<dynamic> getPhotoDF() async {
     try {
-      String result = await platform
-          .invokeMethod('getPhotoMC'); // Call native method getPhotoMC
+      String result = await platform.invokeMethod(
+        'getPhotoMC',
+      ); // Call native method getPhotoMC
 
       var parts = result.split(';');
 
@@ -525,7 +546,8 @@ class ESMIDCard {
   Future<int> disconnectCardDF() async {
     try {
       int returnCode = await platform.invokeMethod(
-          'disconnectCardMC'); // Call native method disconnectCardMC
+        'disconnectCardMC',
+      ); // Call native method disconnectCardMC
       return returnCode;
     } on PlatformException {
       return -1;
@@ -536,7 +558,8 @@ class ESMIDCard {
   Future<int> deselectReaderDF() async {
     try {
       int returnCode = await platform.invokeMethod(
-          'deselectReaderMC'); // Call native method deselectReaderMC
+        'deselectReaderMC',
+      ); // Call native method deselectReaderMC
       return returnCode;
     } on PlatformException {
       return -1;
@@ -547,7 +570,8 @@ class ESMIDCard {
   Future<int> updateLicenseFileDF() async {
     try {
       int returnCode = await platform.invokeMethod(
-          'updateLicenseFileMC'); // Call native method updateLicenseMC
+        'updateLicenseFileMC',
+      ); // Call native method updateLicenseMC
       return returnCode;
     } on PlatformException {
       return NA_LICENSE_UPDATE_ERROR;
@@ -558,7 +582,8 @@ class ESMIDCard {
   Future<int> getCardStatusDF() async {
     try {
       int returnCode = await platform.invokeMethod(
-          'getCardStatusMC'); // Call native method getCardStatusMC
+        'getCardStatusMC',
+      ); // Call native method getCardStatusMC
       return returnCode;
     } on PlatformException {
       return -1;
@@ -568,8 +593,9 @@ class ESMIDCard {
   //////////////////////////////// Get RID ////////////////////////////////
   Future<dynamic> getReaderIDDF() async {
     try {
-      String result = await platform
-          .invokeMethod('getReaderIDMC'); // Call native method getReaderIDMC
+      String result = await platform.invokeMethod(
+        'getReaderIDMC',
+      ); // Call native method getReaderIDMC
       var parts = result.split(';');
       return parts;
     } on PlatformException {
@@ -582,7 +608,8 @@ class ESMIDCard {
     String text = "";
     try {
       text = await platform.invokeMethod(
-          'getSoftwareInfoMC'); // Call native method getSoftwareInfoMC
+        'getSoftwareInfoMC',
+      ); // Call native method getSoftwareInfoMC
       // setState(() {
       sSoftwareInfo = text;
       // });
@@ -601,7 +628,8 @@ class ESMIDCard {
     String result = "";
     try {
       result = await platform.invokeMethod(
-          'getLicenseInfoMC'); // Call native method getLicenseInfoMC
+        'getLicenseInfoMC',
+      ); // Call native method getLicenseInfoMC
       // setState(() {
       sLicenseInfo = result;
       // });
@@ -615,8 +643,9 @@ class ESMIDCard {
   //////////////////////////////////// Close Lib ////////////////////////////////////
   Future<int> closeLibDF() async {
     try {
-      int returnCode = await platform
-          .invokeMethod('closeLibMC'); // Call native method closeLibMC
+      int returnCode = await platform.invokeMethod(
+        'closeLibMC',
+      ); // Call native method closeLibMC
       return returnCode;
     } on PlatformException {
       return -1;
@@ -837,7 +866,8 @@ class ESMIDCard {
       double readPhotoTime = ((endTime - startTime) / 1000);
 
       // setState(() {
-      textResult = textResult +
+      textResult =
+          textResult +
           "\nRead Text+Photo: " +
           readPhotoTime.toStringAsFixed(2) +
           " s";

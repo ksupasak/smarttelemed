@@ -13,7 +13,6 @@ import 'package:smarttelemed/apps/telemed/views/setting/settingListPrinter.dart'
 import 'package:smarttelemed/apps/telemed/views/setting/shutdownWindows.dart';
 import 'package:smarttelemed/apps/telemed/views/setting/talamed_setting.dart';
 import 'package:smarttelemed/apps/telemed/views/setting/ui/boxSetting.dart';
-import 'package:smarttelemed/apps/telemed/views/station/home.dart';
 import 'package:smarttelemed/apps/telemed/views/station/stage.dart';
 import 'package:smarttelemed/shared/med_devices/device_setting.dart';
 

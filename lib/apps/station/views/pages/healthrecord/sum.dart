@@ -543,7 +543,7 @@ class _SumHealthrecordState extends State<SumHealthrecord> {
     List<RecordSnapshot<int, Map<String, Object?>>> data = await getMinMax();
     debugPrint(data.toString());
     if (data != []) {
-      for (RecordSnapshot<int, Map<String, Object?>> record in data!) {
+      for (RecordSnapshot<int, Map<String, Object?>> record in data) {
         context.read<DataProvider>().datamin_max['minsys'] = record["minsys"]
             .toString();
         context.read<DataProvider>().datamin_max['maxsys'] = record["maxsys"]

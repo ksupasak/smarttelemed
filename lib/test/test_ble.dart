@@ -131,7 +131,7 @@ class _BleScannerState extends State<BleScanner> {
           BleOutputProperty.withResponse,
         ).timeout(Duration(seconds: 2));
         print('Write to done');
-      } on TimeoutException catch (e, stackTrace) {
+      } on TimeoutException catch (e) {
         setState(() {
           _log += "\nTimeout: $e";
         });

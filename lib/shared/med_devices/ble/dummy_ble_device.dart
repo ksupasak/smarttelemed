@@ -1,5 +1,4 @@
 import 'package:smarttelemed/shared/med_devices/ble/abstract_ble_device.dart';
-import 'package:universal_ble/universal_ble.dart';
 
 class DummyBleDevice extends TelemedBleDevice {
   DummyBleDevice({

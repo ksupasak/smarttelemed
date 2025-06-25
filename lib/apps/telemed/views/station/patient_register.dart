@@ -1,7 +1,6 @@
 // ignore_for_file: non_constant_identifier_names, use_build_context_synchronously, sort_child_properties_last
 
 import 'dart:convert';
-import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -10,8 +9,6 @@ import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:smarttelemed/apps/telemed/core/services/background.dart/background.dart';
 import 'package:smarttelemed/apps/telemed/data/models/station/provider.dart';
-import 'package:smarttelemed/apps/telemed/views/station/home.dart';
-import 'package:smarttelemed/apps/telemed/views/station/patient_home.dart';
 import 'package:virtual_keyboard_multi_language/virtual_keyboard_multi_language.dart';
 import 'package:smarttelemed/l10n/app_localizations.dart';
 import 'package:smarttelemed/apps/telemed/views/station/stage.dart';

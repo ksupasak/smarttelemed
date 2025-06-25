@@ -11,9 +11,7 @@ import 'package:smarttelemed/apps/telemed/core/services/background.dart/backgrou
 import 'package:smarttelemed/apps/telemed/data/models/station/provider.dart';
 import 'package:smarttelemed/apps/telemed/views/ui/boxrecord.dart';
 import 'package:smarttelemed/apps/telemed/views/ui/informationCard.dart';
-import 'package:smarttelemed/apps/telemed/views/ui/popup.dart';
 import 'package:smarttelemed/apps/telemed/views/ui/stylebutton.dart';
-import 'package:smarttelemed/apps/telemed/views/station/patient_home.dart';
 
 import 'package:smarttelemed/l10n/app_localizations.dart';
 import 'package:smarttelemed/shared/med_devices/device_manager.dart';

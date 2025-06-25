@@ -70,12 +70,8 @@ class DeviceFactory {
           autoStart: false,
         );
     }
-    if (_device != null) {
-      print("setBleDevice: ${_device.name}  ${device.name}");
-      _device.setBleDevice(device);
-      return _device;
-    } else {
-      return null;
-    }
+    print("setBleDevice: ${_device.name}  ${device.name}");
+    _device.setBleDevice(device);
+    return _device;
   }
 }

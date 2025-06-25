@@ -1,8 +1,6 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:smarttelemed/apps/station/main_app/app.dart';
 
 class ShutdownWindows extends StatefulWidget {
   const ShutdownWindows({super.key});

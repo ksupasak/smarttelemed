@@ -1,7 +1,6 @@
 import 'package:smarttelemed/shared/med_devices/ble/abstract_ble_device.dart';
 import 'package:universal_ble/universal_ble.dart';
 import 'dart:typed_data';
-import 'dart:convert';
 import 'dart:async';
 
 class YuwellGlucoseBleDevice extends TelemedBleDevice {

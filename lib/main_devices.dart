@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:universal_ble/universal_ble.dart';
 import 'package:smarttelemed/shared/med_devices/device_manager.dart';
-import 'package:smarttelemed/shared/med_devices/device.dart';
-import 'package:smarttelemed/shared/med_devices/device_factory.dart';
 import 'package:smarttelemed/shared/med_devices/device_setting.dart';
 
 void main() {

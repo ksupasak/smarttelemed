@@ -1,10 +1,8 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
-import 'package:get/get.dart';
 import 'package:openvidu_flutter/participant/local_participant.dart';
 import 'package:openvidu_flutter/participant/participant.dart';
 import 'package:openvidu_flutter/utils/custom_websocket.dart';
@@ -13,10 +11,7 @@ import 'package:openvidu_flutter/utils/utils.dart';
 import 'package:openvidu_flutter/widgets/chat_screen.dart';
 import 'package:openvidu_flutter/widgets/custom_draggable.dart';
 import 'package:openvidu_flutter/widgets/participant_widget.dart';
-import 'package:provider/provider.dart';
 import 'package:smarttelemed/openvidu_flutter/api/api_service.dart';
-import 'package:http/http.dart' as http;
-import 'package:smarttelemed/apps/station/provider/provider.dart';
 import 'package:smarttelemed/apps/telemed/views/station/patient_home.dart';
 
 class VideocallWidget extends StatefulWidget {

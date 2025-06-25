@@ -3,18 +3,13 @@ import 'dart:math';
 import 'dart:io';
 import 'dart:async';
 import 'package:flutter_svg/svg.dart';
-import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:http/http.dart' as http;
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:logging/logging.dart';
 import 'package:smarttelemed/openvidu_flutter/screens/videocall.dart';
-import 'package:smarttelemed/apps/station/main_app/app.dart';
 import 'package:smarttelemed/apps/station/provider/provider.dart';
-import 'package:smarttelemed/apps/station/views/ui/widgetdew.dart/widgetdew.dart';
 
 class PrepareVideocall extends StatefulWidget {
   const PrepareVideocall({super.key});

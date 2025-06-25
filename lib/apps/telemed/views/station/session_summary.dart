@@ -9,12 +9,9 @@ import 'package:qr_flutter/qr_flutter.dart';
 import 'package:smarttelemed/apps/telemed/core/services/background.dart/background.dart';
 import 'package:smarttelemed/apps/telemed/data/models/station/provider.dart';
 import 'package:http/http.dart' as http;
-import 'package:smarttelemed/apps/telemed/views/station/home.dart';
 import 'package:smarttelemed/apps/telemed/views/ui/informationCard.dart';
 import 'package:smarttelemed/apps/telemed/views/ui/stylebutton.dart';
-import 'package:smarttelemed/apps/telemed/views/station/patient_home.dart';
 
-import 'package:flutter/services.dart' show rootBundle;
 import 'package:pdf/widgets.dart' as pw;
 import 'package:smarttelemed/l10n/app_localizations.dart';
 import 'package:smarttelemed/apps/telemed/views/station/stage.dart';

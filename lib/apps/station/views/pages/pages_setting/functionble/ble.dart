@@ -1,13 +1,3 @@
-import 'dart:io';
-import 'dart:math';
-
-import 'package:flutter/material.dart';
-import 'package:flutter_blue_plus/flutter_blue_plus.dart';
-import 'package:provider/provider.dart';
-import 'package:smarttelemed/apps/station/provider/provider.dart';
-import 'package:smarttelemed/apps/station/views/pages/pages_setting/device.dart';
-import 'package:smarttelemed/apps/station/views/pages/pages_setting/functionble/scan.dart';
-
 // class _FindDevicesScreenState extends State<Device> {
 //   @override
 //   void initState() {
