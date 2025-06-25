@@ -16,6 +16,8 @@ import 'package:smarttelemed/apps/telemed/views/station/session_summary.dart';
 import 'package:smarttelemed/apps/telemed/views/setting/setting.dart';
 import 'package:smarttelemed/shared/med_devices/device_manager.dart';
 import 'package:smarttelemed/apps/telemed/views/station/stage.dart';
+import 'package:window_manager/window_manager.dart';
+import 'dart:io';
 
 class TelemedStationApp extends StatefulWidget {
   const TelemedStationApp({super.key});
@@ -63,11 +65,20 @@ class _TelemedStationAppState extends State<TelemedStationApp> {
     }
   }
 
+  void fullscreen() async {
+    if (Platform.isWindows) {
+      await windowManager.ensureInitialized();
+      await windowManager.setFullScreen(true);
+    }
+  }
+
   @override
   void initState() {
     getS();
     super.initState();
-
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      fullscreen();
+    });
     _deviceManager.load().then((_) {
       // _deviceManager.setOnValueChanged(onValueChanged);
       _deviceManager.start();

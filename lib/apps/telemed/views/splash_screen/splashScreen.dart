@@ -22,18 +22,18 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      fullscreen();
-    });
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   fullscreen();
+    // });
     setdata();
   }
 
-  void fullscreen() async {
-    if (Platform.isWindows) {
-      await windowManager.ensureInitialized();
-      await windowManager.setFullScreen(true);
-    }
-  }
+  // void fullscreen() async {
+  //   if (Platform.isWindows) {
+  //     await windowManager.ensureInitialized();
+  //     await windowManager.setFullScreen(true);
+  //   }
+  // }
 
   void setdata() async {
     Future<bool> data = showDataBaseDatauserApp();
