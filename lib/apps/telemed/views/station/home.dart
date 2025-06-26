@@ -8,6 +8,8 @@ import 'package:provider/provider.dart';
 import 'package:smarttelemed/apps/telemed/core/services/background.dart/background.dart';
 import 'package:smarttelemed/apps/telemed/data/models/station/provider.dart';
 import 'package:smarttelemed/apps/telemed/views/setting/setting.dart';
+import 'package:smarttelemed/apps/telemed/views/station/patient_home.dart';
+import 'package:smarttelemed/apps/telemed/views/station/patient_register.dart';
 import 'package:smarttelemed/apps/telemed/views/ui/numpad.dart';
 
 import 'package:smarttelemed/apps/telemed/views/ui/stylebutton.dart';
@@ -313,11 +315,12 @@ class _HomeTelemedState extends State<HomeTelemed> {
             status = false;
           });
           Future.delayed(const Duration(seconds: 1), () {
-            // Navigator.pushReplacement(
-            //   context,
-            //   MaterialPageRoute(builder: (context) => const PatientHome()),
-            // );
-            context.read<DataProvider>().setPage(Stage.PATIENT_HOME_SCREEN);
+            // Use the new navigation method instead of setPage
+            context.read<DataProvider>().setPageWithNavigation(
+              context,
+              Stage.PATIENT_HOME_SCREEN,
+              const PatientHome(),
+            );
           });
         }
       } else {
@@ -327,12 +330,13 @@ class _HomeTelemedState extends State<HomeTelemed> {
           timerreadIDCard?.cancel();
           checkcardout?.cancel;
         });
-        context.read<DataProvider>().setPage(Stage.PATIENT_REGISTER_SCREEN);
 
-        // Navigator.pushReplacement(
-        //   context,
-        //   MaterialPageRoute(builder: (context) => const PatientRegister()),
-        // );
+        // Use the new navigation method instead of setPage
+        context.read<DataProvider>().setPageWithNavigation(
+          context,
+          Stage.PATIENT_REGISTER_SCREEN,
+          const PatientRegister(),
+        );
       }
     } else {
       timerreadIDCard?.cancel();
@@ -418,23 +422,36 @@ class _HomeTelemedState extends State<HomeTelemed> {
       } else {
         provider.debugPrintV("มีข้อมูลปฏิทิน");
       }
-
+      provider.debugPrintV("กำลังส่งข้อมูลกลับหน้า Home");
       //
       setState(() {
         status = false;
       });
 
-      Timer(const Duration(seconds: 1), () {
-        setState(() {
-          Future.delayed(const Duration(seconds: 1), () {
-            // Navigator.pushReplacement(
-            //   context,
-            //   MaterialPageRoute(builder: (context) => const PatientHome()),
-            // );
-            context.read<DataProvider>().setPage(Stage.PATIENT_HOME_SCREEN);
-          });
-        });
-      });
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => Stage().getPage(Stage.PATIENT_HOME_SCREEN),
+        ),
+      );
+
+      // Future.delayed(const Duration(seconds: 1), () {
+      //   provider.debugPrintV("กำลังส่งข้อมูลกลับหน้า Home");
+      //   context.read<DataProvider>().setPage(Stage.PATIENT_HOME_SCREEN);
+      // });
+
+      // Timer(const Duration(seconds: 1), () {
+      //   provider.debugPrintV("กำลังส่งข้อมูลกลับหน้า Home");
+      //   setState(() {
+      //     // Future.delayed(const Duration(seconds: 1), () {
+      //     //   // Navigator.pushReplacement(
+      //     //   //   context,
+      //     //   //   MaterialPageRoute(builder: (context) => const PatientHome()),
+      //     //   // );
+      //     //   provider.debugPrintV("กำลังส่งข้อมูลกลับหน้า Home");
+      //     });
+      //   });
+      // });
     }
   }
 

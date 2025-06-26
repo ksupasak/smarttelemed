@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:sembast/sembast.dart';
 import 'package:smarttelemed/apps/telemed/data/models/station/local.dart';
 import 'package:smarttelemed/apps/telemed/data/models/station/provider.dart';
-import 'package:smarttelemed/apps/telemed/views/splash_screen/splashScreen.dart';
+import 'package:smarttelemed/apps/telemed/views/splash_screen/splash_screen.dart';
 import 'package:smarttelemed/l10n/app_localizations.dart';
 import 'package:smarttelemed/apps/telemed/views/station/home.dart';
 import 'package:smarttelemed/apps/telemed/views/station/patient_register.dart';
@@ -85,34 +85,11 @@ class _TelemedStationAppState extends State<TelemedStationApp> {
     });
   }
 
-  Widget getPage(int index) {
-    if (index == 0) {
-      return const SplashScreen();
-    } else if (index == Stage.HOME_SCREEN) {
-      return const HomeTelemed();
-    } else if (index == Stage.PATIENT_REGISTER_SCREEN) {
-      return const PatientRegister();
-    } else if (index == Stage.PATIENT_HOME_SCREEN) {
-      return const PatientHome();
-    } else if (index == Stage.PATIENT_HEALTH_RECORD_SCREEN) {
-      return const PatientHealthRecord();
-    } else if (index == Stage.PATIENT_HEALTH_ENTRY_SCREEN) {
-      return const PatientHealthEntry();
-    } else if (index == Stage.PATIENT_APPOINTMENT_SCREEN) {
-      return const PatientAppointment();
-    } else if (index == Stage.SESSION_WAITING_SCREEN) {
-      return const SessionWaiting();
-    } else if (index == Stage.SESSION_SUMMARY_SCREEN) {
-      return const SessionSummary();
-    } else if (index == Stage.SETTING_SCREEN) {
-      return const Setting();
-    }
-    return const Placeholder();
-  }
-
   @override
   Widget build(BuildContext context) {
-    final currentPage = context.watch<DataProvider>().currentPage;
+    // final currentPage = context.watch<DataProvider>().currentPage;
+
+    context.read<DataProvider>().setContext(context);
     // if (currentPage != 0) {
     //   Widget page = getPage(currentPage);
     //   Navigator.pushReplacement(
@@ -128,10 +105,7 @@ class _TelemedStationAppState extends State<TelemedStationApp> {
       locale: Locale(s), // LocaleProvider().locales,
       color: Colors.white,
       debugShowCheckedModeBanner: false,
-      home: Consumer<DataProvider>(
-        builder: (context, dataProvider, _) =>
-            getPage(dataProvider.currentPage),
-      ),
+      home: Stage().getPage(context.read<DataProvider>().currentPage),
     );
   }
 }

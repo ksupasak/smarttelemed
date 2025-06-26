@@ -340,7 +340,13 @@ class _SessionSummaryState extends State<SessionSummary> {
       //   context,
       //   MaterialPageRoute(builder: (context) => const HomeTelemed()),
       // );
-      context.read<DataProvider>().setPage(Stage.HOME_SCREEN);
+      // context.read<DataProvider>().setPage(Stage.HOME_SCREEN);
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => Stage().getPage(Stage.HOME_SCREEN),
+        ),
+      );
     } else {
       print("No printer selected.");
     }
@@ -562,6 +568,24 @@ class _SessionSummaryState extends State<SessionSummary> {
                                               fontSize: width * 0.03,
                                             ),
                                           ),
+                                          Text(
+                                            resTojson2["health_records"][0]["pr"] !=
+                                                    null
+                                                ? "Pulse :${resTojson2["health_records"][0]["pr"]}"
+                                                : "",
+                                            style: TextStyle(
+                                              fontSize: width * 0.03,
+                                            ),
+                                          ),
+                                          Text(
+                                            resTojson2["health_records"][0]["dtx "] !=
+                                                    null
+                                                ? "RR :${resTojson2["health_records"][0]["dtx"]}"
+                                                : "",
+                                            style: TextStyle(
+                                              fontSize: width * 0.03,
+                                            ),
+                                          ),
                                         ],
                                       )
                                     : const SizedBox()
@@ -655,8 +679,12 @@ class _SessionSummaryState extends State<SessionSummary> {
                   //     builder: (context) => const PatientHome(),
                   //   ),
                   // );
-                  context.read<DataProvider>().setPage(
-                    Stage.PATIENT_HOME_SCREEN,
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          Stage().getPage(Stage.PATIENT_HOME_SCREEN),
+                    ),
                   );
                 },
                 child: Container(

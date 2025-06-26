@@ -102,8 +102,12 @@ class _PatientHomeState extends State<PatientHome> {
                 //     builder: (context) => const SessionWaiting(),
                 //   ),
                 // );
-                context.read<DataProvider>().setPage(
-                  Stage.SESSION_WAITING_SCREEN,
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        Stage().getPage(Stage.SESSION_WAITING_SCREEN),
+                  ),
                 );
               },
               child: Text(
@@ -319,8 +323,13 @@ class _PatientHomeState extends State<PatientHome> {
                       //     builder: (context) => const SumHealthrecord(),
                       //   ),
                       // );
-                      context.read<DataProvider>().setPage(
-                        Stage.PATIENT_HEALTH_ENTRY_SCREEN,
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => Stage().getPage(
+                            Stage.PATIENT_HEALTH_ENTRY_SCREEN,
+                          ),
+                        ),
                       );
                     },
                     child: Text(
@@ -364,8 +373,15 @@ class _PatientHomeState extends State<PatientHome> {
                       height * provider.buttonSized_h,
                     ),
                     onPressed: () {
-                      context.read<DataProvider>().setPage(
-                        Stage.PATIENT_APPOINTMENT_SCREEN,
+                      // context.read<DataProvider>().setPage(
+                      //   Stage.PATIENT_APPOINTMENT_SCREEN,
+                      // );
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              Stage().getPage(Stage.PATIENT_APPOINTMENT_SCREEN),
+                        ),
                       );
                     },
                     child: Text(
@@ -458,7 +474,13 @@ class _PatientHomeState extends State<PatientHome> {
                   //     builder: (context) => const HomeTelemed(),
                   //   ),
                   // );
-                  context.read<DataProvider>().setPage(Stage.HOME_SCREEN);
+                  // context.read<DataProvider>().setPage(Stage.HOME_SCREEN);
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => Stage().getPage(Stage.HOME_SCREEN),
+                    ),
+                  );
                 },
                 child: Container(
                   height: height * 0.025,

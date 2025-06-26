@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:smarttelemed/apps/telemed/views/station/stage.dart';
 
 class DataProvider with ChangeNotifier {
   String version = "V. 1.0.0";
@@ -7,11 +8,37 @@ class DataProvider with ChangeNotifier {
 
   int currentIndex = 0;
 
+  BuildContext? context;
+
   int get currentPage => currentIndex;
 
+  void setContext(BuildContext context) {
+    this.context = context;
+  }
+
   void setPage(int index) {
+    setPageWithNavigation(context!, index, Stage().getPage(index));
+  }
+
+  // New method to set page with navigation
+  void setPageWithNavigation(
+    BuildContext context,
+    int index,
+    Widget destination,
+  ) {
     currentIndex = index;
     notifyListeners();
+
+    // Use Navigator.pushReplacement to navigate to the destination
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => destination),
+    );
+  }
+
+  // Helper method for common navigation patterns
+  void navigateToPage(BuildContext context, int pageIndex, Widget destination) {
+    setPageWithNavigation(context, pageIndex, destination);
   }
 
   List<String> debug = [];

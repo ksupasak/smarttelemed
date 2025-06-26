@@ -133,8 +133,15 @@ class PatientAppointmentState extends State<PatientAppointment> {
                       height * provider.buttonSized_h,
                     ),
                     onPressed: () {
-                      context.read<DataProvider>().setPage(
-                        Stage.PATIENT_HOME_SCREEN,
+                      // context.read<DataProvider>().setPage(
+                      //   Stage.PATIENT_HOME_SCREEN,
+                      // );
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              Stage().getPage(Stage.PATIENT_HOME_SCREEN),
+                        ),
                       );
                     },
                     child: Text(

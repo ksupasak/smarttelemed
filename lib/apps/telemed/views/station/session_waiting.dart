@@ -69,6 +69,7 @@ class _SessionWaitingState extends State<SessionWaiting> {
     DataProvider provider = context.read<DataProvider>();
     bool one = true;
     timerCheck = Timer.periodic(const Duration(seconds: 2), (timer) async {
+      print("checkQuick ${context.read<DataProvider>().platfromURL}");
       var url = Uri.parse(
         '${context.read<DataProvider>().platfromURL}/check_quick',
       );
@@ -115,7 +116,13 @@ class _SessionWaitingState extends State<SessionWaiting> {
           //   context,
           //   MaterialPageRoute(builder: (context) => const SessionSummary()),
           // );
-          context.read<DataProvider>().setPage(Stage.SESSION_SUMMARY_SCREEN);
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) =>
+                  Stage().getPage(Stage.SESSION_SUMMARY_SCREEN),
+            ),
+          );
         }
       }
     });
@@ -376,7 +383,12 @@ class _SessionWaitingState extends State<SessionWaiting> {
       //   context,
       //   MaterialPageRoute(builder: (context) => const SessionWaiting()),
       // );
-      context.read<DataProvider>().setPage(Stage.SESSION_WAITING_SCREEN);
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => Stage().getPage(Stage.SESSION_WAITING_SCREEN),
+        ),
+      );
     }
   }
 
@@ -502,8 +514,12 @@ class _SessionWaitingState extends State<SessionWaiting> {
                     //     builder: (context) => const SessionSummary(),
                     //   ),
                     // );
-                    context.read<DataProvider>().setPage(
-                      Stage.SESSION_SUMMARY_SCREEN,
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            Stage().getPage(Stage.SESSION_SUMMARY_SCREEN),
+                      ),
                     );
                   },
                   child: Text(

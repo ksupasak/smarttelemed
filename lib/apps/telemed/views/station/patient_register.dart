@@ -102,7 +102,13 @@ class _PatientRegisterState extends State<PatientRegister> {
             //   context,
             //   MaterialPageRoute(builder: (context) => const PatientHome()),
             // );
-            context.read<DataProvider>().setPage(Stage.PATIENT_HOME_SCREEN);
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) =>
+                    Stage().getPage(Stage.PATIENT_HOME_SCREEN),
+              ),
+            );
           });
         } else {
           provider.debugPrintV(
@@ -492,7 +498,12 @@ class _PatientRegisterState extends State<PatientRegister> {
                   //     builder: (context) => const HomeTelemed(),
                   //   ),
                   // );
-                  context.read<DataProvider>().setPage(Stage.HOME_SCREEN);
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => Stage().getPage(Stage.HOME_SCREEN),
+                    ),
+                  );
                 },
                 child: Container(
                   height: height * 0.025,

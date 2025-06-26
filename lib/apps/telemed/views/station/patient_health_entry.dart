@@ -679,11 +679,25 @@ class _PatientHealthEntryState extends State<PatientHealthEntry> {
       //   context,
       //   MaterialPageRoute(builder: (context) => const PatientHome()),
       // );
-      context.read<DataProvider>().setPage(Stage.PATIENT_HEALTH_RECORD_SCREEN);
+      // context.read<DataProvider>().setPage(Stage.PATIENT_HEALTH_RECORD_SCREEN);
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) =>
+              Stage().getPage(Stage.PATIENT_HEALTH_RECORD_SCREEN),
+        ),
+      );
     } catch (e) {
       provider.debugPrintV("error Gateway $e");
 
-      context.read<DataProvider>().setPage(Stage.PATIENT_HEALTH_RECORD_SCREEN);
+      // context.read<DataProvider>().setPage(Stage.PATIENT_HEALTH_RECORD_SCREEN);
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) =>
+              Stage().getPage(Stage.PATIENT_HEALTH_RECORD_SCREEN),
+        ),
+      );
     }
   }
 
@@ -1088,8 +1102,12 @@ class _PatientHealthEntryState extends State<PatientHealthEntry> {
                   //     builder: (context) => const PatientHome(),
                   //   ),
                   // );
-                  context.read<DataProvider>().setPage(
-                    Stage.PATIENT_HOME_SCREEN,
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          Stage().getPage(Stage.PATIENT_HOME_SCREEN),
+                    ),
                   );
                 },
                 child: Container(
