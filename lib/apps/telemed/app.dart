@@ -76,9 +76,9 @@ class _TelemedStationAppState extends State<TelemedStationApp> {
   void initState() {
     getS();
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      fullscreen();
-    });
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   fullscreen();
+    // });
     _deviceManager.load().then((_) {
       // _deviceManager.setOnValueChanged(onValueChanged);
       _deviceManager.start();

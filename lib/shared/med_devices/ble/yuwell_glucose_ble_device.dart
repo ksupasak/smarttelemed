@@ -46,12 +46,6 @@ class YuwellGlucoseBleDevice extends TelemedBleDevice {
       notify_uuid,
       BleInputProperty.notification,
     );
-    // 060900e60701080c0f3534c011
-    // 104  68
-    // 06 06 00 e6 07 01 06 0b 12 27 3a c0 11
-    //                YY MM DD
-    // 91   5B
-    // 06 07 00 e6 07 01 06 0c 14 04 33 c0 11
 
     // Get characteristic updates using stream
     _bleSubscription =
@@ -76,8 +70,8 @@ class YuwellGlucoseBleDevice extends TelemedBleDevice {
               'type': 'dtx',
               'dtx': dtx,
             });
-            cancelSubscription();
-            UniversalBle.disconnect(this.id);
+            // cancelSubscription();
+            // UniversalBle.disconnect(this.id);
           }
         });
     print('YuwellGlucoseBleDevice Subscribed');
