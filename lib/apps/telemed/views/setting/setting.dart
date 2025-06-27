@@ -124,8 +124,15 @@ class _SettingState extends State<Setting> {
                           //     builder: (context) => const HomeTelemed(),
                           //   ),
                           // );
-                          context.read<DataProvider>().setPage(
-                            Stage.HOME_SCREEN,
+                          // context.read<DataProvider>().setPage(
+                          //   Stage.HOME_SCREEN,
+                          // );
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  Stage().getPage(Stage.HOME_SCREEN),
+                            ),
                           );
                         },
 

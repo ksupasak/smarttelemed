@@ -1,3 +1,4 @@
+import 'package:smarttelemed/apps/station/widget_decorate/WidgetDecorate.dart';
 import 'package:smarttelemed/shared/med_devices/device.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smarttelemed/shared/med_devices/device_factory.dart';
@@ -5,6 +6,9 @@ import 'package:smarttelemed/shared/med_devices/ble/abstract_ble_device.dart';
 import 'dart:convert';
 import 'package:universal_ble/universal_ble.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
+import 'dart:isolate';
+import 'package:smarttelemed/shared/med_devices/hl7/aquaris_hl7.dart';
 
 class DeviceManager {
   // Private constructor
@@ -28,6 +32,8 @@ class DeviceManager {
   List<Device> get devices => List.unmodifiable(_devices);
   bool get isStarted => _isStarted;
   bool get hasDevices => _devices.isNotEmpty;
+
+  AquarisHl7? hl7;
 
   // Device management methods
   void addDevice(Device device) {
@@ -125,19 +131,25 @@ class DeviceManager {
       return;
     }
 
+    hl7 = AquarisHl7(
+      name: 'Aquaris HL7',
+      id: 'aquaris_hl7',
+      status: 'disconnected',
+      type: 'hl7',
+      autoStart: true,
+    );
+    hl7?.setCallback(onValueChanged);
+    hl7?.connect();
+
     print('Starting DeviceManager');
     _isStarted = true;
 
-    UniversalBle.onConnectionChange =
-        (String deviceId, bool isConnected, String? error) {
-          debugPrint(
-            'OnConnectionChange $deviceId, $isConnected Error: $error',
-          );
-        };
-
     for (Device device in _devices) {
       if (device is TelemedBleDevice) {
-        device.setOnValueChanged(_onValueChanged);
+        device.setCallback(onValueChanged);
+
+        // Isolate.spawn(device.connect, null);
+        print("Connect ... ${device.name} ");
         device.connect();
       }
     }
@@ -172,8 +184,15 @@ class DeviceManager {
     // Update existing devices with new callback
     for (Device device in _devices) {
       if (device is TelemedBleDevice) {
-        device.setOnValueChanged(_onValueChanged);
+        device.setCallback(onValueChanged);
       }
+    }
+  }
+
+  void onValueChanged(Map<String, dynamic> values) {
+    print('Device Manger onValueChanged : $values');
+    if (_onValueChanged != null) {
+      _onValueChanged!(values);
     }
   }
 

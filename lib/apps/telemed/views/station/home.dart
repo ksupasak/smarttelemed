@@ -62,6 +62,7 @@ class _HomeTelemedState extends State<HomeTelemed> {
   @override
   void dispose() {
     timerreadIDCard!.cancel();
+
     _focusNode.dispose();
     super.dispose();
   }
@@ -625,7 +626,6 @@ class _HomeTelemedState extends State<HomeTelemed> {
                   GestureDetector(
                     onTap: () {
                       if (provider.password == provider.id) {
-                        timerreadIDCard?.cancel();
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(

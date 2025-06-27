@@ -85,27 +85,26 @@ abstract class TelemedBleDevice extends Device {
     // }
 
     // Get connection/disconnection updates using stream
+    await Future.delayed(Duration(seconds: 1));
 
     UniversalBle.connectionStream(this.id).listen((bool isConnected) async {
-      print('OnConnectionChange $this.id, $isConnected');
+      print('OnConnectionChange x $this.id, $isConnected');
+
+      callback?.call({
+        'deviceId': this.id,
+        'name': this.name,
+        'type': 'status',
+        'status': this.isConnected(),
+      });
+
       _isConnected = isConnected;
       if (_isConnected) {
-        // bool? res = await UniversalBle.isPaired(this.id);
-        // print('Pair result: $res');
-        // if (res == false) {
-        //   await UniversalBle.pair(this.id);
-        // }
-        // res = await UniversalBle.isPaired(this.id);
-        // print('Pair result: $res');
-
         discoveredServices = await discoverServices();
-        print('Services discovered');
         print(discoveredServices);
-        await Future.delayed(Duration(seconds: 2));
+        await Future.delayed(Duration(seconds: 1));
         await onConnect();
-      } else {
+      } else if (_isConnected == false) {
         discoveredServices.clear();
-        print('Services cleared');
         await onDisconnect();
       }
     });
@@ -127,8 +126,8 @@ abstract class TelemedBleDevice extends Device {
           await onTick();
         }
       } catch (e) {
-        print('Retrying connection in 2 seconds: $e');
-        await Future.delayed(Duration(seconds: 2));
+        print('Retrying connection in 1 seconds: $e');
+        await Future.delayed(Duration(seconds: 1));
       }
     }
   }
@@ -140,10 +139,5 @@ abstract class TelemedBleDevice extends Device {
 
   String toHex(Uint8List bytes) {
     return bytes.map((b) => b.toRadixString(16).padLeft(2, '0')).join();
-  }
-
-  void Function(Map<String, dynamic>)? onValueChanged;
-  void setOnValueChanged(void Function(Map<String, dynamic>)? callback) {
-    onValueChanged = callback;
   }
 }

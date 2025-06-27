@@ -4,6 +4,8 @@ import 'package:smarttelemed/shared/med_devices/device_manager.dart';
 import 'package:smarttelemed/shared/med_devices/device.dart';
 import 'package:smarttelemed/shared/med_devices/device_factory.dart';
 import 'package:smarttelemed/apps/telemed/views/station/home.dart';
+import 'package:smarttelemed/apps/telemed/views/station/stage.dart';
+import 'dart:io';
 
 class DeviceSetting extends StatefulWidget {
   const DeviceSetting({super.key});
@@ -123,18 +125,17 @@ class _DeviceSettingState extends State<DeviceSetting> {
                 ),
                 IconButton(
                   icon: const Icon(Icons.bluetooth),
-                  onPressed: () => _deviceManager.start(),
+                  onPressed: () {
+                    if (_deviceManager.isStarted) {
+                      _deviceManager.stop();
+                    } else {
+                      _deviceManager.start();
+                    }
+                  },
                 ),
                 IconButton(
                   icon: const Icon(Icons.back_hand),
-                  onPressed: () => {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const HomeTelemed(),
-                      ),
-                    ),
-                  },
+                  onPressed: () => {exit(0)},
                 ),
               ],
             ),

@@ -64,7 +64,7 @@ class YuwellGlucoseBleDevice extends TelemedBleDevice {
                     .toInt();
             print('Dtx: $dtx');
             found = true;
-            onValueChanged?.call({
+            callback?.call({
               'deviceId': this.id,
               'name': this.name,
               'type': 'dtx',
@@ -87,7 +87,7 @@ class YuwellGlucoseBleDevice extends TelemedBleDevice {
 
   @override
   Future<void> onDisconnect() async {
-    print('YuwellGlucoseBleDevice is disconnected');
+    // print('YuwellGlucoseBleDevice is disconnected');
     if (_bleSubscription != null) {
       _bleSubscription!.cancel();
       _bleSubscription = null;
@@ -99,41 +99,28 @@ class YuwellGlucoseBleDevice extends TelemedBleDevice {
   Future<void> onTick() async {
     String serviceId = '00001808-0000-1000-8000-00805f9b34fb';
 
-    List<BleService> services = await UniversalBle.discoverServices(this.id);
+    if (found == false) {
+      List<BleService> services = await UniversalBle.discoverServices(this.id);
 
-    BleService service = services.firstWhere(
-      (service) => service.uuid == serviceId,
-    );
+      BleService service = services.firstWhere(
+        (service) => service.uuid == serviceId,
+      );
 
-    BleCharacteristic characteristic = service.characteristics.firstWhere(
-      (characteristic) =>
-          characteristic.uuid == "00002a52-0000-1000-8000-00805f9b34fb",
-    );
+      BleCharacteristic characteristic = service.characteristics.firstWhere(
+        (characteristic) =>
+            characteristic.uuid == "00002a52-0000-1000-8000-00805f9b34fb",
+      );
 
-    print(characteristic.uuid);
+      print(characteristic.uuid);
 
-    await UniversalBle.writeValue(
-      this.id,
-      serviceId,
-      "00002a52-0000-1000-8000-00805f9b34fb",
-      Uint8List.fromList([0x01, 0x01]),
-      BleOutputProperty.withResponse,
-    );
-    print('AccuchekBleDevice is ticking');
-
-    // BleCharacteristic characteristic = await service.getCharacteristic('2a56');
-    // print('AccuchekBleDevice is ticking');
-
-    // characteristic.write(
-    //   Uint8List.fromList([0x01, 0x01]),
-    //   BleOutputProperty.withResponse,
-    // );
-    // UniversalBle.writeValue(
-    //   this.id,
-    //   serviceId,
-    //   "00002a52-0000-1000-8000-00805f9b34fb",
-    //   Uint8List.fromList([0x01, 0x01]),
-    //   BleOutputProperty.withResponse,
-    // );
+      await UniversalBle.writeValue(
+        this.id,
+        serviceId,
+        "00002a52-0000-1000-8000-00805f9b34fb",
+        Uint8List.fromList([0x01, 0x01]),
+        BleOutputProperty.withResponse,
+      );
+      print('AccuchekBleDevice is ticking');
+    }
   }
 }

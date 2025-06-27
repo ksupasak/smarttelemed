@@ -65,13 +65,6 @@ class _TelemedStationAppState extends State<TelemedStationApp> {
     }
   }
 
-  void fullscreen() async {
-    if (Platform.isWindows) {
-      await windowManager.ensureInitialized();
-      await windowManager.setFullScreen(true);
-    }
-  }
-
   @override
   void initState() {
     getS();

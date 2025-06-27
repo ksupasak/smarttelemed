@@ -1,3 +1,5 @@
+import 'package:universal_ble/universal_ble.dart';
+
 abstract class Device {
   String name;
   String id;
@@ -15,6 +17,12 @@ abstract class Device {
 
   void connect();
   void disconnect();
+  void onTick();
+
+  void Function(Map<String, dynamic>)? callback;
 
   Map<String, dynamic> toJson();
+  void setCallback(void Function(Map<String, dynamic>)? callback) {
+    this.callback = callback;
+  }
 }

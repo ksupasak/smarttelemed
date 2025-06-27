@@ -65,7 +65,7 @@ class AccuchekBleDevice extends TelemedBleDevice {
               radix: 16,
             )).toInt();
             print('Dtx: $dtx');
-            onValueChanged?.call({
+            callback?.call({
               'deviceId': this.id,
               'name': this.name,
               'type': 'dtx',
@@ -138,7 +138,7 @@ class AccuchekBleDevice extends TelemedBleDevice {
 
   @override
   Future<void> onDisconnect() async {
-    print('AccuchekBleDevice is disconnected');
+    // print('AccuchekBleDevice is disconnected');
     if (_bleSubscription != null) {
       _bleSubscription!.cancel();
       _bleSubscription = null;

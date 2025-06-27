@@ -1,8 +1,9 @@
 import 'package:smarttelemed/shared/med_devices/ble/abstract_ble_device.dart';
 import 'package:smarttelemed/shared/med_devices/device.dart';
-import 'package:smarttelemed/shared/med_devices/ble/spo2_ble_devcie.dart';
+import 'package:smarttelemed/shared/med_devices/ble/jumper_spo2_ble_devcie.dart';
 import 'package:smarttelemed/shared/med_devices/ble/dummy_ble_device.dart';
 import 'package:smarttelemed/shared/med_devices/ble/yuwell_temp_ble_device.dart';
+import 'package:smarttelemed/shared/med_devices/ble/yuwell_spo2_ble_device.dart';
 import 'package:universal_ble/universal_ble.dart';
 import 'package:smarttelemed/shared/med_devices/ble/accuchek_ble_device.dart';
 import 'package:smarttelemed/shared/med_devices/ble/yuwell_glucose_ble_device.dart';
@@ -11,13 +12,15 @@ class DeviceFactory {
   static Device? createDevice(Map<String, dynamic> json) {
     switch (json['type']) {
       case 'spo2_jumper':
-        return Spo2BleDevice.fromJson(json);
+        return JumperSpo2BleDevice.fromJson(json);
       case 'temp_yuwell':
         return YuwellTempBleDevice.fromJson(json);
       case 'accuchek':
         return AccuchekBleDevice.fromJson(json);
       case 'yuwell_glucose':
         return YuwellGlucoseBleDevice.fromJson(json);
+      case 'yuwell_spo2':
+        return YuwellSpo2BleDevice.fromJson(json);
       // Add other types here:
       // case 'bp': return BpDevice.fromJson(json);
       default:
@@ -30,7 +33,7 @@ class DeviceFactory {
 
     switch (device.name) {
       case 'My Oximeter':
-        _device = Spo2BleDevice(
+        _device = JumperSpo2BleDevice(
           name: device.name ?? '',
           id: device.deviceId,
           status: 'connected',
@@ -59,6 +62,14 @@ class DeviceFactory {
           id: device.deviceId,
           status: 'connected',
           type: 'yuwell_glucose',
+          autoStart: false,
+        );
+      case 'Yuwell BO-YX110-3058':
+        _device = YuwellSpo2BleDevice(
+          name: device.name ?? '',
+          id: device.deviceId,
+          status: 'connected',
+          type: 'yuwell_spo2',
           autoStart: false,
         );
       default:
