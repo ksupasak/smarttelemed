@@ -256,5 +256,5 @@ class AppLocalizationsTh extends AppLocalizations {
   String get waitting_backButton => '< ย้อนกลับ';
 
   @override
-  String get patient_appointment => 'นัดหมย';
+  String get patient_appointment => 'นัดหมาย';
 }

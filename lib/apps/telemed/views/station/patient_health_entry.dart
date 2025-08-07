@@ -374,8 +374,9 @@ class _PatientHealthEntryState extends State<PatientHealthEntry> {
     }
   }
 
-  /////////////////////////////////////////////////////////////////////////////
 
+
+//////////////////////////////////////////////////////////////////////////////////////
   void startH_W() async {
     DataProvider provider = context.read<DataProvider>();
 
@@ -399,6 +400,7 @@ class _PatientHealthEntryState extends State<PatientHealthEntry> {
           config.parity = 0;
           port.config = config;
           List<int> buffer = [];
+          await Future.delayed(Duration(milliseconds: 100));
           final reader = SerialPortReader(port);
           provider.debugPrintV("reader W_H");
           setState(() {
@@ -431,8 +433,13 @@ class _PatientHealthEntryState extends State<PatientHealthEntry> {
                     warnTemp = AppLocalizations.of(
                       context,
                     )!.health_temp_too_low; //อุณหภูมิ ต่ำเกินไป";
-                    setState(() {
-                      playAudio();
+                    // setState(() {
+                    //   playAudio();
+                    // });
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      setState(() {
+                        playAudio();
+                      });
                     });
                   }
                 }
@@ -447,10 +454,15 @@ class _PatientHealthEntryState extends State<PatientHealthEntry> {
                     warnTemp = AppLocalizations.of(
                       context,
                     )!.health_temp_too_high; //"อุณหภูมิ สูงเกินไป";
-                    setState(() {
-                      playAudio();
+                    // setState(() {
+                    //   playAudio();
+                    // });
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      setState(() {
+                        playAudio();
+                      });
                     });
-                  }
+                 }
                 }
               } else {
                 double weight = double.parse(splitList[0].split(":")[1]);
@@ -479,8 +491,14 @@ class _PatientHealthEntryState extends State<PatientHealthEntry> {
                       warnbmi = AppLocalizations.of(
                         context,
                       )!.health_bmi_too_low; //"BMI ต่ำเกินไป";
-                      setState(() {
-                        playAudio();
+                      // setState(() {
+                      //   playAudio();
+                      // });
+                      // 
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        setState(() {
+                          playAudio();
+                        });
                       });
                     }
                   }
@@ -496,9 +514,14 @@ class _PatientHealthEntryState extends State<PatientHealthEntry> {
                       warnbmi = AppLocalizations.of(
                         context,
                       )!.health_bmi_too_high; //"BMI สูงเกินไป";
+                      // setState(() {
+                      //   playAudio();
+                      // });
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
                       setState(() {
                         playAudio();
                       });
+                    });
                     }
                   }
                 }
@@ -762,10 +785,11 @@ class _PatientHealthEntryState extends State<PatientHealthEntry> {
 
     _deviceManager.setOnValueChanged(onValueChanged);
 
-    startH_W();
-    startBP();
+    
+   startBP();
+   startH_W();
     // startHL7Server();
-    startSpo2();
+   startSpo2();
 
     context.read<DataProvider>().heightHealthrecord.addListener(() {
       calculateBMI();
