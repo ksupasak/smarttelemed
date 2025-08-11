@@ -115,9 +115,10 @@ class _SessionSummaryState extends State<SessionSummary> {
       "rr": "0",
       "pulse": "",
       "spo2": "",
-      "temp": "",
+      "temp": "",     
       "height": "",
       "weight": "",
+      "dtx": "",
       "cc": cc,
     });
     try {
@@ -157,8 +158,24 @@ class _SessionSummaryState extends State<SessionSummary> {
     }
   }
 
+  Future<void> _loadThaiFont() async {
+    final fontData = await rootBundle.load('assets/fonts/THSarabunNew.ttf');
+    print('_loadThaiFont');
+    print(fontData);
+    setState(() {
+      thaiFont = pw.Font.ttf(fontData);
+    });
+  }
+
   void printexam() async {
-    sendHealthrecordGateway();
+    // final fontData = await rootBundle.load('assets/fonts/THSarabunNew.ttf');
+    // print('_loadThaiFont');
+    // print(fontData);
+    // setState(() {
+    //   thaiFont = pw.Font.ttf(fontData);
+    // });
+     debugPrint('++++++++++printexam+++++++++');   
+    //sendHealthrecordGateway();
     String msgHead = "";
     String msgDetail = "";
     //double sizeHeader = 20;
@@ -186,23 +203,23 @@ class _SessionSummaryState extends State<SessionSummary> {
     if (selectedPrinter == null) {
       await _selectPrinter();
 
-      // selectedPrinter = selected_printer;
+       //selectedPrinter = selected_printer;
     }
 
     final pdf = pw.Document();
 
     // Define 80mm width and auto height for a thermal printer
     final pageFormat = PdfPageFormat(80 * PdfPageFormat.mm, double.infinity);
-
+    
     msgHead = 'HN : ${resTojson2['personal']['hn']} \n';
     msgHead +=
         'คุณ : ${resTojson2['personal']['first_name']} ${resTojson2['personal']['last_name']} \n';
 
     msgDetail =
-        'น้ำหนัก : ${resTojson2['health_records'][0]['weight']} | ส่วนสูง: ${resTojson2['health_records'][0]['height']} \n';
+        'น้ำหนัก : ${resTojson2['health_records'][0]['weight']} | ส่วนสูง: ${resTojson2['health_records'][0]['height']} | อุณภูมิ : ${resTojson2['health_records'][0]['temp']} \n';
     msgDetail +=
-        'อุณภูมิ : ${resTojson2['health_records'][0]['temp']}  | BP: ${resTojson2['health_records'][0]['bp']} \n';
-    msgDetail += 'PULSE : ${resTojson2['health_records'][0]['pulse_rate']} \n';
+        'BMI: ${resTojson2['health_records'][0]['bmi']} | SPO2: ${resTojson2['health_records'][0]['spo2']} | BP: ${resTojson2['health_records'][0]['bp']} \n';
+    msgDetail += 'PULSE : ${resTojson2['health_records'][0]['pulse_rate']} | DTX: ${resTojson2['health_records'][0]['dtx']} \n';
     msgDetail += "${AppLocalizations.of(context)!.summary_history} \n";
 
     dataBarcode = resTojson2["personal"]["hn"];
@@ -352,14 +369,14 @@ class _SessionSummaryState extends State<SessionSummary> {
     }
   }
 
-  Future<void> _loadThaiFont() async {
-    final fontData = await rootBundle.load('assets/fonts/THSarabunNew.ttf');
-    print('_loadThaiFont');
-    print(fontData);
-    setState(() {
-      thaiFont = pw.Font.ttf(fontData);
-    });
-  }
+  // Future<void> _loadThaiFont() async {
+  //   final fontData = await rootBundle.load('assets/fonts/THSarabunNew.ttf');
+  //   print('_loadThaiFont');
+  //   print(fontData);
+  //   setState(() {
+  //     thaiFont = pw.Font.ttf(fontData);
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -505,7 +522,7 @@ class _SessionSummaryState extends State<SessionSummary> {
                                             // BMI :
                                             resTojson2["health_records"][0]["bmi"] !=
                                                     null
-                                                ? "${AppLocalizations.of(context)!.summary_bmi} ${resTojson2["health_records"][0]["bmi"]}"
+                                                ? "${AppLocalizations.of(context)!.summary_bmi} ${resTojson2["health_records"][0]["bmi"]} BBB"
                                                 : "",
                                             style: TextStyle(
                                               fontSize: width * 0.03,
@@ -525,7 +542,7 @@ class _SessionSummaryState extends State<SessionSummary> {
                                             // Height :
                                             resTojson2["health_records"][0]["height"] !=
                                                     null
-                                                ? "${AppLocalizations.of(context)!.summary_height} ${resTojson2["health_records"][0]["height"]}"
+                                                ? "${AppLocalizations.of(context)!.summary_height} ${resTojson2["health_records"][0]["height"]} test"
                                                 : "",
                                             style: TextStyle(
                                               fontSize: width * 0.03,
@@ -578,9 +595,9 @@ class _SessionSummaryState extends State<SessionSummary> {
                                             ),
                                           ),
                                           Text(
-                                            resTojson2["health_records"][0]["dtx "] !=
+                                            resTojson2["health_records"][0]["dtx"] !=
                                                     null
-                                                ? "RR :${resTojson2["health_records"][0]["dtx"]}"
+                                                ? "DTX  :${resTojson2["health_records"][0]["dtx"]}"
                                                 : "",
                                             style: TextStyle(
                                               fontSize: width * 0.03,
