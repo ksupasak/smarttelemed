@@ -788,10 +788,10 @@ class _PatientHealthEntryState extends State<PatientHealthEntry> {
     _deviceManager.setOnValueChanged(onValueChanged);
 
     
-   //startBP();
-   //startH_W();
+   startBP();
+   startH_W();
    //startHL7Server();
-   //startSpo2();
+   startSpo2();
 
     context.read<DataProvider>().heightHealthrecord.addListener(() {
       calculateBMI();
